@@ -1,14 +1,14 @@
-from pygame.sprite import Sprite
-from pygame.sprite import Group
+from setup import Setup
 import pygame
+from pygame.sprite import Group
+
 
 class Player(Group):
-
     def __init__(self, x_pos=None, y_pos=None, imagefile1=None, imagefile2=None, imagefile3 = None,imagefile4 = None,imagefile5 = None):
 
         Group.__init__(self)        
 
-        self.player = Sprite()
+        self.player = pygame.sprite.Sprite()
         self.player.x_pos = x_pos
         self.player.y_pos = y_pos
         self.player.imagefile1 = imagefile1
@@ -36,7 +36,7 @@ class Player(Group):
         self.add(self.player)
         print("reset")
 
-    def move(self,direction,buildings,screen,background):
+    def move(self,direction):
         speed = 2
         if direction == "LEFT" or direction == "RIGHT":
             if direction == "LEFT":
@@ -44,13 +44,21 @@ class Player(Group):
                 self.player.image = self.player.image4
             else:
                 self.player.image = self.player.image5
-            if pygame.sprite.spritecollideany(self.player,buildings) != None:
+            if self.player.rect.x + self.player.rect.width >= Setup.screen.get_width():
+                self.player.rect.x = screen.get_width() - self.player.rect.width
+                back_x -= 2
+                if back_x < (0-(Setup.background.get_width()-Setup.screen.get_width())):
+                    print("entered")
+                    Setup.back_x = (0-(Setup.background.get_width()-\
+                    Setup.screen.get_width()))
+                screen.blit(Setup.background, (Setup.back_x,Setup.back_y))
+            if pygame.sprite.spritecollideany(self.player,Setup.buildings) != None:
                 if direction == "LEFT":
                     self.player.rect.x += 1
-                else:
+                elif direction == "RIGHT":
                     self.player.rect.x -= 1
-            else:
-                self.player.rect.x += speed
+                else:
+                    self.player.rect.x += speed
             
         elif direction == "UP" or direction == "DOWN":
             if direction == "UP":
@@ -67,8 +75,8 @@ class Player(Group):
                 self.player.rect.y += speed
 
         
-        self.clear(screen,background)
-        self.draw(screen)
+        self.clear(Setup.screen,background)
+        self.draw(Setup.screen)
         pygame.display.update(self.player.rect)
 
 
