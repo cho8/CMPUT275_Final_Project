@@ -1,17 +1,17 @@
 import pygame, item
 from pygame.sprite import Sprite
 
-class Berry(BaseItem):
+class Berries(BaseItem):
     """
     Consumable item.
     Berries found in the wild are definitely safe to consume.
     Restores a bit of hunger and stamina.
     """
-    sprite = pygame.image.load("images/item_berry.png")
+    sprite = pygame.image.load("images/item_berries.png")
     def __init__(self):
-        super().__init__
+        super().__init__(**keywords)
 
-        self.name = "Berry"
+        self.name = "Berries"
         self.description = ""
     
 

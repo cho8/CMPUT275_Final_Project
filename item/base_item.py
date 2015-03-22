@@ -9,13 +9,14 @@ class BaseItem(Sprite):
     Basic representation of items that can be found around the playable area.
     Includes sprites, stat changes and effects.
     """
-    #active_units = pygame.sprite.LayeredUpdates()
     
     def __init__(self,
                  x_pos = None,
-                 y_pos = None):
+                 y_pos = None,
+                 **keywords):
         
-        Sprite.__init__(self)
+        # There should be a group called "items" somewhere
+        Sprite.__init__(self, items)
         
         self.name = "Base Item"
         self.description = "Base Description"
