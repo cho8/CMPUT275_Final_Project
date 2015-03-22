@@ -1,7 +1,7 @@
-__all__ = { "Berries",
+__all__ = { "Berry",
             "Mysterious Fruit",
             "Old Water Bottle",
             "Dry Jerky"}
 
-in_inventory = {}
-on_ground = {}
+active_inventory = {}
+active_ground = {}

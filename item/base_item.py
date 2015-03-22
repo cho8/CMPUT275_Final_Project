@@ -11,9 +11,17 @@ class BaseItem(Sprite):
     """
     #active_units = pygame.sprite.LayeredUpdates()
     
-    def __init__(self):
+    def __init__(self,
+                 x_pos = None,
+                 y_pos = None):
+        
+        Sprite.__init__(self)
+        
         self.name = "Base Item"
         self.description = "Base Description"
+        
+        self.x_pos = x_pos
+        self.y_pos = y_pos
 
         self.size = 10
         self.heal_value = 0
@@ -22,6 +30,10 @@ class BaseItem(Sprite):
         
         self._inventory = False
         self._ground = False
+    
+    # pygame things
+        self.image = None
+        self.rect = pygame.Rect(0,0,SIZE, SIZE)
         
         
     @property
@@ -30,8 +42,27 @@ class BaseItem(Sprite):
         Returns whether this item is on the ground.
         """
         return self._inventory
-
+    
+    @property
     def in_inventory(self):
-        pass
+        return self._ground
+
+
+    def consume_item(self):
+        if in_inventory(self):
+            self._inventory = False
+            # subclasses inherit this method
+
+    def pick_up(self):
+        """
+        Changes item location from ground to inventory
+        """
+        if on_ground(self):
+            self._ground = False
+            self._inventory = True
+            # update inventory to have item
+            item.active_inventory[self.name] = self
+
+
 
 

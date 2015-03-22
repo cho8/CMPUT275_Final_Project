@@ -18,7 +18,7 @@ class Setup():
     pygame.init()
     back_x = 0
     back_y = 0
-    background = pygame.image.load("images/gamemap2.png").convert()
+    background = pygame.image.load("images/gamemap.png").convert()
     cabin = sprite.Sprite()
     cabin.image = pygame.image.load(CABIN).convert_alpha()
     cabin.rect = cabin.image.get_rect()
