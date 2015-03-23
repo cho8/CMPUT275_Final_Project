@@ -50,9 +50,12 @@ class BaseItem(Sprite):
 
 
     def consume_item(self):
+        """
+        Consumes the item and applies stat changes to the player character.
+        Subclasses inherit this method and override it.
+        """
         if in_inventory(self):
             self._inventory = False
-            # subclasses inherit this method
 
     def pick_up(self):
         """
@@ -63,6 +66,11 @@ class BaseItem(Sprite):
             self._inventory = True
             # update inventory to have item
             item.active_inventory[self.name] = self
+
+    def discard(self):
+        if in_inventory(self) and self.name in item.active_inventory:
+            self._inventory = False
+            item.active_inventory.pop(self.name)
 
 
 
