@@ -1,4 +1,3 @@
-from setup import Setup
 import pygame
 from pygame.sprite import Group
 
@@ -34,49 +33,5 @@ class Player(Group):
         self.player.rect.x = x_pos
         self.player.rect.y = x_pos
         self.add(self.player)
-        print("reset")
-
-    def move(self,direction):
-        speed = 2
-        if direction == "LEFT" or direction == "RIGHT":
-            if direction == "LEFT":
-                speed *= -1
-                self.player.image = self.player.image4
-            else:
-                self.player.image = self.player.image5
-            if self.player.rect.x + self.player.rect.width >= Setup.screen.get_width():
-                self.player.rect.x = screen.get_width() - self.player.rect.width
-                back_x -= 2
-                if back_x < (0-(Setup.background.get_width()-Setup.screen.get_width())):
-                    print("entered")
-                    Setup.back_x = (0-(Setup.background.get_width()-\
-                    Setup.screen.get_width()))
-                screen.blit(Setup.background, (Setup.back_x,Setup.back_y))
-            if pygame.sprite.spritecollideany(self.player,Setup.buildings) != None:
-                if direction == "LEFT":
-                    self.player.rect.x += 1
-                elif direction == "RIGHT":
-                    self.player.rect.x -= 1
-                else:
-                    self.player.rect.x += speed
-            
-        elif direction == "UP" or direction == "DOWN":
-            if direction == "UP":
-                speed *= -1
-                self.player.image = self.player.image3
-            else:
-                self.player.image = self.player.image1
-            if pygame.sprite.spritecollideany(self.player,buildings) != None:
-                if direction == "UP":
-                    self.player.rect.y += 1
-                else:
-                    self.player.rect.y -= 1
-            else:
-                self.player.rect.y += speed
-
-        
-        self.clear(Setup.screen,background)
-        self.draw(Setup.screen)
-        pygame.display.update(self.player.rect)
 
 
