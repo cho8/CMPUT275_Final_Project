@@ -20,20 +20,23 @@ class GUI():
             if direction == "LEFT":
                 SPEED *= -1
                 group.player.image = group.player.left
-                #group.player.rect = group.player.left.get_rect()
             else:
                 group.player.image = group.player.right
-
             if group.player.rect.x + group.player.rect.width >= self.screen.get_width():
                 group.player.rect.x = self.screen.get_width() - group.player.rect.width
                 self.bgx -= SPEED
-                self.buildings.clear(self.screen,self.background)
-                for rect in self.buildings:
-                    rect.rect.x -= SPEED
-                self.buildings.draw(self.screen)
-
+                
                 if self.bgx < (0-(self.background.get_width()-self.screen.get_width())):
                     self.bgx = (0-(self.background.get_width()-self.screen.get_width()))
+                
+                else:
+
+                    self.buildings.clear(self.screen,self.background)
+                    for rect in self.buildings:
+                        rect.rect.x -= SPEED
+                    self.buildings.draw(self.screen)
+
+                
             elif group.player.rect.x < 0:
                 group.player.rect.x = 0
                 self.bgx -= SPEED
@@ -61,12 +64,17 @@ class GUI():
             if group.player.rect.y + group.player.rect.height >= self.screen.get_height():
                 group.player.rect.y = self.screen.get_height() - group.player.rect.height
                 self.bgy -= SPEED
-                self.buildings.clear(self.screen,self.background)
-                for rect in self.buildings:
-                    rect.rect.y -= SPEED
-                self.buildings.draw(self.screen)
+
                 if self.bgy < (0-(self.background.get_height()-self.screen.get_height())):
                     self.bgy = (0-(self.background.get_height()-self.screen.get_height()))
+
+                else:
+                    self.buildings.clear(self.screen,self.background)
+                    for rect in self.buildings:
+                        rect.rect.y -= SPEED
+                    self.buildings.draw(self.screen)
+                
+                    
             elif group.player.rect.y < 0:
                 group.player.rect.y = 0
                 self.bgy -= SPEED
