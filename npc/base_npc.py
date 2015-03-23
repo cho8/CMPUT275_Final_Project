@@ -10,10 +10,14 @@ class BaseNPC(Sprite):
 
     #active_NPCs =  pygame.sprite.LayeredUpdates()
 
-    def __init__(self, tile_x, tile_y, activate):
+    def __init__(self,
+                 x_pos = None,
+                 y_pos = None):
 
         Sprite.__init(self)
 
+        self.x_pos = x_pos
+        self.y_pos = y_pos
 
         # Default Initialized values
         self.mode = "Neutral"

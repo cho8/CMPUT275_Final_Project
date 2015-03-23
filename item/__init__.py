@@ -1,4 +1,11 @@
-__all__ = { }
+__all__ = { "Berries",
+            "Mysterious Fruit",
+            "Old Water Bottle",
+            "Dry Jerky"}
 
-in_inventory = {}
-active = {}
+descriptions = { "Berries" : "Wild berries are definitely safe to eat right?",
+                 "Old Water Bottle" : "A bottle with a bit of potable water inside",
+                 "Dry Jerky" : "Looks like cardboard. Oh well."}
+
+
+active_inventory = {}
