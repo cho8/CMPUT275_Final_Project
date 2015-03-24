@@ -22,7 +22,19 @@ class GUI():
                 group.player.image = group.player.left
             else:
                 group.player.image = group.player.right
-            if group.player.rect.x + group.player.rect.width >= self.screen.get_width():
+               
+            if group.player.rect.x < 0:
+                group.player.rect.x = 0
+                self.bgx -= SPEED
+                if self.bgx > -25:
+                    self.bgx = 0
+                self.buildings.clear(self.screen,self.background)
+                for rect in self.buildings:
+                    rect.rect.x -= SPEED
+                self.buildings.draw(self.screen)
+                print(self.bgx)
+
+            elif group.player.rect.x + group.player.rect.width >= self.screen.get_width():
                 group.player.rect.x = self.screen.get_width() - group.player.rect.width
                 self.bgx -= SPEED
                 
@@ -35,19 +47,6 @@ class GUI():
                     for rect in self.buildings:
                         rect.rect.x -= SPEED
                     self.buildings.draw(self.screen)
-
-                
-            elif group.player.rect.x < 0:
-                group.player.rect.x = 0
-                self.bgx -= SPEED
-                if self.bgx > 0:
-                    self.bgx = 0
-                else:
-                    self.buildings.clear(self.screen,self.background)
-                    for rect in self.buildings:
-                        rect.rect.x -= SPEED
-                    self.buildings.draw(self.screen)
-                return
 
             group.player.rect.x += SPEED
 
@@ -95,7 +94,7 @@ class GUI():
                 group.player.rect.y -= SPEED
 
         
-        group.clear(self.screen,self.background)
+        group.clear(self.screen,self.screen)
         group.draw(self.screen)
 
     def update(self):
