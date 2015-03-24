@@ -14,14 +14,14 @@ PAD = 4
 # Set fonts
 pygame.font.init()
 FONT_SIZE = 16
-BIG_FONT_SIZE = 42
+BIG_FONT_SIZE = 18
 FONT = pygame.font.SysFont("Arial", FONT_SIZE)
 BIG_FONT = pygame.font.SysFont("Arial", BIG_FONT_SIZE)
 FONT_COLOUR = (0, 0, 0)
 
 # Colour stuff
 GUI_COLOUR = (150, 150, 150)
-OUTLINE_COLOUR = (50, 50, 50)
+OUTLINE_COLOUR = (255, 255, 255)
 BUTTON_HIGHLIGHT_COLOUR = (255, 255, 255)
 BUTTON_DISABLED_COLOUR = (64, 64, 64)
 
@@ -59,7 +59,7 @@ class GUI(LayeredUpdates):
                                     MAP_WIDTH,
                                     screen_rect.h)
 
-        self.map = pygame.image.load("images/gamemap_test.png").convert()
+        self.map = pygame.image.load("images/gamemap.png").convert()
 
         #Set up GUI
         self.buttons = [
@@ -143,22 +143,88 @@ class GUI(LayeredUpdates):
         pygame.draw.rect(self.screen, OUTLINE_COLOUR, outlineRect, 2)
 
         # display player stats
-        player_name = FONT.render("Gus", True, FONT_COLOUR)
+        player_name = BIG_FONT.render("Gus", True, FONT_COLOUR)
         self.screen.blit(player_name,
                          (self.gui_rect.centerx - (player_name.get_width()/2),
-                          FONT_SIZE*line_num))
-
+                          BIG_FONT_SIZE*line_num + PAD))
+        #update number or bar graphic
+        line_num += 1
+        player_health = FONT.render("Health", True, FONT_COLOUR)
+        self.screen.blit(player_health,
+                         (self.gui_rect.left + PAD,
+                          FONT_SIZE*line_num + PAD))
+        #update number or bar graphic
+        line_num += 1
+        player_hunger = FONT.render("Hunger", True, FONT_COLOUR)
+        self.screen.blit(player_hunger,
+                         (self.gui_rect.left + PAD,
+                          FONT_SIZE*line_num + PAD))
+        #update number or bar graphic
+        line_num += 1
+        player_stamina = FONT.render("Stamina", True, FONT_COLOUR)
+        self.screen.blit(player_stamina,
+                         (self.gui_rect.left + PAD,
+                          FONT_SIZE*line_num + PAD))
+        line_num += 2
+        
+        #divider
+        pygame.draw.line(self.screen, OUTLINE_COLOUR, (self.gui_rect.left, FONT_SIZE*line_num), (self.gui_rect.right, FONT_SIZE*line_num))
+        
+        #inventory box
+        
+        #buttons
+        
         # update screen
         pygame.display.flip()
 
+def draw_gui_button(self, button, startpos):
+        """
+        Renders a button to the bar.
+        If the mouse is hovering over the button it is rendered in white,
+        else rgb(50, 50, 50).
+        """
+        
+        # Gotta figure out the button rect dimensions
+        # but_rect = pygame.Rect()
+        
+        # The outline needs a slightly smaller rectangle
+        but_out_rect = but_rect
+        but_out_rect.width -= 1
+
+        # Determine the button color
+        but_color = BAR_COLOR
+        
+        # The button can't be used
+        if button.condition and not button.condition():
+            but_color = BUTTON_DISABLED_COLOR
+        else:
+            # The button can be used
+            mouse_pos = pygame.mouse.get_pos()
+            if but_rect.collidepoint(mouse_pos):
+                # Highlight on mouse over
+                but_color = BUTTON_HIGHLIGHT_COLOR
+        
+        # Draw the button
+        pygame.draw.rect(self.screen, but_color, but_rect)
+            
+        # Draw the outline
+        pygame.draw.rect(self.screen, OUTLINE_COLOR, but_out_rect, 2)
+
+        # Draw the text
+        but_text = FONT.render(button.text, True, FONT_COLOR)
+        self.screen.blit(
+            but_text,
+            (self.bar_rect.centerx - (but_text.get_width()/2),
+            but_rect.y + (BUTTON_HEIGHT//2) - but_text.get_height()//2))
+
 screen = pygame.display.set_mode((600,400))
 pygame.init()
-background = pygame.image.load("images/gamemap_test.png").convert()
+#background = pygame.image.load("images/gamemap_test.png").convert()
 main_gui = GUI(RESOLUTION)
 while 1:
     main_gui.draw()
     main_gui.draw_gui()
-    screen.blit(background, (0,0))
+
 
 
 
