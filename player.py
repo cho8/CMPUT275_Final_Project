@@ -17,12 +17,12 @@ class Player(Group):
         self.player.right = imagemap.subsurface(34,0,10,20)
      
 
-        #Put initial attributes here
+        #Initial attributes
+        self.health = 100 #percent
+        self.hunger = 0
+        self.encumbrance = 0
+        self.fatigue = 0
 
-
-
-
-        #
         self.player.image = self.player.front
         self.player.rect = self.player.front.get_rect()
         self.player.rect.x = x_pos
