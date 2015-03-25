@@ -21,18 +21,17 @@ while True:
 
             elif event.type == pygame.KEYDOWN:
                 keys = pygame.key.get_pressed()
-                print(clock.get_time())
 
                 if keys[pygame.K_d]:                
                     gui.movePlayer("RIGHT",player)
            
-                if keys[pygame.K_s]:
+                elif keys[pygame.K_s]:
                     gui.movePlayer("DOWN",player)
 
-                if keys[pygame.K_a]:
+                elif keys[pygame.K_a]:
                     gui.movePlayer("LEFT",player)
 
-                if keys[pygame.K_w]:
+                elif keys[pygame.K_w]:
                     gui.movePlayer("UP",player)
             elif event.type == setup.UPDATEHUNGER:
                 player.updateHunger()

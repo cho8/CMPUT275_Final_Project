@@ -31,11 +31,6 @@ class GUI():
                 for rect in self.buildings:
                     rect.rect.x -= SPEED
 
-                if self.bgx > -20:
-                    self.bgx = 0
-                    group.player.rect.x = 20
-                print(self.bgx)
-
             elif group.player.rect.x + group.player.rect.width > self.screen.get_width():
                 group.player.rect.x = self.screen.get_width() - group.player.rect.width
                 self.bgx -= SPEED
@@ -49,7 +44,19 @@ class GUI():
 
             group.player.rect.x += SPEED
             if pygame.sprite.spritecollideany(group.player,setup.buildings) != None:
+                print(self.bgx)
                 group.player.rect.x -= SPEED
+                if 0 > self.bgx >= -20:
+                    group.player.rect.x -= SPEED
+                    self.bgx -= SPEED
+                    for rect in self.buildings:
+                        rect.rect.x -= SPEED
+                elif (20-self.background.get_width()
++self.screen.get_width()) >= self.bgx  > (0-self.background.get_width()+self.screen.get_width()):
+                    group.player.rect.x -= SPEED
+                    self.bgx -= SPEED
+                    for rect in self.buildings:
+                        rect.rect.x -= SPEED
 
         elif direction == "UP" or direction == "DOWN":
             if direction == "UP":
@@ -80,9 +87,24 @@ class GUI():
                         rect.rect.y -= SPEED
          
             group.player.rect.y += SPEED
+            print(self.bgy)
             if pygame.sprite.spritecollideany(group.player,setup.buildings) != None:
 
                 group.player.rect.y -= SPEED
+                if 0 > self.bgy >= -40:
+                    group.player.rect.y -= SPEED
+                    self.bgy -= SPEED
+                    for rect in self.buildings:
+                        rect.rect.y -= SPEED
+                elif (140-self.background.get_height()
++self.screen.get_height()) >= self.bgy  > (0-self.background.get_height()+self.screen.get_height()):
+                    group.player.rect.y -= SPEED
+                    self.bgy -= SPEED
+                    for rect in self.buildings:
+                        rect.rect.y -= SPEED
+
+
+
 
     def update(self):
         pygame.display.flip()
