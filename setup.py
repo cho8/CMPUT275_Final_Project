@@ -24,7 +24,7 @@ def load(image,x,y):
 
 #Starting Positions/Sizes
 
-SCREENSIZE = (600,400)
+SCREENSIZE = (400,400)
 pstart_x = 200
 pstart_y = 200
 bgx = 0
@@ -42,9 +42,11 @@ screen = pygame.display.set_mode(SCREENSIZE)
 pygame.display.set_caption("Survive!")
 background = pygame.image.load(GAMEMAP).convert()
 buildings = sprite.OrderedUpdates()
-offscr_buildings = sprite.OrderedUpdates()
 for i in range(60):
     for j in range(60):
+        
+        if map_matrix[i][j] == 'P':
+            player = Player(j*20,i*20,PLAYERIMG)
         if map_matrix[i][j] == 1:
             load(TREE,j,i)
         elif map_matrix[i][j] == 2:
@@ -56,8 +58,7 @@ for i in range(60):
         elif map_matrix[i][j] == 5:
             load(MOUNTAIN_END,j,i)
         elif map_matrix[i][j] == 6:
-            load(SNOWY_TREE,j,i)          
+            load(SNOWY_TREE,j,i)         
          
 
-player = Player(pstart_x,pstart_y,PLAYERIMG)
     
