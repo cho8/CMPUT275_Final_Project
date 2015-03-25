@@ -22,19 +22,21 @@ class GUI():
                 group.player.image = group.player.left
             else:
                 group.player.image = group.player.right
+            
                
             if group.player.rect.x < 0:
                 group.player.rect.x = 0
                 self.bgx -= SPEED
-                if self.bgx > -25:
-                    self.bgx = 0
-                self.buildings.clear(self.screen,self.background)
+                    
                 for rect in self.buildings:
                     rect.rect.x -= SPEED
-                self.buildings.draw(self.screen)
+
+                if self.bgx > -20:
+                    self.bgx = 0
+                    group.player.rect.x = 20
                 print(self.bgx)
 
-            elif group.player.rect.x + group.player.rect.width >= self.screen.get_width():
+            elif group.player.rect.x + group.player.rect.width > self.screen.get_width():
                 group.player.rect.x = self.screen.get_width() - group.player.rect.width
                 self.bgx -= SPEED
                 
@@ -42,17 +44,13 @@ class GUI():
                     self.bgx = (0-(self.background.get_width()-self.screen.get_width()))
                 
                 else:
-
-                    self.buildings.clear(self.screen,self.background)
                     for rect in self.buildings:
                         rect.rect.x -= SPEED
-                    self.buildings.draw(self.screen)
 
             group.player.rect.x += SPEED
-
             if pygame.sprite.spritecollideany(group.player,setup.buildings) != None:
                 group.player.rect.x -= SPEED
-         
+
         elif direction == "UP" or direction == "DOWN":
             if direction == "UP":
                 SPEED *= -1
@@ -60,7 +58,8 @@ class GUI():
             else:
                 group.player.image = group.player.front
 
-            if group.player.rect.y + group.player.rect.height >= self.screen.get_height():
+
+            if group.player.rect.y + group.player.rect.height > self.screen.get_height():
                 group.player.rect.y = self.screen.get_height() - group.player.rect.height
                 self.bgy -= SPEED
 
@@ -68,34 +67,22 @@ class GUI():
                     self.bgy = (0-(self.background.get_height()-self.screen.get_height()))
 
                 else:
-                    self.buildings.clear(self.screen,self.background)
                     for rect in self.buildings:
                         rect.rect.y -= SPEED
-                    self.buildings.draw(self.screen)
-                
-                    
+              
             elif group.player.rect.y < 0:
                 group.player.rect.y = 0
                 self.bgy -= SPEED
                 if self.bgy > 0:
                     self.bgy = 0
                 else:
-                    self.buildings.clear(self.screen,self.background)
                     for rect in self.buildings:
                         rect.rect.y -= SPEED
-                    self.buildings.draw(self.screen)
-                
-                return
          
             group.player.rect.y += SPEED
-
             if pygame.sprite.spritecollideany(group.player,setup.buildings) != None:
 
                 group.player.rect.y -= SPEED
-
-        
-        group.clear(self.screen,self.screen)
-        group.draw(self.screen)
 
     def update(self):
         pygame.display.flip()

@@ -23,7 +23,7 @@ class Player(Group):
         self.alive = True
         self.starving = False
         self.encumbrance = 0
-        self.fatigue = 0
+        self.stamina = 0
         self.exhausted = False
 
         self.player.image = self.player.front
@@ -39,9 +39,9 @@ class Player(Group):
             self.starving = True
             print("starving")
             print(self.health)
-    def updateFatigue(self):
-        if self.fatigue < 100:
-            self.fatigue += 1+(self.encumbrance%25)
+    def updateStamina(self):
+        if self.stamina < 100:
+            self.stamina -= 1+(self.encumbrance%25)
         else:
             self.exhausted = True
 

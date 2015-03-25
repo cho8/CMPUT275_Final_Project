@@ -41,14 +41,17 @@ while True:
 
         gui.update()
         player.updatePlayer()
-    surface = pygame.display.get_surface()
+
+    endscreen = pygame.Surface(pygame.display.get_surface().get_size()).convert_alpha()
+    endscreen.fill((0,0,0))
     alpha = 0
+    endscreen.blit(pygame.display.get_surface(),(0,0))
     while alpha < 255:
-        surface.fill(1)
-        print(endscreen.get_alpha())
-        pygame.time.delay(100)
+        pygame.time.delay(50)
         alpha += 5
-        surface.set_alpha(alpha)
-        surface.blit(setup.screen,(0,0))
+        endscreen.set_alpha(alpha)
         pygame.display.flip()
+
+
+
     
