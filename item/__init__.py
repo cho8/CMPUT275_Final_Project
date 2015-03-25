@@ -1,3 +1,5 @@
+from pygame import Group
+
 __all__ = { "Berries",
             "Mysterious Fruit",
             "Old Water Bottle",
@@ -8,4 +10,5 @@ descriptions = { "Berries" : "Wild berries are definitely safe to eat right?",
                  "Dry Jerky" : "Looks like cardboard. Oh well."}
 
 
-active_inventory = {}
+active_items = pygame.sprite.Group()
+

@@ -16,6 +16,7 @@ class Jerky(BaseItem):
         
         self.heal_value = -10
         self.stam_value = 40
+        self.image = pygame.image.load("images/item_oldwaterbottle.png").convert_alpha()
 
     def consume_item(self, player):
         """

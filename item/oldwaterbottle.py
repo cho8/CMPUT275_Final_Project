@@ -7,14 +7,15 @@ class OldWaterBottle(BaseItem):
     A bottle of water.
     Restores stamina by a medium amount.
     """
-    sprite = pygame.image.load("images/item_oldwaterbottle.png")
+    
     def __init__(self):
         super().__init__(**keywords)
 
         self.name = "Old Water Bottle"
         self.description = ""
     
-        self.stam_value = 40
+        self.stam_value = 20
+        self.image = pygame.image.load("images/item_oldwaterbottle.png").convert_alpha()
 
     def consume_item(self, player):
         """

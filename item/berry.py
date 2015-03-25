@@ -7,7 +7,6 @@ class Berries(BaseItem):
     Berries found in the wild are definitely safe to consume.
     Restores a bit of hunger and stamina.
     """
-    sprite = pygame.image.load("images/item_berries.png")
     def __init__(self):
         super().__init__(**keywords)
 
@@ -17,6 +16,7 @@ class Berries(BaseItem):
 
         self.eat_value = 10
         self.stam_value = 0
+        self.image = pygame.image.load("images/item_berries.png").convert_alpha()
 
     def consume_item(self, player):
         """

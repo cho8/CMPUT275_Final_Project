@@ -24,7 +24,7 @@ def load(image,x,y):
 
 #Starting Positions/Sizes
 
-SCREENSIZE = (400,400)
+SCREENSIZE = (600,400)
 pstart_x = 200
 pstart_y = 200
 bgx = 0
@@ -42,6 +42,7 @@ screen = pygame.display.set_mode(SCREENSIZE)
 pygame.display.set_caption("Survive!")
 background = pygame.image.load(GAMEMAP).convert()
 buildings = sprite.OrderedUpdates()
+offscr_buildings = sprite.OrderedUpdates()
 for i in range(60):
     for j in range(60):
         if map_matrix[i][j] == 1:

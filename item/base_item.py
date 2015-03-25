@@ -32,7 +32,7 @@ class BaseItem(Sprite):
         self._inventory = False
         self._ground = False
     
-    # pygame things
+        # pygame things
         self.image = None
         self.rect = pygame.Rect(0,0,SIZE, SIZE)
         
