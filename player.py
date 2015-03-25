@@ -20,8 +20,11 @@ class Player(Group):
         #Initial attributes
         self.health = 100 #percent
         self.hunger = 0
+        self.alive = True
+        self.starving = False
         self.encumbrance = 0
         self.fatigue = 0
+        self.exhausted = False
 
         self.player.image = self.player.front
         self.player.rect = self.player.front.get_rect()
@@ -29,4 +32,23 @@ class Player(Group):
         self.player.rect.y = x_pos
         self.add(self.player)
 
+    def updateHunger(self):
+        if self.hunger < 100:
+            self.hunger += 1
+        else:
+            self.starving = True
+            print("starving")
+            print(self.health)
+    def updateFatigue(self):
+        if self.fatigue < 100:
+            self.fatigue += 1+(self.encumbrance%25)
+        else:
+            self.exhausted = True
 
+    def updatePlayer(self):
+        #Takes roughly 4 min. from full health to death when starving.
+        if self.starving:
+            self.health -= .1
+        if self.health <= 0:
+            self.alive = False
+            

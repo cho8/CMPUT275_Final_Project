@@ -13,7 +13,7 @@ class GUI():
         self.buildings = setup.buildings
  
 
-    def move_player(self,direction,group):
+    def movePlayer(self,direction,group):
         SPEED = setup.player_speed
 
         if direction == "LEFT" or direction == "RIGHT":

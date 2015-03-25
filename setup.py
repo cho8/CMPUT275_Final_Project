@@ -32,7 +32,12 @@ bgy = 0
 player_speed = 5
 map_matrix = mapmatrix.map_matrix
 
+#Custom Events
+UPDATEHUNGER = 25
+#pygame.event.Event(pygame.USEREVENT)
+
 #Initializations
+
 screen = pygame.display.set_mode(SCREENSIZE)
 pygame.display.set_caption("Survive!")
 background = pygame.image.load(GAMEMAP).convert()
