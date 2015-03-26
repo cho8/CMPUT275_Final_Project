@@ -155,9 +155,6 @@ class GUI():
         pygame.draw.line(self.screen, OUTLINE_COLOUR, (self.gui_rect.left, FONT_SIZE*line_num), (self.gui_rect.right, FONT_SIZE*line_num))
         
         #inventory box
-        
-
-
 
         #buttons
         
