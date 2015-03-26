@@ -6,8 +6,9 @@ from collections import namedtuple
 RESOLUTION_RECT = pygame.Rect(0,0, 600,400)
 BUTTON_HEIGHT = 50
 BUTTON_WIDTH = 80
-BAR_WIDTH = 200
+GUI_WIDTH = 200
 MAP_WIDTH = 400
+BAR_WIDTH = 100
 PAD = 4
 
 # Set fonts
@@ -23,6 +24,9 @@ GUI_COLOUR = (150, 150, 150)
 OUTLINE_COLOUR = (255, 255, 255)
 BUTTON_HIGHLIGHT_COLOUR = (255, 255, 255)
 BUTTON_DISABLED_COLOUR = (64, 64, 64)
+RED_BAR = (255,0,0)
+GREEN_BAR = (0,255,0)
+
 
 # A container class which stores button information.
 # slot_height and slot_width represents the number of BUTTON_HEIGHT and BUTTON WIDTH of the button relative to the bottom and right edge of gui.
@@ -46,10 +50,11 @@ class GUI():
         self.player = setup.player
         self.buildings = setup.buildings
     
-        #rect for gui bar
-        self.gui_rect = pygame.Rect(RESOLUTION_RECT.w - BAR_WIDTH,
+    
+        #rect for gui
+        self.gui_rect = pygame.Rect(RESOLUTION_RECT.w - GUI_WIDTH,
                                     0,
-                                    BAR_WIDTH,
+                                    GUI_WIDTH,
                                     RESOLUTION_RECT.h)
 
         #rect for play area
@@ -57,6 +62,7 @@ class GUI():
                                     0,
                                     MAP_WIDTH,
                                     self.screen_rect.h)
+                                    
         #Set up GUI
         self.buttons = [
             Button(1, 1, "USE", self.use_pressed, self.item_selected),
@@ -88,30 +94,59 @@ class GUI():
         outlineRect.h -= 1
         
         pygame.draw.rect(self.screen, OUTLINE_COLOUR, outlineRect, 2)
+        
+        #rect for stats bars
+        bar_gen_rect = pygame.Rect(0,
+                                    0,
+                                    BAR_WIDTH,
+                                    FONT_SIZE - PAD)
 
         # display player stats
         player_name = BIG_FONT.render("Gus", True, FONT_COLOUR)
         self.screen.blit(player_name,
                          (self.gui_rect.centerx - (player_name.get_width()/2),
-                          BIG_FONT_SIZE*line_num + PAD))
-        #update number or bar graphic
+                          FONT_SIZE*line_num + PAD))
         line_num += 1
+        
+        # health stat
         player_health = FONT.render("Health", True, FONT_COLOUR)
         self.screen.blit(player_health,
                          (self.gui_rect.left + PAD,
                           FONT_SIZE*line_num + PAD))
-        #update number or bar graphic
+
+        health_rect = bar_gen_rect.copy()
+        health_rect.x, health_rect.y = RESOLUTION_RECT.w - (self.gui_rect.w)/2 - PAD, \
+                                        BIG_FONT_SIZE*line_num + 1.3*PAD
+        health_rect.w = self.player.health
+        # bar color
+        bar_colour = RED_BAR if self.player.health <= 30 else GREEN_BAR
+        pygame.draw.rect(self.screen, bar_colour, health_rect)
         line_num += 1
+        
+        # hunger stat
         player_hunger = FONT.render("Hunger", True, FONT_COLOUR)
         self.screen.blit(player_hunger,
                          (self.gui_rect.left + PAD,
                           FONT_SIZE*line_num + PAD))
-        #update number or bar graphic
+        hunger_rect = bar_gen_rect.copy()
+        hunger_rect.x, hunger_rect.y = RESOLUTION_RECT.w - (self.gui_rect.w)/2 - PAD, \
+                                        FONT_SIZE*line_num + 2*PAD
+        hunger_rect.w = self.player.hunger
+        bar_colour  = RED_BAR if self.player.hunger >= 75 else GREEN_BAR
+        pygame.draw.rect(self.screen, bar_colour, hunger_rect)
         line_num += 1
+        
+        # stamina stat
         player_stamina = FONT.render("Stamina", True, FONT_COLOUR)
         self.screen.blit(player_stamina,
                          (self.gui_rect.left + PAD,
                           FONT_SIZE*line_num + PAD))
+        stamina_rect = bar_gen_rect.copy()
+        stamina_rect.x, stamina_rect.y = RESOLUTION_RECT.w - (self.gui_rect.w)/2 - PAD, \
+                                        FONT_SIZE*line_num + 2*PAD
+        stamina_rect.w = self.player.stamina
+        bar_colour = RED_BAR if self.player.stamina <= 30 else GREEN_BAR
+        pygame.draw.rect(self.screen,bar_colour, stamina_rect)
         line_num += 2
         
         #divider
