@@ -26,6 +26,8 @@ class Player(Group):
         self.stamina = 100
         self.exhausted = False
         self.speed = 5
+        self.stats = "Health:{} Stamina:{} Hunger:{} Starving:{} Speed:{}".format\
+        (self.health,self.stamina,self.hunger,self.starving,self.speed)
 
         self.player.image = self.player.front
         self.player.rect = self.player.front.get_rect()

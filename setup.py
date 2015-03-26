@@ -38,7 +38,7 @@ bgy = 0
 map_matrix = mapmatrix.map_matrix
 
 #Custom Events
-UPDATEHUNGER = 25
+UPDATESTATUS = 25
 #pygame.event.Event(pygame.USEREVENT)
 
 #Initializations
