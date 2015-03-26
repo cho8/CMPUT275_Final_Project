@@ -41,28 +41,30 @@ def checkCollisions(spr):
     if spr.rect.x < 0:
         spr.rect.x = 0
         turnLeft(spr)
-        turenLeft(spr)
+        turnLeft(spr)
     if spr.rect.x > setup.background.get_width():
         spr.rect.x = setup.background.get_width()
         turnLeft(spr)
-        turenLeft(spr)
+        turnLeft(spr)
     if spr.rect.y < 0:
         spr.rect.y = 0
         turnLeft(spr)
-        turenLeft(spr)
+        turnLeft(spr)
     if spr.rect.y > setup.background.get_height():
         spr.rect.x = setup.background.get_height()
         turnLeft(spr)
-        turenLeft(spr)
+        turnLeft(spr)
         
 
 def updateNPC(spritegroup):
     for spr in spritegroup:
-        mv = random.randrange(0,100)
+        mv = random.randrange(0,200)
         if mv == 0:
             turnLeft(spr)
         elif mv == 1:
             turnRight(spr)
+        elif mv == 2 or mv == 3 or mv == 4:
+            pass # do nothing
         else:
             move(spr)
     

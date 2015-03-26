@@ -1,6 +1,5 @@
 import pygame, npc
 from npc.base_npc import BaseNPC
-#from tiles import Tile
 
 class Wolf(BaseNPC):
     """
@@ -13,13 +12,13 @@ class Wolf(BaseNPC):
     def __init__(self, **keywords):
         
         # Set base class
-        BaseNPC.__init__(self, **keywords)
+        super().__init__(**keywords)
         self.image = pygame.image.load("images/wolf.png").convert_alpha()
         self.front = self.image.subsurface(0,28,10,14)
         self.back = self.image.subsurface(10,28,10,14)
         self.left= self.image.subsurface(0,0,29,14)
         self.right = self.image.subsurface(0,14,29,14)
-        self.image = self.front
+        self.image = self.left
         self.rect = self.image.get_rect() 
         self.health = 10
         self.speed = 1
