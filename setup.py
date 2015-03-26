@@ -26,7 +26,7 @@ def load(image,x,y):
 
 #Starting Positions/Sizes
 
-SCREENSIZE = (400,400)
+SCREENSIZE = (600,400)
 pstart_x = 200
 pstart_y = 200
 bgx = 0
