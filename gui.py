@@ -30,6 +30,8 @@ class GUI():
                     
                     for rect in self.buildings:
                         rect.rect.x -= SPEED
+                    for spr in setup.npcs:
+                        spr.rect.x -= SPEED
 
             elif group.player.rect.x > self.screen.get_width()-VIEWDISTANCE:
                 if self.bgx >(0-self.background.get_width()+self.screen.get_width()):
@@ -38,6 +40,8 @@ class GUI():
                 
                     for rect in self.buildings:
                         rect.rect.x -= SPEED
+                    for spr in setup.npcs:
+                        spr.rect.x -= SPEED
 
             group.player.rect.x += SPEED
 
@@ -59,6 +63,8 @@ class GUI():
                     
                     for rect in self.buildings:
                         rect.rect.y -= SPEED
+                    for spr in setup.npcs:
+                        spr.rect.y -= SPEED
             
             elif group.player.rect.y < VIEWDISTANCE:
                 if self.bgy < 0:
@@ -67,6 +73,8 @@ class GUI():
                 
                     for rect in self.buildings:
                         rect.rect.y -= SPEED
+                    for spr in setup.npcs:
+                        spr.rect.y -= SPEED
 
             group.player.rect.y += SPEED
 
@@ -79,3 +87,4 @@ class GUI():
         self.screen.blit(self.background,(self.bgx,self.bgy))
         self.player.draw(self.screen)
         self.buildings.draw(self.screen)
+        setup.npcs.draw(self.screen)
