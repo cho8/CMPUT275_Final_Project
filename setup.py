@@ -48,9 +48,9 @@ npcs = sprite.Group()
 for i in range(60):
     for j in range(60):
         
-        if map_matrix[i][j] == 'P':
+        if map_matrix[i][j] == 7:
             player = Player(j*20,i*20,PLAYERIMG)
-        elif map_matrix[i][j] == 'W':
+        elif map_matrix[i][j] == 8:
             object = Wolf()
             #object.image = pygame.image.load(WOLF).convert_alpha()
             #object.rect = object.image.get_rect()

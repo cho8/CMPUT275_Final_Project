@@ -47,6 +47,7 @@ class Player(Group):
     def movePlayer(self,direction):
         SPEED = setup.player_speed
         VIEWDISTANCE = 150
+        GUIWIDTH = 200
 
         if direction == "LEFT" or direction == "RIGHT":
             if direction == "LEFT":
@@ -65,9 +66,9 @@ class Player(Group):
                     for spr in setup.npcs:
                         spr.rect.x -= SPEED
 
-            elif self.player.rect.x > setup.screen.get_width()-VIEWDISTANCE-200:
-                if setup.gui.bgx >(0-setup.background.get_width()+setup.screen.get_width()-200):
-                    self.player.rect.x = setup.screen.get_width()-VIEWDISTANCE-200
+            elif self.player.rect.x > setup.screen.get_width()-VIEWDISTANCE-GUIWIDTH:
+                if setup.gui.bgx >(0-setup.background.get_width()+setup.screen.get_width()-GUIWIDTH):
+                    self.player.rect.x = setup.screen.get_width()-VIEWDISTANCE-GUIWIDTH
                     setup.gui.bgx -= SPEED
                 
                     for rect in setup.buildings:
