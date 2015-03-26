@@ -25,7 +25,6 @@ def move(spr):
         spr.image = spr.right
         spr.rect.x += spr.speed
     checkCollisions(spr)
-    print("x:{},y:{}".format(spr.rect.x,spr.rect.y))
 
 def checkCollisions(spr):
     if pygame.sprite.spritecollideany(spr,setup.buildings) != None or pygame.sprite.spritecollideany(spr,setup.player) != None:

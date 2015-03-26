@@ -23,8 +23,9 @@ class Player(Group):
         self.alive = True
         self.starving = False
         self.encumbrance = 0
-        self.stamina = 0
+        self.stamina = 100
         self.exhausted = False
+        self.speed = 5
 
         self.player.image = self.player.front
         self.player.rect = self.player.front.get_rect()
@@ -45,7 +46,7 @@ class Player(Group):
         else:
             self.exhausted = True
     def movePlayer(self,direction):
-        SPEED = setup.player_speed
+        SPEED = self.speed
         VIEWDISTANCE = 150
         GUIWIDTH = 200
 
@@ -65,6 +66,8 @@ class Player(Group):
                         rect.rect.x -= SPEED
                     for spr in setup.npcs:
                         spr.rect.x -= SPEED
+                    for item in setup.items:
+                        item.rect.x -= SPEED
 
             elif self.player.rect.x > setup.screen.get_width()-VIEWDISTANCE-GUIWIDTH:
                 if setup.gui.bgx >(0-setup.background.get_width()+setup.screen.get_width()-GUIWIDTH):
@@ -75,10 +78,14 @@ class Player(Group):
                         rect.rect.x -= SPEED
                     for spr in setup.npcs:
                         spr.rect.x -= SPEED
+                    for item in setup.items:
+                        item.rect.x -= SPEED
 
             self.player.rect.x += SPEED
 
-            if pygame.sprite.spritecollideany(self.player,setup.buildings) != None:
+            if pygame.sprite.spritecollideany(self.player,setup.buildings) != None\
+            or pygame.sprite.spritecollideany(self.player,setup.npcs) != None\
+            or pygame.sprite.spritecollideany(self.player,setup.items) != None:
 
                 self.player.rect.x -= SPEED
 
@@ -98,6 +105,8 @@ class Player(Group):
                         rect.rect.y -= SPEED
                     for spr in setup.npcs:
                         spr.rect.y -= SPEED
+                    for item in setup.items:
+                        item.rect.y -= SPEED
             
             elif self.player.rect.y < VIEWDISTANCE:
                 if setup.gui.bgy < 0:
@@ -108,10 +117,14 @@ class Player(Group):
                         rect.rect.y -= SPEED
                     for spr in setup.npcs:
                         spr.rect.y -= SPEED
+                    for item in setup.items:
+                        item.rect.y -= SPEED
 
             self.player.rect.y += SPEED
 
-            if pygame.sprite.spritecollideany(self.player,setup.buildings) != None:
+            if pygame.sprite.spritecollideany(self.player,setup.buildings) != None\
+            or pygame.sprite.spritecollideany(self.player,setup.npcs) != None\
+            or pygame.sprite.spritecollideany(self.player,setup.items) != None:
 
                 self.player.rect.y -= SPEED
 
@@ -122,4 +135,6 @@ class Player(Group):
             self.health -= .1
         if self.health <= 0:
             self.alive = False
+        if self.exhausted:
+            self.speed = 1
             

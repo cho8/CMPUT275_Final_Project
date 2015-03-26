@@ -35,7 +35,6 @@ pstart_x = 200
 pstart_y = 200
 bgx = 0
 bgy = 0
-player_speed = 5
 map_matrix = mapmatrix.map_matrix
 
 #Custom Events
