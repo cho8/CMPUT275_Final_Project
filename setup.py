@@ -1,6 +1,7 @@
-import pygame,mapmatrix
+import pygame,mapmatrix, npc
 from pygame import sprite
 from player import Player
+from npc.wolf import Wolf
 
 
 #images
@@ -13,6 +14,7 @@ LOG = "images/log.png"
 MOUNTAIN = "images/mountain.png"
 MOUNTAIN_END = "images/mountainend.png"
 SNOWY_TREE = "images/tree2.png"
+WOLF = "images/wolf.png"
 
 def load(image,x,y):
      object = sprite.Sprite()
@@ -42,12 +44,20 @@ screen = pygame.display.set_mode(SCREENSIZE)
 pygame.display.set_caption("Survive!")
 background = pygame.image.load(GAMEMAP).convert()
 buildings = sprite.OrderedUpdates()
+npcs = sprite.Group()
 for i in range(60):
     for j in range(60):
         
         if map_matrix[i][j] == 'P':
             player = Player(j*20,i*20,PLAYERIMG)
-        if map_matrix[i][j] == 1:
+        elif map_matrix[i][j] == 'W':
+            object = Wolf()
+            #object.image = pygame.image.load(WOLF).convert_alpha()
+            #object.rect = object.image.get_rect()
+            object.rect.x = j*20
+            object.rect.y = i*20
+            npcs.add(object)
+        elif map_matrix[i][j] == 1:
             load(TREE,j,i)
         elif map_matrix[i][j] == 2:
             load(CABIN,j,i) 

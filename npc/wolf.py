@@ -1,6 +1,6 @@
 import pygame, npc
-from npc import BaseNPC
-from tiles import Tile
+from npc.base_npc import BaseNPC
+#from tiles import Tile
 
 class Wolf(BaseNPC):
     """
@@ -9,16 +9,15 @@ class Wolf(BaseNPC):
     Modes: Fight, Flight, Neutral
     
     """
-    sprite = pygame.image.load("images/wolf.png")
 
     def __init__(self, **keywords):
-        self._base_image = Wolf.sprite
         
         # Set base class
-        super().__init__(**keywords)
-
+        BaseNPC.__init__(self, **keywords)
+        self.image = pygame.image.load("images/wolf.png").convert_alpha()
+        self.rect = self.image.get_rect() 
         self.health = 10
-        self.speed = 10
+        self.speed = 3
         self.atk = 5
         self.type = "Wolf"
 

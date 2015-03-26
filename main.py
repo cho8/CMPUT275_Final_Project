@@ -1,9 +1,10 @@
-import sys,pygame,setup
+import sys,pygame,setup,AI
 from gui import GUI
 
 pygame.init()
 gui = GUI()
 player = setup.player
+npcs = setup.npcs
 clock = pygame.time.Clock()
 pygame.key.set_repeat(1)
 pygame.time.set_timer(setup.UPDATEHUNGER,6000)#Ten minutes until starving
@@ -38,8 +39,10 @@ while True:
     
         clock.tick(40)
 
-        gui.update()
+
         player.updatePlayer()
+        AI.updateNPC(npcs)
+        gui.update()
 
     endscreen = pygame.Surface(pygame.display.get_surface().get_size()).convert_alpha()
     endscreen.fill((0,0,0))
