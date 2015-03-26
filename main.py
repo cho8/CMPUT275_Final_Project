@@ -34,8 +34,9 @@ while True:
 
                 elif keys[pygame.K_w]:
                     player.movePlayer("UP")
-            elif event.type == setup.UPDATESTATUS:
-                print(player.stats)
+            if event.type == setup.UPDATESTATUS:
+                print("Health:{} Stamina:{} Hunger:{} Starving:{} Speed:{}".format\
+        (player.health,player.stamina,player.hunger,player.starving,player.speed))
                 player.updateHunger()
                 player.updateStamina()
     

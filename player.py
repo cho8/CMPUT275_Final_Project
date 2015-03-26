@@ -26,14 +26,14 @@ class Player(Group):
         self.stamina = 100
         self.exhausted = False
         self.speed = 5
-        self.stats = "Health:{} Stamina:{} Hunger:{} Starving:{} Speed:{}".format\
-        (self.health,self.stamina,self.hunger,self.starving,self.speed)
-
+        self.inventory = []
+        self.moving = False
         self.player.image = self.player.front
         self.player.rect = self.player.front.get_rect()
         self.player.rect.x = x_pos
         self.player.rect.y = x_pos
         self.add(self.player)
+        
 
     def updateHunger(self):
         if self.hunger < 100:
@@ -43,14 +43,21 @@ class Player(Group):
             print("starving")
             print(self.health)
     def updateStamina(self):
-        if self.stamina > 0:
-            self.stamina -= 1+(self.encumbrance%25)
+        if self.moving == True:
+            if self.stamina > -10:
+                self.stamina -= 1+(self.encumbrance%25)
+            if self.stamina < 0:
+                self.exhausted = True
         else:
-            self.exhausted = True
+            if self.stamina < 100:
+                self.stamina += 1
+            if self.stamina > 0:
+                self.exhausted = False
     def movePlayer(self,direction):
         SPEED = self.speed
         VIEWDISTANCE = 150
         GUIWIDTH = 200
+        self.moving = True
 
         if direction == "LEFT" or direction == "RIGHT":
             if direction == "LEFT":
@@ -133,6 +140,7 @@ class Player(Group):
 
     def updatePlayer(self):
         #Takes roughly 4 min. from full health to death when starving.
+        self.moving = False
         if self.starving:
             self.health -= .1
         if self.health <= 0:
