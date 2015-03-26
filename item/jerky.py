@@ -9,10 +9,10 @@ class Jerky(BaseItem):
     """
     sprite = pygame.image.load("images/item_oldwaterbottle.png")
     def __init__(self):
-        super().__init__(**keywords)
+        super().__init__()
 
         self.name = "Dry Jerky"
-        self.description = ""
+        self.description = item.descriptions[self.name]
         
         self.heal_value = -10
         self.stam_value = 40

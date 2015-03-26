@@ -12,7 +12,6 @@ class OldWaterBottle(BaseItem):
         super().__init__(**keywords)
 
         self.name = "Old Water Bottle"
-        self.description = ""
     
         self.stam_value = 20
         self.image = pygame.image.load("images/item_oldwaterbottle.png").convert_alpha()

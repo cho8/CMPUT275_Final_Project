@@ -5,10 +5,9 @@ __all__ = { "Berries",
             "Old Water Bottle",
             "Dry Jerky"}
 
-descriptions = { "Berries" : "Wild berries are definitely safe to eat right?",
-                 "Old Water Bottle" : "A bottle with a bit of potable water inside",
-                 "Dry Jerky" : "Looks like cardboard. Oh well."}
+descriptions = { "Berries" : "Wild berries are definitely safe to eat, right?",
+                 "Old Water Bottle" : "A bottle with a bit of water inside",
+                 "Dry Jerky" : "Looks like cardboard. Tastes like cardboard."}
 
 
-active_items = pygame.sprite.Group()
 

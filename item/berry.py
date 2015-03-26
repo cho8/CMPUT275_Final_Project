@@ -10,9 +10,7 @@ class Berries(BaseItem):
     def __init__(self):
         super().__init__(**keywords)
 
-        self.name = "Berries"
-        self.description = ""
-    
+        self.name = "Berries"   
 
         self.eat_value = 10
         self.stam_value = 0

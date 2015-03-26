@@ -10,19 +10,12 @@ class BaseItem(Sprite):
     Includes sprites, stat changes and effects.
     """
     
-    def __init__(self,
-                 x_pos = None,
-                 y_pos = None,
-                 **keywords):
+    def __init__(self):
         
-        # There should be a group called "items" somewhere
         Sprite.__init__(self, items)
         
         self.name = "Base Item"
-        self.description = "Base Description"
-        
-        self.x_pos = x_pos
-        self.y_pos = y_pos
+        self.description = self.description = item.descriptions[self.name]
 
         self.size = 10
         self.heal_value = 0

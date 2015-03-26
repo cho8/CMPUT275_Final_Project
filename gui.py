@@ -13,8 +13,10 @@ PAD = 4
 
 # Set fonts
 pygame.font.init()
+SMALL_FONT_SIZE = 14
 FONT_SIZE = 16
 BIG_FONT_SIZE = 18
+SMALL_FONT = pygame.font.SysFont("Arial", SMALL_FONT_SIZE)
 FONT = pygame.font.SysFont("Arial", FONT_SIZE)
 BIG_FONT = pygame.font.SysFont("Arial", BIG_FONT_SIZE)
 FONT_COLOUR = (0, 0, 0)
@@ -89,11 +91,11 @@ class GUI():
         pygame.draw.rect(self.screen, GUI_COLOUR, guiRect)
 
         # draw outline of gui
-        outlineRect = self.gui_rect.copy()
-        outlineRect.w -= 1
-        outlineRect.h -= 1
+        outline_rect = self.gui_rect.copy()
+        outline_rect.w -= 1
+        outline_rect.h -= 1
         
-        pygame.draw.rect(self.screen, OUTLINE_COLOUR, outlineRect, 2)
+        pygame.draw.rect(self.screen, OUTLINE_COLOUR, outline_rect, 2)
         
         #rect for stats bars
         bar_gen_rect = pygame.Rect(0,
@@ -132,7 +134,7 @@ class GUI():
         hunger_rect.x, hunger_rect.y = RESOLUTION_RECT.w - (self.gui_rect.w)/2 - PAD, \
                                         FONT_SIZE*line_num + 2*PAD
         hunger_rect.w = self.player.hunger
-        bar_colour  = RED_BAR if self.player.hunger >= 75 else GREEN_BAR
+        bar_colour  = RED_BAR if self.player.hunger >= 70 else GREEN_BAR
         pygame.draw.rect(self.screen, bar_colour, hunger_rect)
         line_num += 1
         
@@ -154,7 +156,26 @@ class GUI():
         
         #inventory box
         
+
+
+
         #buttons
+        
+    def draw_inventory_list(self, inventory):
+        """
+        Draws the list of items (inventory) into the gui
+        """
+        inventory_rect = self.gui_rect.copy()
+        inventory_rect.x += 5
+        inventory_rect.y += 84
+        inventory_rect.w -= 10
+        inventory_rect.h -= 130
+        pygame.draw.rect(self.screen, OUTLINE_COLOUR, inventory_rect, 1)
+        for item in self.player.inventory:
+            item_name = FONT.rend(item.name, True, FONT_COLOUR)
+            self.screen.blit(item_name,
+                            (inventoryRect + PAD,
+                            FONT_SIZE*line_num+PAD))
 
     def draw_gui_button(self, button, startpos):
         """
