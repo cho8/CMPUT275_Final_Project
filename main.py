@@ -2,7 +2,7 @@ import sys,pygame,setup,AI
 from gui import GUI
 
 pygame.init()
-gui = GUI()
+gui = setup.gui
 player = setup.player
 npcs = setup.npcs
 clock = pygame.time.Clock()
@@ -24,16 +24,16 @@ while True:
                 keys = pygame.key.get_pressed()
 
                 if keys[pygame.K_d]:                
-                    gui.movePlayer("RIGHT",player)
+                    player.movePlayer("RIGHT")
            
                 elif keys[pygame.K_s]:
-                    gui.movePlayer("DOWN",player)
+                    player.movePlayer("DOWN")
 
                 elif keys[pygame.K_a]:
-                    gui.movePlayer("LEFT",player)
+                    player.movePlayer("LEFT")
 
                 elif keys[pygame.K_w]:
-                    gui.movePlayer("UP",player)
+                    player.movePlayer("UP")
             elif event.type == setup.UPDATEHUNGER:
                 player.updateHunger()
     

@@ -1,4 +1,4 @@
-import pygame
+import pygame,setup
 from pygame.sprite import Group
 
 
@@ -44,6 +44,76 @@ class Player(Group):
             self.stamina -= 1+(self.encumbrance%25)
         else:
             self.exhausted = True
+    def movePlayer(self,direction):
+        SPEED = setup.player_speed
+        VIEWDISTANCE = 150
+
+        if direction == "LEFT" or direction == "RIGHT":
+            if direction == "LEFT":
+                SPEED *= -1
+                self.player.image = self.player.left
+            else:
+                self.player.image = self.player.right
+            
+            if self.player.rect.x < VIEWDISTANCE:               
+                if setup.gui.bgx < 0:
+                    self.player.rect.x = VIEWDISTANCE
+                    setup.gui.bgx -= SPEED
+                    
+                    for rect in setup.buildings:
+                        rect.rect.x -= SPEED
+                    for spr in setup.npcs:
+                        spr.rect.x -= SPEED
+
+            elif self.player.rect.x > setup.screen.get_width()-VIEWDISTANCE-200:
+                if setup.gui.bgx >(0-setup.background.get_width()+setup.screen.get_width()-200):
+                    self.player.rect.x = setup.screen.get_width()-VIEWDISTANCE-200
+                    setup.gui.bgx -= SPEED
+                
+                    for rect in setup.buildings:
+                        rect.rect.x -= SPEED
+                    for spr in setup.npcs:
+                        spr.rect.x -= SPEED
+
+            self.player.rect.x += SPEED
+
+            if pygame.sprite.spritecollideany(self.player,setup.buildings) != None:
+
+                self.player.rect.x -= SPEED
+
+        elif direction == "UP" or direction == "DOWN":
+            if direction == "UP":
+                SPEED *= -1
+                self.player.image = self.player.back
+            else:
+                self.player.image = self.player.front
+
+            if self.player.rect.y > setup.screen.get_height() - VIEWDISTANCE: 
+                if setup.gui.bgy >(0-setup.background.get_height()+setup.screen.get_height()):
+                    self.player.rect.y = setup.screen.get_height()-VIEWDISTANCE         
+                    setup.gui.bgy -= SPEED
+                    
+                    for rect in setup.buildings:
+                        rect.rect.y -= SPEED
+                    for spr in setup.npcs:
+                        spr.rect.y -= SPEED
+            
+            elif self.player.rect.y < VIEWDISTANCE:
+                if setup.gui.bgy < 0:
+                    self.player.rect.y = VIEWDISTANCE
+                    setup.gui.bgy -= SPEED
+                
+                    for rect in setup.buildings:
+                        rect.rect.y -= SPEED
+                    for spr in setup.npcs:
+                        spr.rect.y -= SPEED
+
+            self.player.rect.y += SPEED
+
+            if pygame.sprite.spritecollideany(self.player,setup.buildings) != None:
+
+                self.player.rect.y -= SPEED
+
 
     def updatePlayer(self):
         #Takes roughly 4 min. from full health to death when starving.

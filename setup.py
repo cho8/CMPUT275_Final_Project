@@ -1,4 +1,4 @@
-import pygame,mapmatrix, npc
+import pygame,mapmatrix, npc, gui
 from pygame import sprite
 from player import Player
 from npc.wolf import Wolf
@@ -70,5 +70,5 @@ for i in range(60):
         elif map_matrix[i][j] == 6:
             load(SNOWY_TREE,j,i)         
          
-
+gui = gui.GUI()
     
