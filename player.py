@@ -43,7 +43,7 @@ class Player(Group):
             print("starving")
             print(self.health)
     def updateStamina(self):
-        if self.stamina < 100:
+        if self.stamina > 0:
             self.stamina -= 1+(self.encumbrance%25)
         else:
             self.exhausted = True
