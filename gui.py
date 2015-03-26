@@ -201,6 +201,7 @@ class GUI():
         self.screen.blit(self.background,(self.bgx,self.bgy))
         self.player.draw(self.screen)
         self.buildings.draw(self.screen)
+        setup.items.draw(self.screen)
         setup.npcs.draw(self.screen)
         self.draw_gui()
         pygame.display.flip()

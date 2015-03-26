@@ -15,14 +15,18 @@ MOUNTAIN = "images/mountain.png"
 MOUNTAIN_END = "images/mountainend.png"
 SNOWY_TREE = "images/tree2.png"
 WOLF = "images/wolf.png"
+JERKY = "images/item_jerky.png"
 
-def load(image,x,y):
-     object = sprite.Sprite()
+def load(image,x,y,group):
+     if group == npcs:
+         object = Wolf()
+     else:
+         object = sprite.Sprite()
      object.image = pygame.image.load(image).convert_alpha()
      object.rect = object.image.get_rect()
      object.rect.x = x*20
      object.rect.y = y*20
-     buildings.add(object)
+     group.add(object)
 
 #Starting Positions/Sizes
 
@@ -45,30 +49,29 @@ pygame.display.set_caption("Survive!")
 background = pygame.image.load(GAMEMAP).convert()
 buildings = sprite.OrderedUpdates()
 npcs = sprite.Group()
+items = sprite.Group()
 for i in range(60):
     for j in range(60):
         
         if map_matrix[i][j] == 7:
             player = Player(j*20,i*20,PLAYERIMG)
         elif map_matrix[i][j] == 8:
-            object = Wolf()
-            #object.image = pygame.image.load(WOLF).convert_alpha()
-            #object.rect = object.image.get_rect()
-            object.rect.x = j*20
-            object.rect.y = i*20
-            npcs.add(object)
+            load(WOLF,j,i,npcs)
         elif map_matrix[i][j] == 1:
-            load(TREE,j,i)
+            load(TREE,j,i,buildings)
         elif map_matrix[i][j] == 2:
-            load(CABIN,j,i) 
+            load(CABIN,j,i,buildings) 
         elif map_matrix[i][j] == 3:
-            load(LOG,j,i) 
+            load(LOG,j,i,buildings) 
         elif map_matrix[i][j] == 4:
-            load(MOUNTAIN,j,i)
+            load(MOUNTAIN,j,i,buildings)
         elif map_matrix[i][j] == 5:
-            load(MOUNTAIN_END,j,i)
+            load(MOUNTAIN_END,j,i,buildings)
         elif map_matrix[i][j] == 6:
-            load(SNOWY_TREE,j,i)         
+            load(SNOWY_TREE,j,i,buildings)
+        elif map_matrix[i][j] == 9:
+            load(JERKY,j,i,items)
+                 
          
 gui = gui.GUI()
     
