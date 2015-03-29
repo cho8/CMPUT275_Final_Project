@@ -4,12 +4,12 @@ from collections import namedtuple
 
 # GUI size things
 RESOLUTION_RECT = pygame.Rect(0,0, 600,400)
-BUTTON_HEIGHT = 50
-BUTTON_WIDTH = 80
+BUTTON_HEIGHT = 40
+BUTTON_WIDTH = 100
 GUI_WIDTH = 200
 MAP_WIDTH = 400
 BAR_WIDTH = 100
-PAD = 4
+PAD = 5
 
 # Set fonts
 pygame.font.init()
@@ -32,7 +32,7 @@ GREEN_BAR = (0,255,0)
 
 # A container class which stores button information.
 # slot_height and slot_width represents the number of BUTTON_HEIGHT and BUTTON WIDTH of the button relative to the bottom and right edge of gui.
-Button = namedtuple('Button', ['slot_height', 'slot_width', 'text', 'onClick', 'condition'])
+Button = namedtuple('Button', ['slot_x', 'slot_y', 'text', 'onClick', 'condition'])
 
 class GUI():
     
@@ -68,9 +68,9 @@ class GUI():
         #Set up GUI
         self.buttons = [
             Button(1, 1, "USE", self.use_pressed, self.item_selected),
-            Button(1, 0, "DISCARD", self.discard_pressed, self.item_selected),
+            Button(0, 1, "DISCARD", self.discard_pressed, self.item_selected),
             Button(0, 0, "SEARCH", self.search_pressed, None),
-            Button(0, 1, "AUTO-EAT", self.auto_pressed, None)]
+            Button(1, 0, "AUTO-EAT", self.auto_pressed, None)]
     
         #Currently Selected Item in Inventory
         self.sel_item = None
@@ -144,7 +144,8 @@ class GUI():
                          (self.gui_rect.left + PAD,
                           FONT_SIZE*line_num + PAD))
         stamina_rect = bar_gen_rect.copy()
-        stamina_rect.x, stamina_rect.y = RESOLUTION_RECT.w - (self.gui_rect.w)/2 - PAD, \
+        stamina_rect.x, stamina_rect.y = RESOLUTION_RECT.w - \
+                                        (self.gui_rect.w)/2 - PAD,\
                                         FONT_SIZE*line_num + 2*PAD
         stamina_rect.w = self.player.stamina
         bar_colour = RED_BAR if self.player.stamina <= 30 else GREEN_BAR
@@ -155,8 +156,11 @@ class GUI():
         pygame.draw.line(self.screen, OUTLINE_COLOUR, (self.gui_rect.left, FONT_SIZE*line_num), (self.gui_rect.right, FONT_SIZE*line_num))
         
         #inventory box
+        self.draw_inventory_list(self.player.inventory)
 
         #buttons
+        for button in self.buttons:
+            self.draw_gui_button(button)
         
     def draw_inventory_list(self, inventory):
         """
@@ -166,7 +170,7 @@ class GUI():
         inventory_rect.x += 5
         inventory_rect.y += 84
         inventory_rect.w -= 10
-        inventory_rect.h -= 130
+        inventory_rect.h -= 180
         pygame.draw.rect(self.screen, OUTLINE_COLOUR, inventory_rect, 1)
         for item in self.player.inventory:
             item_name = FONT.rend(item.name, True, FONT_COLOUR)
@@ -174,44 +178,47 @@ class GUI():
                             (inventoryRect + PAD,
                             FONT_SIZE*line_num+PAD))
 
-    def draw_gui_button(self, button, startpos):
+    def draw_gui_button(self, button):
         """
         Renders a button to the bar.
         If the mouse is hovering over the button it is rendered in white,
         else rgb(50, 50, 50).
         """
-        
-        # Gotta figure out the button rect dimensions
-        #but_rect = pygame.Rect()
+        but_x = self.screen_rect.w - (self.gui_rect.w/2)*(button.slot_x+1) + PAD
+        but_y = self.screen_rect.h - (self.gui_rect.h/9)*(button.slot_y+1) 
+        but_rect = pygame.Rect(but_x,
+                                but_y,
+                                BUTTON_WIDTH,
+                                BUTTON_HEIGHT)
         
         # The outline needs a slightly smaller rectangle
         but_out_rect = but_rect
-        but_out_rect.width -= 1
+        but_out_rect.width -= 10
 
         # Determine the button color
-        but_color = BAR_COLOR
+        but_colour = GUI_COLOUR
         
         # The button can't be used
         if button.condition and not button.condition():
-            but_color = BUTTON_DISABLED_COLOR
+            but_colour = BUTTON_DISABLED_COLOUR
         else:
             # The button can be used
             mouse_pos = pygame.mouse.get_pos()
             if but_rect.collidepoint(mouse_pos):
                 # Highlight on mouse over
-                but_color = BUTTON_HIGHLIGHT_COLOR
+                but_colour = BUTTON_HIGHLIGHT_COLOUR
         
         # Draw the button
-        pygame.draw.rect(self.screen, but_color, but_rect)
+        pygame.draw.rect(self.screen, but_colour, but_rect)
             
         # Draw the outline
-        pygame.draw.rect(self.screen, OUTLINE_COLOR, but_out_rect, 2)
+        pygame.draw.rect(self.screen, OUTLINE_COLOUR, but_out_rect, 2)
 
         # Draw the text
-        but_text = FONT.render(button.text, True, FONT_COLOR)
+        but_text = FONT.render(button.text, True, FONT_COLOUR)
         self.screen.blit(
             but_text,
-            (self.bar_rect.centerx - (but_text.get_width()/2),
+            (but_rect.centerx - (but_text.get_width()/2),
             but_rect.y + (BUTTON_HEIGHT//2) - but_text.get_height()//2))
     
     def use_pressed(self):
