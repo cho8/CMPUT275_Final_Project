@@ -6,7 +6,7 @@ __all__ = { "Berries",
 
 descriptions = { "Berries" : "Wild berries are definitely safe to eat, right?",
                  "Old Water Bottle" : "A bottle with a bit of water inside",
-                 "Dry Jerky" : "Looks like cardboard. Tastes like cardboard."}
+                 "Dry Jerky" : "Looks like cardboard. Tastes like cardboard.", "Base Item":""}
 
 
 

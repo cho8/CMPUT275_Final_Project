@@ -1,4 +1,5 @@
 import pygame,mapmatrix, npc, gui
+from item.jerky import Jerky
 from pygame import sprite
 from player import Player
 from npc.wolf import Wolf
@@ -21,13 +22,26 @@ GRASS = "images/grass.png"
 def load(image,x,y,group):
      if group == npcs:
          object = Wolf()
+         object.image = pygame.image.load(image).convert_alpha()
+         object.rect = object.image.get_rect()
+         object.rect.x = x*20
+         object.rect.y = y*20
+         group.add(object)
+     elif group == items:
+         if image == JERKY:
+             object = Jerky()
+             object.rect = object.image.get_rect()
+             object.rect.x = x*20
+             object.rect.y = y*20
+             group.add(object)
+             object.set_ground()
      else:
          object = sprite.Sprite()
-     object.image = pygame.image.load(image).convert_alpha()
-     object.rect = object.image.get_rect()
-     object.rect.x = x*20
-     object.rect.y = y*20
-     group.add(object)
+         object.image = pygame.image.load(image).convert_alpha()
+         object.rect = object.image.get_rect()
+         object.rect.x = x*20
+         object.rect.y = y*20
+         group.add(object)
 
 #Starting Positions/Sizes
 

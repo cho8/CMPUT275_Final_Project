@@ -14,7 +14,7 @@ class BaseItem(Sprite):
     
     def __init__(self):
         
-        Sprite.__init__(self, items)
+        Sprite.__init__(self)
         
         self.name = "Base Item"
         self.description = self.description = item.descriptions[self.name]
@@ -44,12 +44,10 @@ class BaseItem(Sprite):
     def in_inventory(self):
         return self._inventory
     
-    @_inventory.setter
     def set_inventory(self):
         self._inventory = True
         self._ground = False
     
-    @_ground.setter
     def set_ground(self):
         self._inventory = False
         self._ground = True
@@ -66,7 +64,7 @@ class BaseItem(Sprite):
         """
         Changes item location from ground to inventory
         """
-        if on_ground(self):
+        if self.on_ground:
             self.set_inventory()
             # update inventory to have item
             inventory.append(self)

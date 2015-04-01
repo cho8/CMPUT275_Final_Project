@@ -1,4 +1,5 @@
 import pygame, item
+from item.base_item import BaseItem
 from pygame.sprite import Sprite
 
 class Jerky(BaseItem):
@@ -23,7 +24,7 @@ class Jerky(BaseItem):
         Consumes the item.
         Overrides base class definition of method.
         """
-        super().consume_item(self):
+        super().consume_item(self)
         # add stats to player
         # player.stamina += self.heal_value
         # player.stamina += self.stam_value

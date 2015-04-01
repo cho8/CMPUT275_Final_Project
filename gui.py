@@ -1,6 +1,5 @@
 import pygame
 import setup
-import
 from collections import namedtuple
 
 # GUI size things
@@ -159,13 +158,13 @@ class GUI():
         pygame.draw.line(self.screen, OUTLINE_COLOUR, (self.gui_rect.left, FONT_SIZE*line_num), (self.gui_rect.right, FONT_SIZE*line_num))
         
         #inventory box
-        self.draw_inventory_list(self.player.inventory)
+        self.draw_inventory_list(self.player.inventory,line_num)
 
         #buttons
         for button in self.buttons:
             self.draw_gui_button(button)
         
-    def draw_inventory_list(self, inventory):
+    def draw_inventory_list(self, inventory,line_num):
         """
         Draws the list of items (inventory) into the gui
         """
@@ -178,9 +177,9 @@ class GUI():
         for item in self.player.inventory:
             item.list_rect = inventory_rect.copy()
             item.list_rect.h = item.list_rect.h/8
-            item_name = FONT.rend(item.name, True, FONT_COLOUR)
+            item_name = FONT.render(item.name, True, FONT_COLOUR)
             self.screen.blit(item_name,
-                            (inventoryRect + PAD,
+                            (inventory_rect.x + PAD,
                             FONT_SIZE*line_num+PAD))
 
     def draw_gui_button(self, button):
@@ -253,7 +252,7 @@ class GUI():
         eligible_item = pygame.sprite.spritecollideany(self.player.player,setup.items)
         if eligible_item:
             eligible_item.pick_up(self.player.inventory)
-            print(inventory)
+            print(self.player.inventory)
     
 
     def auto_pressed(self):
