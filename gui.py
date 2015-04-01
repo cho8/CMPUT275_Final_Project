@@ -149,7 +149,10 @@ class GUI():
         stamina_rect.x, stamina_rect.y = RESOLUTION_RECT.w - \
                                         (self.gui_rect.w)/2 - PAD,\
                                         FONT_SIZE*line_num + 2*PAD
-        stamina_rect.w = self.player.stamina
+        if self.player.stamina >= 0:
+            stamina_rect.w = self.player.stamina
+        else:
+            stamina_rect.w = 0
         bar_colour = RED_BAR if self.player.stamina <= 30 else GREEN_BAR
         pygame.draw.rect(self.screen,bar_colour, stamina_rect)
         line_num += 2

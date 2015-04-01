@@ -23,24 +23,32 @@ while True:
             elif event.type == pygame.KEYDOWN:
                 keys = pygame.key.get_pressed()
 
-                if keys[pygame.K_d]:                
+                if keys[pygame.K_SPACE]:
+                    player.running = True
+
+                if keys[pygame.K_d]:
+                    player.moving == True                
                     player.movePlayer("RIGHT")
            
                 elif keys[pygame.K_s]:
+                    player.moving == True
                     player.movePlayer("DOWN")
 
                 elif keys[pygame.K_a]:
+                    player.moving == True
                     player.movePlayer("LEFT")
 
                 elif keys[pygame.K_w]:
+                    player.moving == True
                     player.movePlayer("UP")
+
             elif event.type == pygame.MOUSEBUTTONUP:
                 gui.on_click(event)
+
             if event.type == setup.UPDATESTATUS:
-                print("Health:{} Stamina:{} Hunger:{} Starving:{} Speed:{}".format\
-        (player.health,player.stamina,player.hunger,player.starving,player.speed))
+                print("Health:{} Stamina:{} Hunger:{} Starving:{}".format\
+        (player.health,player.stamina,player.hunger,player.starving))
                 player.updateHunger()
-                player.updateStamina()
     
         clock.tick(40)
 
