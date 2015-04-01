@@ -25,7 +25,7 @@ class Player(Group):
         self.encumbrance = 0
         self.stamina = 100
         self.exhausted = False
-        self.speed = 5
+        self.speed = 10
         self.inventory = []
         self.moving = False
         self.player.image = self.player.front
@@ -89,6 +89,8 @@ class Player(Group):
                         spr.rect.x -= SPEED
                     for item in setup.items:
                         item.rect.x -= SPEED
+                    for object in setup.longgrass:
+                        item.rect.x -= SPEED
 
             self.player.rect.x += SPEED
 
@@ -128,6 +130,8 @@ class Player(Group):
                         spr.rect.y -= SPEED
                     for item in setup.items:
                         item.rect.y -= SPEED
+                    for object in setup.longgrass:
+                        item.rect.x -= SPEED
 
             self.player.rect.y += SPEED
 

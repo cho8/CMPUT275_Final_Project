@@ -268,7 +268,7 @@ class GUI():
         """
         An item in the inventory is clicked/selected. Returns true or false.
         """
-        if self.sel_unit: return True
+        if self.sel_item: return True
         else: return False
     
     
@@ -315,5 +315,6 @@ class GUI():
         self.buildings.draw(self.screen)
         setup.items.draw(self.screen)
         setup.npcs.draw(self.screen)
+        setup.longgrass.draw(self.screen)
         self.draw_gui()
         pygame.display.flip()

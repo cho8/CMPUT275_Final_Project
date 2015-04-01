@@ -1,7 +1,6 @@
 import pygame,mapmatrix, npc, gui
 from pygame import sprite
 from player import Player
-
 from npc.wolf import Wolf
 
 
@@ -17,6 +16,7 @@ MOUNTAIN_END = "images/mountainend.png"
 SNOWY_TREE = "images/tree2.png"
 WOLF = "images/wolf.png"
 JERKY = "images/item_jerky.png"
+GRASS = "images/grass.png"
 
 def load(image,x,y,group):
      if group == npcs:
@@ -50,10 +50,11 @@ background = pygame.image.load(GAMEMAP).convert()
 buildings = sprite.OrderedUpdates()
 npcs = sprite.Group()
 items = sprite.Group()
+longgrass = sprite.Group()
 for i in range(60):
     for j in range(60):
         
-        if map_matrix[i][j] == 7:
+        if map_matrix[i][j] == 'p':
             player = Player(j*20,i*20,PLAYERIMG)
         elif map_matrix[i][j] == 8:
             load(WOLF,j,i,npcs)
@@ -71,6 +72,9 @@ for i in range(60):
             load(SNOWY_TREE,j,i,buildings)
         elif map_matrix[i][j] == 9:
             load(JERKY,j,i,items)
+        elif map_matrix[i][j] == 7:
+            load(GRASS,j,i,longgrass)
+                 
          
 gui = gui.GUI()
     
