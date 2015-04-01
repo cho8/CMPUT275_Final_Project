@@ -8,7 +8,6 @@ class Jerky(BaseItem):
     Dry meat. It doesn't look sanitary.
     Restores hunger by a medium amount. Reduces health slightly.
     """
-    sprite = pygame.image.load("images/item_oldwaterbottle.png")
     def __init__(self):
         super().__init__()
 
@@ -17,7 +16,7 @@ class Jerky(BaseItem):
         
         self.heal_value = -10
         self.stam_value = 40
-        self.image = pygame.image.load("images/item_oldwaterbottle.png").convert_alpha()
+        self.image = pygame.image.load("images/item_jerky.png").convert_alpha()
 
     def consume_item(self, player):
         """
