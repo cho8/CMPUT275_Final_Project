@@ -25,7 +25,7 @@ class Player(Group):
         self.encumbrance = 0
         self.stamina = 100
         self.exhausted = False
-        self.speed = 10
+        self.speed = 2
         self.inventory = []
         self.moving = False
         self.player.image = self.player.front
@@ -54,7 +54,10 @@ class Player(Group):
             if self.stamina > 0:
                 self.exhausted = False
     def movePlayer(self,direction):
-        SPEED = self.speed
+        if pygame.sprite.spritecollideany(self.player,setup.longgrass) != None:
+            SPEED = 1
+        else: 
+            SPEED = self.speed
         VIEWDISTANCE = 150
         GUIWIDTH = 200
         self.moving = True
@@ -77,6 +80,8 @@ class Player(Group):
                         spr.rect.x -= SPEED
                     for item in setup.items:
                         item.rect.x -= SPEED
+                    for object in setup.longgrass:
+                        object.rect.x -= SPEED
 
             elif self.player.rect.x > setup.screen.get_width()-VIEWDISTANCE-GUIWIDTH:
                 if setup.gui.bgx >(0-setup.background.get_width()+setup.screen.get_width()-GUIWIDTH):
@@ -90,7 +95,7 @@ class Player(Group):
                     for item in setup.items:
                         item.rect.x -= SPEED
                     for object in setup.longgrass:
-                        item.rect.x -= SPEED
+                        object.rect.x -= SPEED
 
             self.player.rect.x += SPEED
 
@@ -118,6 +123,8 @@ class Player(Group):
                         spr.rect.y -= SPEED
                     for item in setup.items:
                         item.rect.y -= SPEED
+                    for object in setup.longgrass:
+                        object.rect.y -= SPEED
             
             elif self.player.rect.y < VIEWDISTANCE:
                 if setup.gui.bgy < 0:
@@ -131,7 +138,7 @@ class Player(Group):
                     for item in setup.items:
                         item.rect.y -= SPEED
                     for object in setup.longgrass:
-                        item.rect.x -= SPEED
+                        object.rect.y -= SPEED
 
             self.player.rect.y += SPEED
 
@@ -140,6 +147,7 @@ class Player(Group):
             or pygame.sprite.spritecollideany(self.player,setup.items) != None:
 
                 self.player.rect.y -= SPEED
+
 
 
     def updatePlayer(self):
