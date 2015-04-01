@@ -8,6 +8,7 @@ npcs = setup.npcs
 clock = pygame.time.Clock()
 pygame.key.set_repeat(1)
 pygame.time.set_timer(setup.UPDATESTATUS,6000)#Ten minutes until starving
+pygame.time.set_timer(setup.MOVE_NPCS,200)
 endscreen = pygame.Surface((setup.screen.get_width(),setup.screen.get_height()))
 endscreen.fill(55)
 while True:
@@ -49,12 +50,14 @@ while True:
                 print("Health:{} Stamina:{} Hunger:{} Starving:{}".format\
         (player.health,player.stamina,player.hunger,player.starving))
                 player.updateHunger()
+            if event.type == setup.MOVE_NPCS:
+                AI.updateNPC(npcs)
+
     
         clock.tick(40)
 
 
         player.updatePlayer()
-        AI.updateNPC(npcs)
         gui.update()
 
     endscreen = pygame.Surface(pygame.display.get_surface().get_size()).convert_alpha()

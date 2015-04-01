@@ -20,7 +20,8 @@ class Rabbit(BaseNPC):
         self.image = self.left
         self.rect = self.image.get_rect()
         self.health = 5
-        self.speed = 1
+        self.speed = 6
+        self.airborne = False
         self.atk = 5
         self.type = "Rabbit"
 

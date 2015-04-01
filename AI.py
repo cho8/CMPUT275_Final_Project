@@ -11,22 +11,63 @@ def turnRight(spr):
     if spr.dir < 0:
        spr.dir = 3
 
-def move(spr):
+def getImage(spr):
     if spr.dir == 0:
         spr.image = spr.front
         spr.rect.size = spr.image.get_size()
-        spr.rect.y += spr.speed
-    elif spr.dir == 1:
-        spr.image = spr.left
-        spr.rect.size = spr.image.get_size()
-        spr.rect.x -= spr.speed
+
     elif spr.dir == 2:
         spr.image = spr.back
         spr.rect.size = spr.image.get_size()
+
+    elif spr.dir == 1:
+        if spr.type == "Rabbit":
+ 
+            spr.image = spr.left
+            spr.rect.size = spr.image.get_size()
+
+            if not spr.airborne:
+                spr.rect.y -= 3
+                spr.airborne = True
+            else:
+                spr.rect.y += 3
+                spr.airborne = False
+        else:
+            if spr.image == spr.left1:
+                spr.image = spr.left2
+            else:
+                spr.image = spr.left1
+            spr.rect.size = spr.image.get_size()
+
+    elif spr.dir == 3:
+        if spr.type == "Rabbit":
+ 
+            spr.image = spr.right
+            spr.rect.size = spr.image.get_size()
+
+            if not spr.airborne:
+                spr.rect.y -= 3
+                spr.airborne = True
+            else:
+                spr.rect.y += 3
+                spr.airborne = False
+        else:
+            if spr.image == spr.right1:
+                spr.image = spr.right2
+            else:
+                spr.image = spr.right1
+            spr.rect.size = spr.image.get_size()
+    
+
+def move(spr):
+    getImage(spr)
+    if spr.dir == 0:
+        spr.rect.y += spr.speed
+    elif spr.dir == 1:
+        spr.rect.x -= spr.speed
+    elif spr.dir == 2:
         spr.rect.y -= spr.speed
     elif spr.dir == 3:
-        spr.image = spr.right
-        spr.rect.size = spr.image.get_size()
         spr.rect.x += spr.speed
     checkCollisions(spr)
 
@@ -61,13 +102,11 @@ def checkCollisions(spr):
 
 def updateNPC(spritegroup):
     for spr in spritegroup:
-        mv = random.randrange(0,200)
-        if mv == 0:
+        mv = random.randrange(0,100)
+        if mv == 0 or mv == 1 or mv == 2:
             turnLeft(spr)
-        elif mv == 1:
-            turnRight(spr)
         elif mv == 2 or mv == 3 or mv == 4:
-            turnLeft(spr)
+            turnRight(spr)
         else:
             move(spr)
     

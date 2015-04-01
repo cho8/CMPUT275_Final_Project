@@ -57,6 +57,7 @@ map_matrix = mapmatrix.map_matrix
 
 #Custom Events
 UPDATESTATUS = 25
+MOVE_NPCS = 26
 #pygame.event.Event(pygame.USEREVENT)
 
 #Initializations
