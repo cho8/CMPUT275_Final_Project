@@ -34,6 +34,8 @@ while True:
 
                 elif keys[pygame.K_w]:
                     player.movePlayer("UP")
+            elif event.type == pygame.MOUSEBUTTONUP:
+                gui.on_click(event)
             if event.type == setup.UPDATESTATUS:
                 print("Health:{} Stamina:{} Hunger:{} Starving:{} Speed:{}".format\
         (player.health,player.stamina,player.hunger,player.starving,player.speed))

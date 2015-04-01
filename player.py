@@ -100,8 +100,7 @@ class Player(Group):
             self.player.rect.x += SPEED
 
             if pygame.sprite.spritecollideany(self.player,setup.buildings) != None\
-            or pygame.sprite.spritecollideany(self.player,setup.npcs) != None\
-            or pygame.sprite.spritecollideany(self.player,setup.items) != None:
+            or pygame.sprite.spritecollideany(self.player,setup.npcs) != None:
 
                 self.player.rect.x -= SPEED
 
@@ -143,8 +142,7 @@ class Player(Group):
             self.player.rect.y += SPEED
 
             if pygame.sprite.spritecollideany(self.player,setup.buildings) != None\
-            or pygame.sprite.spritecollideany(self.player,setup.npcs) != None\
-            or pygame.sprite.spritecollideany(self.player,setup.items) != None:
+            or pygame.sprite.spritecollideany(self.player,setup.npcs) != None:
 
                 self.player.rect.y -= SPEED
 

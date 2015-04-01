@@ -1,6 +1,6 @@
 import pygame
 import setup
-import item
+import
 from collections import namedtuple
 
 # GUI size things
@@ -10,6 +10,8 @@ BUTTON_WIDTH = 100
 GUI_WIDTH = 200
 MAP_WIDTH = 400
 BAR_WIDTH = 100
+INV_HEIGHT = 420
+INV_WIDTH = 190
 PAD = 5
 
 # Set fonts
@@ -33,7 +35,7 @@ GREEN_BAR = (0,255,0)
 
 # A container class which stores button information.
 # slot_height and slot_width represents the number of BUTTON_HEIGHT and BUTTON WIDTH of the button relative to the bottom and right edge of gui.
-Button = namedtuple('Button', ['slot_x', 'slot_y', 'text', 'onClick', 'condition'])
+Button = namedtuple('Button', ['slot_x', 'slot_y', 'rect','text', 'onClick', 'condition'])
 
 class GUI():
     
@@ -68,11 +70,12 @@ class GUI():
                                     self.screen_rect.h)
                                     
         #Set up GUI
+        temp_rect = pygame.Rect(0,0,1,1)
         self.buttons = [
-            Button(1, 1, "USE", self.use_pressed, self.item_selected),
-            Button(0, 1, "DISCARD", self.discard_pressed, self.item_selected),
-            Button(0, 0, "SEARCH", self.search_pressed, None),
-            Button(1, 0, "AUTO-EAT", self.auto_pressed, None)]
+            Button(1, 1, temp_rect, "USE", self.use_pressed, self.item_selected),
+            Button(0, 1, temp_rect, "DISCARD", self.discard_pressed, self.item_selected),
+            Button(0, 0, temp_rect, "SEARCH", self.search_pressed, None),
+            Button(1, 0, temp_rect, "AUTO-EAT", self.auto_pressed, None)]
     
         #Currently Selected Item in Inventory
         self.sel_item = None
@@ -80,13 +83,11 @@ class GUI():
     def draw_gui(self):
         """
         Draws the interface on the right side of the screen.
+        Some 'magic' numbers are hardcoded because of the specific layout.
         """
         if not self.background: return
     
         line_num = 0
-        # determine mouse position
-        mouse_pos = pygame.mouse.get_pos()
-        #coords = self.map.tile_coords(mouse_pos)
 
         # draw gui background
         guiRect = self.gui_rect
@@ -169,10 +170,10 @@ class GUI():
         Draws the list of items (inventory) into the gui
         """
         inventory_rect = self.gui_rect.copy()
-        inventory_rect.x += 5
-        inventory_rect.y += 84
-        inventory_rect.w -= 10
-        inventory_rect.h -= 180
+        inventory_rect.x += PAD
+        inventory_rect.y += 85
+        inventory_rect.w = INV_WIDTH
+        inventory_rect.h = INV_HEIGHT
         pygame.draw.rect(self.screen, OUTLINE_COLOUR, inventory_rect, 1)
         for item in self.player.inventory:
             item.list_rect = inventory_rect.copy()
@@ -186,7 +187,7 @@ class GUI():
         """
         Renders a button to the bar.
         If the mouse is hovering over the button it is rendered in white,
-        else rgb(50, 50, 50).
+        else grey.
         """
         but_x = self.screen_rect.w - (self.gui_rect.w/2)*(button.slot_x+1) + PAD
         but_y = self.screen_rect.h - (self.gui_rect.h/9)*(button.slot_y+1) 
@@ -244,15 +245,15 @@ class GUI():
         self.sel_item.discard(self.player.inventory)
         self.sel_item = None
 
-    def search_pressed():
+    def search_pressed(self):
         """
         Search for usable items on the current and adjacent positions of the player
         """
         #check collision between player and any item
-        eligible_item = pygame.sprite.spritecollideany(self.player,setup.items)
-        if eligible_tem:
+        eligible_item = pygame.sprite.spritecollideany(self.player.player,setup.items)
+        if eligible_item:
             eligible_item.pick_up(self.player.inventory)
-            self.item
+            print(inventory)
     
 
     def auto_pressed(self):
@@ -276,17 +277,17 @@ class GUI():
         """
         Handles clicking events.
         """
-        if (e.type == pygame.MOUSTBUTTONUP
+        if (e.type == pygame.MOUSEBUTTONUP
             and e.button ==1
             and pygame.mouse.get_focused()):
             
             # if the inside of the gui was clicked
             if self.gui_rect.collidepoint(e.pos):
-                itm = get_item_at_point(e.pos)
+                itm = self.get_item_at_point(e.pos)
             
                 # if the click position is not on an item, check for button
                 if not itm:
-                    button_at_point(e.pos)
+                    self.button_at_point(e.pos)
 
     def get_item_at_point(self,pos):
         """
@@ -304,16 +305,24 @@ class GUI():
         """
         for button in self.buttons:
             # If the button is enabled and clickable, call the click function
-            if ((not button.condition or button.condition()) and
-                self.get_button_rect(button).collidpoint(pos)):
-                button.onClick()
+            if not button.condition or button.condition():
+                but_x = self.screen_rect.w - (self.gui_rect.w/2)*(button.slot_x+1) + PAD
+                but_y = self.screen_rect.h - (self.gui_rect.h/9)*(button.slot_y+1)
+        
+                but_rect = pygame.Rect(but_x,
+                                but_y,
+                                BUTTON_WIDTH,
+                                BUTTON_HEIGHT)
+                if but_rect.collidepoint(pos):
+                    button.onClick()
+                    print("{} was clicked".format(button.text))
     
    
     def update(self):
         self.screen.blit(self.background,(self.bgx,self.bgy))
-        self.player.draw(self.screen)
         self.buildings.draw(self.screen)
         setup.items.draw(self.screen)
+        self.player.draw(self.screen)
         setup.npcs.draw(self.screen)
         setup.longgrass.draw(self.screen)
         self.draw_gui()
