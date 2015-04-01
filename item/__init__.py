@@ -1,4 +1,3 @@
-from pygame import Group
 
 __all__ = { "Berries",
             "Mysterious Fruit",
@@ -8,6 +7,11 @@ __all__ = { "Berries",
 descriptions = { "Berries" : "Wild berries are definitely safe to eat, right?",
                  "Old Water Bottle" : "A bottle with a bit of water inside",
                  "Dry Jerky" : "Looks like cardboard. Tastes like cardboard."}
+
+
+
+
+
 
 
 

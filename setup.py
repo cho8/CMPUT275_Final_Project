@@ -1,6 +1,7 @@
 import pygame,mapmatrix, npc, gui
 from pygame import sprite
 from player import Player
+
 from npc.wolf import Wolf
 
 
@@ -70,7 +71,6 @@ for i in range(60):
             load(SNOWY_TREE,j,i,buildings)
         elif map_matrix[i][j] == 9:
             load(JERKY,j,i,items)
-                 
          
 gui = gui.GUI()
     

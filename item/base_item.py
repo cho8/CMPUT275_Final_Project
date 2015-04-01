@@ -3,6 +3,8 @@ from pygame.sprite import Sprite
 
 
 SIZE = 20
+L_WIDTH = 180
+L_HEIGHT = 40
 
 class BaseItem(Sprite):
     """
@@ -28,6 +30,7 @@ class BaseItem(Sprite):
         # pygame things
         self.image = None
         self.rect = pygame.Rect(0,0,SIZE, SIZE)
+        self.list_rect = pygame.Rect(0,0, L_WIDTH, L_HEIGHT)
         
         
     @property
@@ -35,35 +38,43 @@ class BaseItem(Sprite):
         """
         Returns whether this item is on the ground.
         """
-        return self._inventory
+        return self._ground
     
     @property
     def in_inventory(self):
-        return self._ground
-
+        return self._inventory
+    
+    @_inventory.setter
+    def set_inventory(self):
+        self._inventory = True
+        self._ground = False
+    
+    @_ground.setter
+    def set_ground(self):
+        self._inventory = False
+        self._ground = True
 
     def consume_item(self):
         """
         Consumes the item and applies stat changes to the player character.
-        Subclasses inherit this method and override it.
+        Subclasses inherit this method and override it for specific stat changes.
         """
         if in_inventory(self):
             self._inventory = False
 
-    def pick_up(self):
+    def pick_up(self,inventory):
         """
         Changes item location from ground to inventory
         """
         if on_ground(self):
-            self._ground = False
-            self._inventory = True
+            self.set_inventory()
             # update inventory to have item
-            item.active_inventory[self.name] = self
+            inventory.append(self)
 
-    def discard(self):
-        if in_inventory(self) and self.name in item.active_inventory:
+    def discard(self,inventory):
+        if in_inventory(self):
             self._inventory = False
-            item.active_inventory.pop(self.name)
+            inventory.pop(self)
 
 
 

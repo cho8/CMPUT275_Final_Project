@@ -1,5 +1,6 @@
 import pygame
 import setup
+import item
 from collections import namedtuple
 
 # GUI size things
@@ -51,6 +52,7 @@ class GUI():
         self.bgy = setup.bgy
         self.player = setup.player
         self.buildings = setup.buildings
+        self.items = setup.items
     
     
         #rect for gui
@@ -173,6 +175,8 @@ class GUI():
         inventory_rect.h -= 180
         pygame.draw.rect(self.screen, OUTLINE_COLOUR, inventory_rect, 1)
         for item in self.player.inventory:
+            item.list_rect = inventory_rect.copy()
+            item.list_rect.h = item.list_rect.h/8
             item_name = FONT.rend(item.name, True, FONT_COLOUR)
             self.screen.blit(item_name,
                             (inventoryRect + PAD,
@@ -222,6 +226,9 @@ class GUI():
             but_rect.y + (BUTTON_HEIGHT//2) - but_text.get_height()//2))
     
     def use_pressed(self):
+        """
+        Use button is clicked while an inventory item is selected.
+        """
         if self.sel_item == None:
             return
         #if the item is usable, consume it and remove it from inventory
@@ -229,17 +236,24 @@ class GUI():
         self.sel_item = None
 
     def discard_pressed(self):
+        """
+        Discard button is clicked while an inventory item is selected.
+        """
         if self.sel_item == None:
             return
-        self.sel_item.discard()
+        self.sel_item.discard(self.player.inventory)
         self.sel_item = None
 
     def search_pressed():
         """
-        Search for usable items on the current and adjacent tiles of the player.
+        Search for usable items on the current and adjacent positions of the player
         """
-        #Gotta figure out the player/map stuff first
-        pass
+        #check collision between player and any item
+        eligible_item = pygame.sprite.spritecollideany(self.player,setup.items)
+        if eligible_tem:
+            eligible_item.pick_up(self.player.inventory)
+            self.item
+    
 
     def auto_pressed(self):
         """
@@ -247,15 +261,53 @@ class GUI():
         Optimally consumes the items that restores the most hunger 
         and relieves the most inventory space
         """
-        
         # Leaving the memoization part for later
         pass
     
     def item_selected(self):
         """
-        An item in the inventory is clicked/selected
+        An item in the inventory is clicked/selected. Returns true or false.
         """
-        pass
+        if self.sel_unit: return True
+        else: return False
+    
+    
+    def on_click(self,e):
+        """
+        Handles clicking events.
+        """
+        if (e.type == pygame.MOUSTBUTTONUP
+            and e.button ==1
+            and pygame.mouse.get_focused()):
+            
+            # if the inside of the gui was clicked
+            if self.gui_rect.collidepoint(e.pos):
+                itm = get_item_at_point(e.pos)
+            
+                # if the click position is not on an item, check for button
+                if not itm:
+                    button_at_point(e.pos)
+
+    def get_item_at_point(self,pos):
+        """
+        Returns the item if the click position is within its rect
+        """
+        for i in self.player.inventory:
+            if i.list_rect.collidepoint(pos):
+                self.sel_item = i
+                return i
+    
+    def button_at_point(self,pos):
+        """
+        Detects if a button is pressed at the click position, if there is,
+        perform its function when it is clicked.
+        """
+        for button in self.buttons:
+            # If the button is enabled and clickable, call the click function
+            if ((not button.condition or button.condition()) and
+                self.get_button_rect(button).collidpoint(pos)):
+                button.onClick()
+    
    
     def update(self):
         self.screen.blit(self.background,(self.bgx,self.bgy))
