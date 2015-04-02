@@ -9,6 +9,7 @@ from npc.rabbit import Rabbit
 #images
 
 PLAYERIMG = "images/Gus.png"
+PLAYERIMG2 = "images/Gus2.png"
 CABIN = "images/Cabin.png"
 GAMEMAP = "images/gamemap.png"
 TREE = "images/tree1.png"
@@ -73,7 +74,7 @@ for i in range(60):
     for j in range(60):
         
         if map_matrix[i][j] == 'p':
-            player = Player(j*20,i*20,PLAYERIMG)
+            player = Player(j*20,i*20,PLAYERIMG,PLAYERIMG2)
         elif map_matrix[i][j] == 8:
             load(WOLF,j,i,npcs)
         elif map_matrix[i][j] == 'r':

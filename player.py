@@ -3,7 +3,7 @@ from pygame.sprite import Group
 
 
 class Player(Group):
-    def __init__(self, x_pos=None, y_pos=None, imagemap=None):
+    def __init__(self, x_pos=None, y_pos=None, imagemap=None,imagemap2=None):
 
         Group.__init__(self)        
 
@@ -11,10 +11,16 @@ class Player(Group):
         self.player.x_pos = x_pos
         self.player.y_pos = y_pos
         imagemap = pygame.image.load(imagemap).convert_alpha()
-        self.player.front = imagemap.subsurface(0,0,12,20)
-        self.player.back = imagemap.subsurface(12,0,12,20)
-        self.player.left= imagemap.subsurface(24,0,10,20)
-        self.player.right = imagemap.subsurface(34,0,10,20)
+        imagemap2 = pygame.image.load(imagemap2).convert_alpha()
+        self.player.front1 = imagemap.subsurface(0,0,12,20)
+        self.player.back1 = imagemap.subsurface(12,0,12,20)
+        self.player.left1= imagemap.subsurface(24,0,10,20)
+        self.player.right1 = imagemap.subsurface(34,0,10,20)
+        self.player.front2 = imagemap2.subsurface(0,0,12,20)
+        self.player.back2 = imagemap2.subsurface(12,0,12,20)
+        self.player.left2= imagemap2.subsurface(24,0,10,20)
+        self.player.right2 = imagemap2.subsurface(34,0,10,20)
+
      
 
         #Initial attributes
@@ -28,8 +34,8 @@ class Player(Group):
         self.basespeed = 2
         self.inventory = []
         self.moving = False
-        self.player.image = self.player.front
-        self.player.rect = self.player.front.get_rect()
+        self.player.image = self.player.front1
+        self.player.rect = self.player.image.get_rect()
         self.player.rect.x = x_pos
         self.player.rect.y = x_pos
         self.add(self.player)
@@ -48,6 +54,7 @@ class Player(Group):
             staminaloss = .1+(self.encumbrance%25)*.1
             if self.running:
                 staminaloss *= 2
+                self.running = False
             if self.stamina > -10:
                 self.stamina -= staminaloss
             if self.stamina < 0:
@@ -62,7 +69,6 @@ class Player(Group):
         SPEED = self.basespeed
         if self.running:
             SPEED *= 2
-            self.running = False
         if pygame.sprite.spritecollideany(self.player,setup.longgrass) != None or self.exhausted:
             SPEED = 1
      
@@ -73,9 +79,15 @@ class Player(Group):
         if direction == "LEFT" or direction == "RIGHT":
             if direction == "LEFT":
                 SPEED *= -1
-                self.player.image = self.player.left
+                if self.player.image == self.player.left1:
+                    self.player.image = self.player.left2
+                else:
+                    self.player.image = self.player.left1
             else:
-                self.player.image = self.player.right
+                if self.player.image == self.player.right1:
+                    self.player.image = self.player.right2
+                else:
+                    self.player.image = self.player.right1
             
             if self.player.rect.x < VIEWDISTANCE:               
                 if setup.gui.bgx < 0:
@@ -115,9 +127,15 @@ class Player(Group):
         elif direction == "UP" or direction == "DOWN":
             if direction == "UP":
                 SPEED *= -1
-                self.player.image = self.player.back
+                if self.player.image == self.player.back1:
+                    self.player.image = self.player.back2
+                else:
+                    self.player.image = self.player.back1
             else:
-                self.player.image = self.player.front
+                if self.player.image == self.player.front1:
+                    self.player.image = self.player.front2
+                else:
+                    self.player.image = self.player.front1
 
             if self.player.rect.y > setup.screen.get_height() - VIEWDISTANCE: 
                 if setup.gui.bgy >(0-setup.background.get_height()+setup.screen.get_height()):

@@ -24,5 +24,6 @@ class Rabbit(BaseNPC):
         self.airborne = False
         self.atk = 5
         self.type = "Rabbit"
+        self.dest = None
 
 npc.active_npcs["Rabbit"] = Rabbit

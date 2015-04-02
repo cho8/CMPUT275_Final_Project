@@ -54,7 +54,7 @@ while True:
                 AI.updateNPC(npcs)
 
     
-        clock.tick(40)
+        clock.tick(30)
 
 
         player.updatePlayer()

@@ -10,6 +10,45 @@ def turnRight(spr):
     spr.dir -= 1
     if spr.dir < 0:
        spr.dir = 3
+def findRefuge(spr):
+    closest = None
+    cdist = setup.screen.get_width()
+    for grass in setup.longgrass:
+        x = abs(spr.rect.x - grass.rect.x)
+        y = abs(spr.rect.y - grass.rect.y)
+        dist = x+y
+        if dist < cdist:
+            cdist = dist
+            closest = grass
+    return closest
+
+def manDist(spr1,spr2):
+    x = abs(spr1.rect.x - spr2.rect.x)
+    y = abs(spr1.rect.y - spr2.rect.y)
+    return x+y
+
+def nearPlayer(spr):
+    
+    if manDist(spr,setup.player.player) < 60:
+        return True
+    else:
+        return False
+
+def moveDest(spr):
+    if spr.dest is not None:
+        if spr.rect.x < spr.dest.rect.x:
+            spr.dir = 3
+        elif spr.rect.x > spr.dest.rect.x: 
+            spr.dir = 1
+        if spr.rect.y > spr.dest.rect.y:
+            spr.dir = 2
+        elif spr.rect.y < spr.dest.rect.y:
+            spr.dir = 0
+        if manDist(spr,spr.dest)<5:
+            spr.dest = None
+            spr.mode = "Neutral"
+            return
+        move(spr)
 
 def getImage(spr):
     if spr.dir == 0:
@@ -72,6 +111,8 @@ def move(spr):
     checkCollisions(spr)
 
 def checkCollisions(spr):
+    if spr.mode == "Flight":
+        return
     if pygame.sprite.spritecollideany(spr,setup.buildings) != None or pygame.sprite.spritecollideany(spr,setup.player) != None:
         if spr.dir == 0:
             spr.rect.y -= spr.speed
@@ -102,11 +143,22 @@ def checkCollisions(spr):
 
 def updateNPC(spritegroup):
     for spr in spritegroup:
-        mv = random.randrange(0,100)
-        if mv == 0 or mv == 1 or mv == 2:
-            turnLeft(spr)
-        elif mv == 2 or mv == 3 or mv == 4:
-            turnRight(spr)
-        else:
-            move(spr)
+
+        if spr.type == "Rabbit" and nearPlayer(spr):
+            spr.mode = "Flight"
+            print("Flight")
+        if spr.mode == "Neutral":
+            mv = random.randrange(0,100)
+            if mv == 0 or mv == 1 or mv == 2:
+                turnLeft(spr)
+            elif mv == 2 or mv == 3 or mv == 4:
+                turnRight(spr)
+            else:
+                move(spr)
+        elif spr.mode == "Flight":
+            if spr.dest is None:
+                spr.dest = findRefuge(spr)
+            moveDest(spr)
+            print(spr.dest)
+         
     
