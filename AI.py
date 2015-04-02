@@ -11,17 +11,29 @@ def turnRight(spr):
     if spr.dir < 0:
        spr.dir = 3
 def findRefuge(spr):
-    closest = None
-    cdist = setup.screen.get_width()
-    for grass in setup.longgrass:
-        x = abs(spr.rect.x - grass.rect.x)
-        y = abs(spr.rect.y - grass.rect.y)
-        dist = x+y
-        if dist < cdist:
-            cdist = dist
-            closest = grass
-    return closest
-
+    """
+    if spr.dest is not None:
+        closest = None
+        cdist = setup.screen.get_width()
+        for grass in setup.longgrass:
+            dist = manDist(spr,grass) 
+            if dist < cdist:
+                cdist = dist
+                closest = grass
+        spr.dest = closest
+    moveDest(spr)
+    """
+    if nearPlayer(spr):
+        spr.dir = setup.player.dir + 1
+        if spr.dir > 3:
+            spr.dir = 0
+        move(spr)
+    elif pygame.sprite.spritecollideany(spr,setup.buildings) != None:
+        move(spr)
+    else:
+        spr.mode = "Neutral"
+        spr.speed /= 2
+        
 def manDist(spr1,spr2):
     x = abs(spr1.rect.x - spr2.rect.x)
     y = abs(spr1.rect.y - spr2.rect.y)
@@ -35,7 +47,6 @@ def nearPlayer(spr):
         return False
 
 def moveDest(spr):
-    if spr.dest is not None:
         if spr.rect.x < spr.dest.rect.x:
             spr.dir = 3
         elif spr.rect.x > spr.dest.rect.x: 
@@ -144,8 +155,9 @@ def checkCollisions(spr):
 def updateNPC(spritegroup):
     for spr in spritegroup:
 
-        if spr.type == "Rabbit" and nearPlayer(spr):
+        if spr.type == "Rabbit" and nearPlayer(spr) and spr.mode is not "Flight" :
             spr.mode = "Flight"
+            spr.speed *= 2
             print("Flight")
         if spr.mode == "Neutral":
             mv = random.randrange(0,100)
@@ -156,9 +168,6 @@ def updateNPC(spritegroup):
             else:
                 move(spr)
         elif spr.mode == "Flight":
-            if spr.dest is None:
-                spr.dest = findRefuge(spr)
-            moveDest(spr)
-            print(spr.dest)
+            spr.dest = findRefuge(spr)
          
     

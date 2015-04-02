@@ -35,11 +35,14 @@ class Player(Group):
         self.inventory = []
         self.moving = False
         self.player.image = self.player.front1
+        self.dir = 0
         self.player.rect = self.player.image.get_rect()
         self.player.rect.x = x_pos
         self.player.rect.y = x_pos
         self.add(self.player)
         self.running = False
+        self.framerate = 6
+        self.frame = self.framerate
         
 
     def updateHunger(self):
@@ -78,16 +81,21 @@ class Player(Group):
 
         if direction == "LEFT" or direction == "RIGHT":
             if direction == "LEFT":
+                self.dir = 1
                 SPEED *= -1
-                if self.player.image == self.player.left1:
-                    self.player.image = self.player.left2
-                else:
-                    self.player.image = self.player.left1
+                
+                if self.frame % self.framerate == 0:
+                    if self.player.image == self.player.left1:
+                        self.player.image = self.player.left2
+                    else:
+                        self.player.image = self.player.left1
             else:
-                if self.player.image == self.player.right1:
-                    self.player.image = self.player.right2
-                else:
-                    self.player.image = self.player.right1
+                self.dir = 3
+                if self.frame % self.framerate == 0:
+                    if self.player.image == self.player.right1:
+                        self.player.image = self.player.right2
+                    else:
+                        self.player.image = self.player.right1
             
             if self.player.rect.x < VIEWDISTANCE:               
                 if setup.gui.bgx < 0:
@@ -126,16 +134,20 @@ class Player(Group):
 
         elif direction == "UP" or direction == "DOWN":
             if direction == "UP":
+                self.dir = 1
                 SPEED *= -1
-                if self.player.image == self.player.back1:
-                    self.player.image = self.player.back2
-                else:
-                    self.player.image = self.player.back1
+                if self.frame % self.framerate == 0:
+                    if self.player.image == self.player.back1:
+                        self.player.image = self.player.back2
+                    else:
+                        self.player.image = self.player.back1
             else:
-                if self.player.image == self.player.front1:
-                    self.player.image = self.player.front2
-                else:
-                    self.player.image = self.player.front1
+                self.dir = 0
+                if self.frame % self.framerate == 0:
+                    if self.player.image == self.player.front1:
+                        self.player.image = self.player.front2
+                    else:
+                        self.player.image = self.player.front1
 
             if self.player.rect.y > setup.screen.get_height() - VIEWDISTANCE: 
                 if setup.gui.bgy >(0-setup.background.get_height()+setup.screen.get_height()):
@@ -178,6 +190,7 @@ class Player(Group):
         #Takes roughly 4 min. from full health to death when starving.
 
         self.updateStamina()
+        self.frame += 1
             
         if self.starving:
             self.health -= .1
