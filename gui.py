@@ -2,6 +2,7 @@ import pygame
 import setup
 from collections import namedtuple
 from textwrap import drawText
+from auto_eat import auto_eat
 
 # GUI size things
 RESOLUTION_RECT = pygame.Rect(0,0, 600,400)
@@ -283,6 +284,7 @@ class GUI():
         #if the item is usable, consume it and remove it from inventory
         self.sel_item.consume_item(self.player)
         self.sel_item = None
+        self.player.inventory.remove(self)
 
     def discard_pressed(self):
         """
@@ -302,7 +304,6 @@ class GUI():
         if eligible_item:
             eligible_item.pick_up(self.player.inventory)
             setup.items.remove(eligible_item)
-            print(self.player.inventory)
     
 
     def auto_pressed(self):
@@ -311,8 +312,13 @@ class GUI():
         Optimally consumes the items that restores the most hunger 
         and relieves the most inventory space
         """
-        # Leaving the memoization part for later
-        pass
+        to_consume = auto_eat(self.player.inventory,10,lambda x: x.size)
+        print(to_consume)
+        if to_consume:
+            for i in to_consume:
+                i.consume_item(self.player)
+
+    
     
     def item_selected(self):
         """

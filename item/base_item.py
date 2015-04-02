@@ -62,7 +62,7 @@ class BaseItem(Sprite):
         """
         if self.in_inventory:
             self._inventory = False
-            player.inventory.remove(self)
+            
 
     def pick_up(self,inventory):
         """

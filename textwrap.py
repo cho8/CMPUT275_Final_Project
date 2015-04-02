@@ -6,7 +6,8 @@ def drawText(surface, text, color, rect, font, aa=False, bkg=None):
     Automatically wraps words.
     Returns any text that didn't get blitted.
     
-    This helper function is sourced from http://www.pygame.org/wiki/TextWrap
+    The base code for this function is sourced from http://www.pygame.org/wiki/TextWrap
+    but is modified for the use in our project
     """
     y = rect.top
     lineSpacing = -2
