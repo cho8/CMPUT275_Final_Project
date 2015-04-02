@@ -24,7 +24,7 @@ class Wolf(BaseNPC):
         self.image = self.left1
         self.rect = self.image.get_rect() 
         self.health = 10
-        self.speed = 5
+        self.speed = 1
         self.atk = 5
         self.type = "Wolf"
  

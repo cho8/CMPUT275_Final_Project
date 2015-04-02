@@ -380,5 +380,7 @@ class GUI():
         setup.npcs.draw(self.screen)
         self.buildings.draw(self.screen)
         setup.longgrass.draw(self.screen)
+        setup.trees.draw(self.screen)
+
         self.draw_gui()
         pygame.display.flip()

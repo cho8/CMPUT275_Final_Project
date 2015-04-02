@@ -36,13 +36,12 @@ class Player(Group):
         self.moving = False
         self.player.image = self.player.front1
         self.dir = 0
+        self.FRAMERATE = 10
         self.player.rect = self.player.image.get_rect()
         self.player.rect.x = x_pos
         self.player.rect.y = x_pos
         self.add(self.player)
         self.running = False
-        self.framerate = 6
-        self.frame = self.framerate
         
 
     def updateHunger(self):
@@ -54,18 +53,18 @@ class Player(Group):
             print(self.health)
     def updateStamina(self):
         if self.moving == True:
-            staminaloss = .1+(self.encumbrance%25)*.1
+            staminaloss = .01+(self.encumbrance%25)*.01
             if self.running:
-                staminaloss *= 2
+                staminaloss *= 5
                 self.running = False
-            if self.stamina > -10:
+            if self.stamina > -5:
                 self.stamina -= staminaloss
             if self.stamina < 0:
                 self.exhausted = True
             self.moving = False
         else:
             if self.stamina < 100:
-                self.stamina += .1
+                self.stamina += .01
             if self.stamina > 0:
                 self.exhausted = False
     def movePlayer(self,direction):
@@ -83,15 +82,16 @@ class Player(Group):
             if direction == "LEFT":
                 self.dir = 1
                 SPEED *= -1
-                
-                if self.frame % self.framerate == 0:
+                #self.player.image = self.player.left1
+                if setup.frame % self.FRAMERATE == 0:
                     if self.player.image == self.player.left1:
                         self.player.image = self.player.left2
                     else:
                         self.player.image = self.player.left1
             else:
                 self.dir = 3
-                if self.frame % self.framerate == 0:
+                #self.player.image = self.player.right1
+                if setup.frame % self.FRAMERATE == 0:
                     if self.player.image == self.player.right1:
                         self.player.image = self.player.right2
                     else:
@@ -110,6 +110,8 @@ class Player(Group):
                         item.rect.x -= SPEED
                     for object in setup.longgrass:
                         object.rect.x -= SPEED
+                    for object in setup.trees:
+                        object.rect.x -= SPEED
 
             elif self.player.rect.x > setup.screen.get_width()-VIEWDISTANCE-GUIWIDTH:
                 if setup.gui.bgx >(0-setup.background.get_width()+setup.screen.get_width()-GUIWIDTH):
@@ -124,11 +126,14 @@ class Player(Group):
                         item.rect.x -= SPEED
                     for object in setup.longgrass:
                         object.rect.x -= SPEED
+                    for object in setup.trees:
+                        object.rect.x -= SPEED
 
             self.player.rect.x += SPEED
 
             if pygame.sprite.spritecollideany(self.player,setup.buildings) != None\
-            or pygame.sprite.spritecollideany(self.player,setup.npcs) != None:
+            or pygame.sprite.spritecollideany(self.player,setup.npcs) != None\
+            or pygame.sprite.spritecollideany(self.player,setup.trees) != None:
 
                 self.player.rect.x -= SPEED
 
@@ -136,14 +141,18 @@ class Player(Group):
             if direction == "UP":
                 self.dir = 1
                 SPEED *= -1
-                if self.frame % self.framerate == 0:
+                #self.player.image = self.player.back1
+
+                if setup.frame % self.FRAMERATE == 0:
                     if self.player.image == self.player.back1:
                         self.player.image = self.player.back2
                     else:
                         self.player.image = self.player.back1
             else:
                 self.dir = 0
-                if self.frame % self.framerate == 0:
+              #  self.player.image = self.player.front1
+
+                if setup.frame % self.FRAMERATE == 0:
                     if self.player.image == self.player.front1:
                         self.player.image = self.player.front2
                     else:
@@ -162,6 +171,8 @@ class Player(Group):
                         item.rect.y -= SPEED
                     for object in setup.longgrass:
                         object.rect.y -= SPEED
+                    for object in setup.trees:
+                        object.rect.y -= SPEED
             
             elif self.player.rect.y < VIEWDISTANCE:
                 if setup.gui.bgy < 0:
@@ -176,11 +187,14 @@ class Player(Group):
                         item.rect.y -= SPEED
                     for object in setup.longgrass:
                         object.rect.y -= SPEED
+                    for object in setup.trees:
+                        object.rect.y -= SPEED
 
             self.player.rect.y += SPEED
 
             if pygame.sprite.spritecollideany(self.player,setup.buildings) != None\
-            or pygame.sprite.spritecollideany(self.player,setup.npcs) != None:
+            or pygame.sprite.spritecollideany(self.player,setup.npcs) != None\
+            or pygame.sprite.spritecollideany(self.player,setup.trees) != None:
 
                 self.player.rect.y -= SPEED
 
@@ -190,7 +204,6 @@ class Player(Group):
         #Takes roughly 4 min. from full health to death when starving.
 
         self.updateStamina()
-        self.frame += 1
             
         if self.starving:
             self.health -= .1
