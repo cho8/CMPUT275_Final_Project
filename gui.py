@@ -1,6 +1,7 @@
 import pygame
 import setup
 from collections import namedtuple
+from textwrap import drawText
 
 # GUI size things
 RESOLUTION_RECT = pygame.Rect(0,0, 600,400)
@@ -15,12 +16,15 @@ PAD = 5
 
 # Set fonts
 pygame.font.init()
+SMALLER_FONT_SIZE = 10
 SMALL_FONT_SIZE = 14
 FONT_SIZE = 16
 BIG_FONT_SIZE = 18
+SMALLER_FONT = pygame.font.SysFont("Arial", SMALLER_FONT_SIZE)
 SMALL_FONT = pygame.font.SysFont("Arial", SMALL_FONT_SIZE)
 FONT = pygame.font.SysFont("Arial", FONT_SIZE)
 BIG_FONT = pygame.font.SysFont("Arial", BIG_FONT_SIZE)
+BIG_FONT.set_bold(True)
 FONT_COLOUR = (0, 0, 0)
 
 # Colour stuff
@@ -173,14 +177,45 @@ class GUI():
         inventory_rect.y += 85
         inventory_rect.w = INV_WIDTH
         inventory_rect.h = INV_HEIGHT
-        pygame.draw.rect(self.screen, OUTLINE_COLOUR, inventory_rect, 1)
+
         for item in self.player.inventory:
             item.list_rect = inventory_rect.copy()
-            item.list_rect.h = item.list_rect.h/8
-            item_name = FONT.render(item.name, True, FONT_COLOUR)
+            item.list_rect.h = item.list_rect.h/20
+            pygame.draw.rect(self.screen,GUI_COLOUR, item.list_rect)
+            if self.sel_item:
+                pygame.draw.rect(self.screen, OUTLINE_COLOUR, item.list_rect)
+            item_name = SMALL_FONT.render(item.name, True, FONT_COLOUR)
+                            
+            mouse_pos = pygame.mouse.get_pos()
+            if item.list_rect.collidepoint(mouse_pos):
+                self.draw_hover_rect(item)
+                pygame.draw.rect(self.screen, OUTLINE_COLOUR, item.list_rect)
             self.screen.blit(item_name,
                             (inventory_rect.x + PAD,
                             FONT_SIZE*line_num+PAD))
+    
+        pygame.draw.rect(self.screen, OUTLINE_COLOUR, inventory_rect, 1)
+
+    def draw_hover_rect(self, item):
+        """
+        Draw the popup menu that appears when an item is hovered over.
+        """
+        hover_rect = pygame.Rect(self.gui_rect.h - 150, 0,150, 100)
+        hover_out_rect = hover_rect.copy()
+        hover_out_rect.w -= 1
+        hover_out_rect.h -= 1
+        
+        item_name = item.name
+        item_desc = item.description
+
+        pygame.draw.rect(self.screen, GUI_COLOUR, hover_rect)
+        pygame.draw.rect(self.screen, OUTLINE_COLOUR, hover_out_rect, 2)
+        
+        text_rect = hover_rect.copy()
+        text_rect.x += 10
+        text_rect.y += 10
+        drawText(self.screen, item_name, FONT_COLOUR, text_rect, SMALL_FONT)
+
 
     def draw_gui_button(self, button):
         """
@@ -224,6 +259,7 @@ class GUI():
             but_text,
             (but_rect.centerx - (but_text.get_width()/2),
             but_rect.y + (BUTTON_HEIGHT//2) - but_text.get_height()//2))
+                
     
     def use_pressed(self):
         """
@@ -232,7 +268,7 @@ class GUI():
         if self.sel_item == None:
             return
         #if the item is usable, consume it and remove it from inventory
-        self.sel_item.consume_item()
+        self.sel_item.consume_item(self.player)
         self.sel_item = None
 
     def discard_pressed(self):
@@ -283,10 +319,13 @@ class GUI():
             # if the inside of the gui was clicked
             if self.gui_rect.collidepoint(e.pos):
                 itm = self.get_item_at_point(e.pos)
+                if self.sel_item == None:
+                    self.sel_item = itm
             
                 # if the click position is not on an item, check for button
                 if not itm:
-                    self.button_at_point(e.pos)
+                    object = self.get_button_at_point(e.pos)
+                    if object: object.onClick()
 
     def get_item_at_point(self,pos):
         """
@@ -297,24 +336,27 @@ class GUI():
                 self.sel_item = i
                 return i
     
-    def button_at_point(self,pos):
+    def get_button_at_point(self,pos):
         """
-        Detects if a button is pressed at the click position, if there is,
-        perform its function when it is clicked.
+        Detects if a button or item is clicked at a given mouse position.
+        If a button is detected
         """
+
         for button in self.buttons:
             # If the button is enabled and clickable, call the click function
             if not button.condition or button.condition():
+            
+                # Temporarily construct the button rect
                 but_x = self.screen_rect.w - (self.gui_rect.w/2)*(button.slot_x+1) + PAD
                 but_y = self.screen_rect.h - (self.gui_rect.h/9)*(button.slot_y+1)
-        
                 but_rect = pygame.Rect(but_x,
                                 but_y,
                                 BUTTON_WIDTH,
                                 BUTTON_HEIGHT)
+                # if the mouse position is on the button
                 if but_rect.collidepoint(pos):
-                    button.onClick()
                     print("{} was clicked".format(button.text))
+                    return button
     
    
     def update(self):

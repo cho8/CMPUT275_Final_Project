@@ -42,6 +42,9 @@ class BaseItem(Sprite):
     
     @property
     def in_inventory(self):
+        """
+        Returns whether this item is in inventory.
+        """
         return self._inventory
     
     def set_inventory(self):
@@ -52,13 +55,14 @@ class BaseItem(Sprite):
         self._inventory = False
         self._ground = True
 
-    def consume_item(self):
+    def consume_item(self, player):
         """
         Consumes the item and applies stat changes to the player character.
         Subclasses inherit this method and override it for specific stat changes.
         """
-        if in_inventory(self):
+        if self.in_inventory:
             self._inventory = False
+            player.inventory.remove(self)
 
     def pick_up(self,inventory):
         """
@@ -70,9 +74,9 @@ class BaseItem(Sprite):
             inventory.append(self)
 
     def discard(self,inventory):
-        if in_inventory(self):
+        if self.in_inventory:
             self._inventory = False
-            inventory.pop(self)
+            inventory.remove(self)
 
 
 
