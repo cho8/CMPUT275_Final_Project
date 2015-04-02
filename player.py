@@ -25,7 +25,7 @@ class Player(Group):
         self.encumbrance = 0
         self.stamina = 100
         self.exhausted = False
-        self.speed = 2
+        self.basespeed = 2
         self.inventory = []
         self.moving = False
         self.player.image = self.player.front
@@ -33,6 +33,7 @@ class Player(Group):
         self.player.rect.x = x_pos
         self.player.rect.y = x_pos
         self.add(self.player)
+        self.running = False
         
 
     def updateHunger(self):
@@ -44,20 +45,27 @@ class Player(Group):
             print(self.health)
     def updateStamina(self):
         if self.moving == True:
+            staminaloss = .1+(self.encumbrance%25)*.1
+            if self.running:
+                staminaloss *= 2
             if self.stamina > -10:
-                self.stamina -= 1+(self.encumbrance%25)
+                self.stamina -= staminaloss
             if self.stamina < 0:
                 self.exhausted = True
+            self.moving = False
         else:
             if self.stamina < 100:
-                self.stamina += 1
+                self.stamina += .1
             if self.stamina > 0:
                 self.exhausted = False
     def movePlayer(self,direction):
-        if pygame.sprite.spritecollideany(self.player,setup.longgrass) != None:
+        SPEED = self.basespeed
+        if self.running:
+            SPEED *= 2
+            self.running = False
+        if pygame.sprite.spritecollideany(self.player,setup.longgrass) != None or self.exhausted:
             SPEED = 1
-        else: 
-            SPEED = self.speed
+     
         VIEWDISTANCE = 150
         GUIWIDTH = 200
         self.moving = True
@@ -150,11 +158,11 @@ class Player(Group):
 
     def updatePlayer(self):
         #Takes roughly 4 min. from full health to death when starving.
-        self.moving = False
+
+        self.updateStamina()
+            
         if self.starving:
             self.health -= .1
         if self.health <= 0:
             self.alive = False
-        if self.exhausted:
-            self.speed = 1
             

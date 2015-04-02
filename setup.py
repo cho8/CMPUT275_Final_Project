@@ -3,6 +3,7 @@ from item.jerky import Jerky
 from pygame import sprite
 from player import Player
 from npc.wolf import Wolf
+from npc.rabbit import Rabbit
 
 
 #images
@@ -18,12 +19,14 @@ SNOWY_TREE = "images/tree2.png"
 WOLF = "images/wolf.png"
 JERKY = "images/item_jerky.png"
 GRASS = "images/grass.png"
+RABBIT ="images/rabbit.png"
 
 def load(image,x,y,group):
      if group == npcs:
-         object = Wolf()
-         object.image = pygame.image.load(image).convert_alpha()
-         object.rect = object.image.get_rect()
+         if image == WOLF:
+             object = Wolf()
+         elif image == RABBIT:
+             object = Rabbit()
          object.rect.x = x*20
          object.rect.y = y*20
          group.add(object)
@@ -54,6 +57,7 @@ map_matrix = mapmatrix.map_matrix
 
 #Custom Events
 UPDATESTATUS = 25
+MOVE_NPCS = 26
 #pygame.event.Event(pygame.USEREVENT)
 
 #Initializations
@@ -72,6 +76,8 @@ for i in range(60):
             player = Player(j*20,i*20,PLAYERIMG)
         elif map_matrix[i][j] == 8:
             load(WOLF,j,i,npcs)
+        elif map_matrix[i][j] == 'r':
+            load(RABBIT,j,i,npcs)
         elif map_matrix[i][j] == 1:
             load(TREE,j,i,buildings)
         elif map_matrix[i][j] == 2:
