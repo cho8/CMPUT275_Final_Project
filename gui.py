@@ -7,10 +7,12 @@ from textwrap import drawText
 RESOLUTION_RECT = pygame.Rect(0,0, 600,400)
 BUTTON_HEIGHT = 40
 BUTTON_WIDTH = 100
+HOVER_HEIGHT = 100
+HOVER_WIDTH = 175
 GUI_WIDTH = 200
 MAP_WIDTH = 400
 BAR_WIDTH = 100
-INV_HEIGHT = 420
+INV_HEIGHT = 220
 INV_WIDTH = 190
 PAD = 5
 
@@ -165,13 +167,13 @@ class GUI():
         pygame.draw.line(self.screen, OUTLINE_COLOUR, (self.gui_rect.left, FONT_SIZE*line_num), (self.gui_rect.right, FONT_SIZE*line_num))
         
         #inventory box
-        self.draw_inventory_list(self.player.inventory,line_num)
+        self.draw_inventory_list(self.player.inventory)
 
         #buttons
         for button in self.buttons:
             self.draw_gui_button(button)
         
-    def draw_inventory_list(self, inventory,line_num):
+    def draw_inventory_list(self, inventory):
         """
         Draws the list of items (inventory) into the gui
         """
@@ -180,10 +182,14 @@ class GUI():
         inventory_rect.y += 85
         inventory_rect.w = INV_WIDTH
         inventory_rect.h = INV_HEIGHT
+        inv_line = 0
 
         for item in self.player.inventory:
             item.list_rect = inventory_rect.copy()
-            item.list_rect.h = item.list_rect.h/20
+            item.list_rect.h = INV_HEIGHT/10
+            item.list_rect.y += inv_line * item.list_rect.h
+            if item.list_rect.y > inventory_rect.x + INV_HEIGHT:
+                return
             pygame.draw.rect(self.screen,GUI_COLOUR, item.list_rect)
             if self.sel_item:
                 pygame.draw.rect(self.screen, OUTLINE_COLOUR, item.list_rect)
@@ -193,9 +199,11 @@ class GUI():
             if item.list_rect.collidepoint(mouse_pos):
                 self.draw_hover_rect(item)
                 pygame.draw.rect(self.screen, OUTLINE_COLOUR, item.list_rect)
+            
             self.screen.blit(item_name,
                             (inventory_rect.x + PAD,
-                            FONT_SIZE*line_num+PAD))
+                            item.list_rect.y+PAD))
+            inv_line +=1
     
         pygame.draw.rect(self.screen, OUTLINE_COLOUR, inventory_rect, 1)
 
@@ -203,7 +211,7 @@ class GUI():
         """
         Draw the popup menu that appears when an item is hovered over.
         """
-        hover_rect = pygame.Rect(self.gui_rect.h - 150, 0,150, 100)
+        hover_rect = pygame.Rect(self.gui_rect.h - HOVER_WIDTH, 0,HOVER_WIDTH, HOVER_HEIGHT)
         hover_out_rect = hover_rect.copy()
         hover_out_rect.w -= 1
         hover_out_rect.h -= 1
@@ -215,9 +223,11 @@ class GUI():
         pygame.draw.rect(self.screen, OUTLINE_COLOUR, hover_out_rect, 2)
         
         text_rect = hover_rect.copy()
-        text_rect.x += 10
-        text_rect.y += 10
+        text_rect.x += 5
+        text_rect.y += 5
         drawText(self.screen, item_name, FONT_COLOUR, text_rect, SMALL_FONT)
+        text_rect.y += PAD + FONT_SIZE
+        drawText(self.screen, item_desc, FONT_COLOUR, text_rect, SMALL_FONT)
 
 
     def draw_gui_button(self, button):
@@ -291,6 +301,7 @@ class GUI():
         eligible_item = pygame.sprite.spritecollideany(self.player.player,setup.items)
         if eligible_item:
             eligible_item.pick_up(self.player.inventory)
+            setup.items.remove(eligible_item)
             print(self.player.inventory)
     
 
