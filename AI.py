@@ -24,7 +24,7 @@ def findRefuge(spr):
     moveDest(spr)
     """
     if manDist(spr,setup.player.player)<120:
-        spr.dir = setup.player.dir
+        spr.dir = setup.player.dir + 1
         if spr.dir > 3:
             spr.dir = 0
         move(spr)

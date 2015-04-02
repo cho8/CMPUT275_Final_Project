@@ -69,10 +69,10 @@ class Player(Group):
                 self.exhausted = False
     def movePlayer(self,direction):
         SPEED = self.basespeed
+        if pygame.sprite.spritecollideany(self.player,setup.longgrass) != None or self.exhausted:
+            self.running = False
         if self.running:
             SPEED *= 2
-        if pygame.sprite.spritecollideany(self.player,setup.longgrass) != None or self.exhausted:
-            SPEED = 1
      
         VIEWDISTANCE = 150
         GUIWIDTH = 200
