@@ -32,6 +32,7 @@ FONT_COLOUR = (0, 0, 0)
 
 # Colour stuff
 GUI_COLOUR = (150, 150, 150)
+SEL_COLOUR = (0,255,255)
 OUTLINE_COLOUR = (255, 255, 255)
 BUTTON_HIGHLIGHT_COLOUR = (255, 255, 255)
 BUTTON_DISABLED_COLOUR = (64, 64, 64)
@@ -176,7 +177,8 @@ class GUI():
         
     def draw_inventory_list(self, inventory):
         """
-        Draws the list of items (inventory) into the gui
+        Draws the list of items (inventory) into the gui. Also handles cursor
+        highlighting items.
         """
         inventory_rect = self.gui_rect.copy()
         inventory_rect.x += PAD
@@ -185,28 +187,29 @@ class GUI():
         inventory_rect.h = INV_HEIGHT
         inv_line = 0
 
+        pygame.draw.rect(self.screen, OUTLINE_COLOUR, inventory_rect, 1)
         for item in self.player.inventory:
             item.list_rect = inventory_rect.copy()
+            item.list_rect.x += 1
+            item.list_rect.w -= 2
             item.list_rect.h = INV_HEIGHT/10
             item.list_rect.y += inv_line * item.list_rect.h
             if item.list_rect.y > inventory_rect.x + INV_HEIGHT:
                 return
-            pygame.draw.rect(self.screen,GUI_COLOUR, item.list_rect)
-            if self.sel_item:
-                pygame.draw.rect(self.screen, OUTLINE_COLOUR, item.list_rect)
-            item_name = SMALL_FONT.render(item.name, True, FONT_COLOUR)
-                            
+            if item == self.sel_item:
+                pygame.draw.rect(self.screen, SEL_COLOUR, item.list_rect,1)
+            
             mouse_pos = pygame.mouse.get_pos()
             if item.list_rect.collidepoint(mouse_pos):
                 self.draw_hover_rect(item)
                 pygame.draw.rect(self.screen, OUTLINE_COLOUR, item.list_rect)
-            
+            item_name = SMALL_FONT.render(item.name, True, FONT_COLOUR)
             self.screen.blit(item_name,
                             (inventory_rect.x + PAD,
                             item.list_rect.y+PAD))
             inv_line +=1
     
-        pygame.draw.rect(self.screen, OUTLINE_COLOUR, inventory_rect, 1)
+#        pygame.draw.rect(self.screen, OUTLINE_COLOUR, inventory_rect, 1)
 
     def draw_hover_rect(self, item):
         """
@@ -280,11 +283,12 @@ class GUI():
         Use button is clicked while an inventory item is selected.
         """
         if self.sel_item == None:
+            print("no item selected")
             return
         #if the item is usable, consume it and remove it from inventory
         self.sel_item.consume_item(self.player)
         self.sel_item = None
-        self.player.inventory.remove(self)
+        
 
     def discard_pressed(self):
         """
@@ -302,8 +306,10 @@ class GUI():
         #check collision between player and any item
         eligible_item = pygame.sprite.spritecollideany(self.player.player,setup.items)
         if eligible_item:
-            eligible_item.pick_up(self.player.inventory)
+            eligible_item.pick_up(self.player)
             setup.items.remove(eligible_item)
+            print(self.player.encumbrance)
+            print(self.player.inventory)
     
 
     def auto_pressed(self):
@@ -312,8 +318,12 @@ class GUI():
         Optimally consumes the items that restores the most hunger 
         and relieves the most inventory space
         """
-        to_consume = auto_eat(self.player.inventory,10,lambda x: x.size)
-        print(to_consume)
+        inv_remain = 100 - self.player.encumbrance
+        print("rem inv {}".format(inv_remain))
+        inv_copy = self.player.inventory.copy()
+        to_consume = auto_eat(inv_remain,self.player.inventory,lambda x: x.eat_value)
+        print(self.player.inventory)
+        self.player.inventory = inv_copy
         if to_consume:
             for i in to_consume:
                 i.consume_item(self.player)

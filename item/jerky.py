@@ -14,6 +14,7 @@ class Jerky(BaseItem):
         self.name = "Dry Jerky"
         self.description = item.descriptions[self.name]
         
+        self.size = 5
         self.heal_value = -10
         self.stam_value = 40
         self.hung_value = -5

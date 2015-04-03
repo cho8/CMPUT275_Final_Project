@@ -61,22 +61,25 @@ class BaseItem(Sprite):
         Subclasses inherit this method and override it for specific stat changes.
         """
         if self.in_inventory:
+            self.discard(player)
             self._inventory = False
             
 
-    def pick_up(self,inventory):
+    def pick_up(self,player):
         """
         Changes item location from ground to inventory
         """
         if self.on_ground:
             self.set_inventory()
             # update inventory to have item
-            inventory.append(self)
+            player.inventory.append(self)
+            player.encumbrance += self.size
 
-    def discard(self,inventory):
+    def discard(self,player):
         if self.in_inventory:
             self._inventory = False
-            inventory.remove(self)
+            player.inventory.remove(self)
+            player.encumbrance -= self.size
 
 
 
