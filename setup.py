@@ -21,7 +21,7 @@ SNOWY_TREE = "images/tree2.png"
 WOLF = "images/wolf.png"
 JERKY = "images/item_jerky.png"
 GRASS = "images/grass.png"
-RABBIT ="images/rabbit.png"
+RABBIT ="images/rabbit2.png"
 BOTTLE ="images/item_oldwaterbottle.png"
 
 FRAMERATE = 8
