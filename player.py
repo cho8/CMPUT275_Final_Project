@@ -47,6 +47,10 @@ class Player(Group):
         self.player.rect.y = x_pos
         self.add(self.player)
         self.running = False
+        self.lastleft = self.player.left1
+        self.lastright = self.player.right1
+        self.lastback = self.player.back1
+        self.lastfront = self.player.front1
         
 
     def updateHunger(self):
@@ -85,6 +89,9 @@ class Player(Group):
         SPEED = self.basespeed
         if self.running:
             SPEED *= 2
+            self.FRAMERATE = 5
+        else:
+            self.FRAMERATE = 10
         if pygame.sprite.spritecollideany(self.player,setup.longgrass) != None\
         or self.exhausted: 
             self.running = False
@@ -98,22 +105,24 @@ class Player(Group):
             if direction == "LEFT":
                 self.dir = 1
                 SPEED *= -1
-                self.player.image = self.player.left
+                
                 if setup.frame % self.FRAMERATE == 0:
-                    if lastimage == self.player.left1:
-                        lastimage  = self.player.left2                     
+                    if self.player.image == self.player.left1:
+                        self.lastleft = self.player.image  = self.player.left2                     
                     else:
-                        lastimage = self.player.left1
-                    self.player.image = lastimage
+                        self.lastleft = self.player.image = self.player.left1
+                else:
+                    self.player.image  = self.lastleft
+
             else:
                 self.dir = 3
-                self.player.image = self.player.right
                 if setup.frame % self.FRAMERATE == 0:
-                    if lastimage == self.player.right1:
-                        lastimage  = self.player.right2                     
+                    if self.player.image == self.player.right1:
+                        self.lastright = self.player.image  = self.player.right2                     
                     else:
-                        lastimage = self.player.right1
-                    self.player.image = lastimage
+                        self.lastright = self.player.image = self.player.right1
+                else:
+                    self.player.image  = self.lastright
             
             if self.player.rect.x < VIEWDISTANCE:               
                 if setup.gui.bgx < 0:
@@ -160,24 +169,25 @@ class Player(Group):
             if direction == "UP":
                 self.dir = 1
                 SPEED *= -1
-                self.player.image = self.player.back
 
                 if setup.frame % self.FRAMERATE == 0:
-                    if lastimage == self.player.back1:
-                        lastimage  = self.player.back2                     
+                    if self.player.image == self.player.back1:
+                        self.lastback = self.player.image  = self.player.back2                     
                     else:
-                        lastimage = self.player.back1
-                    self.player.image = lastimage
+                        self.lastback = self.player.image = self.player.back1
+                else:
+                    self.player.image  = self.lastback
+
             else:
                 self.dir = 0
-                self.player.image = self.player.front
 
                 if setup.frame % self.FRAMERATE == 0:
-                    if lastimage == self.player.front1:
-                        lastimage  = self.player.front2                     
+                    if self.player.image == self.player.front1:
+                        self.lastfront = self.player.image  = self.player.front2                     
                     else:
-                        lastimage = self.player.front1
-                    self.player.image = lastimage
+                        self.lastfront = self.player.image = self.player.front1
+                else:
+                    self.player.image  = self.lastfront
 
             if self.player.rect.y > setup.screen.get_height() - VIEWDISTANCE: 
                 if setup.gui.bgy >(0-setup.background.get_height()\
