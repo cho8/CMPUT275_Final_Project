@@ -12,16 +12,21 @@ def turnRight(spr):
        spr.dir = 3
 def flee(spr):
 
-    if spr.dest is None:
-        if setup.player.player.rect.x <= spr.rect.x:
-            spr.dest = [setup.player.player.rect.x+200,spr.rect.y]
-        elif setup.player.player.rect.x > spr.rect.x:
-            spr.dest = [setup.player.player.rect.x-200,spr.rect.y]   
-        if setup.player.player.rect.y <= spr.rect.y:
-            spr.dest[1] += 200
-        elif setup.player.player.rect.y > spr.rect.y:
-            spr.dest[1] -= 200    
-    moveDest(spr) 
+    if manDist(spr,setup.player.player) < 120:
+        if setup.player.player.rect.x <= spr.rect.x and setup.player.dir == 3:
+            spr.dir = 3
+        elif setup.player.player.rect.x > spr.rect.x and setup.player.dir == 1:
+            spr.dir = 1
+        elif setup.player.player.rect.y <= spr.rect.y and setup.player.dir == 0:
+            spr.dir = 0
+        elif setup.player.player.rect.y > spr.rect.y and setup.player.dir == 2:
+            spr.dir = 2
+        move(spr)
+    elif pygame.sprite.spritecollideany(spr,setup.trees) != None:
+        move(spr)
+    else:
+        spr.mode = "Neutral"
+        spr.speed /= 5
         
 def manDist(spr1,spr2):
     x = abs(spr1.rect.x - spr2.rect.x)
@@ -34,27 +39,6 @@ def nearPlayer(spr):
         return True
     else:
         return False
-
-def moveDest(spr):
-        if spr.rect.x < spr.dest[0]:
-            spr.dir = 3
-        elif spr.rect.x > spr.dest[0]: 
-            spr.dir = 1
-        if spr.rect.y > spr.dest[1]:
-            spr.dir = 2
-        elif spr.rect.y < spr.dest[1]:
-            spr.dir = 0
-        if abs(spr.rect.x-spr.dest[0])<5 and abs(spr.rect.y-spr.dest[1])<5:
-            spr.dest = None
-            if not nearPlayer(spr):
-                if pygame.sprite.spritecollideany(spr,setup.trees) != None:
-                    move(spr)
-                else:
-                    spr.mode = "Neutral"
-                    spr.speed /= 5
-                return
-        
-        move(spr)
 
 def getImage(spr):
     if spr.dir == 0:
@@ -129,18 +113,14 @@ def move(spr):
         spr.rect.y -= spr.speed
     elif spr.dir == 3:
         spr.rect.x += spr.speed
+
     checkCollisions(spr)
 
 def checkCollisions(spr):
     if spr.mode == "Flight":
-        if pygame.sprite.spritecollideany(spr,setup.buildings) != None:
-            if spr.dest is not None:
-                if spr.dir == 0 or spr.dir == 2:
-                    spr.dest[1] = spr.rect.y
-                    
-                else:
-                    spr.dest[0] = spr.rect.x
-                turnRight(spr)
+        if pygame.sprite.spritecollideany(spr,setup.trees) != None\
+        and pygame.sprite.spritecollideany(spr,setup.buildings) == None:
+            return
     if pygame.sprite.spritecollideany(spr,setup.buildings) != None\
     or pygame.sprite.spritecollideany(spr,setup.player) != None\
     or pygame.sprite.spritecollideany(spr,setup.trees) != None\

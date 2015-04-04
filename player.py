@@ -98,7 +98,7 @@ class Player(Group):
             if direction == "LEFT":
                 self.dir = 1
                 SPEED *= -1
-                self.player.image = lastimage
+                self.player.image = self.player.left
                 if setup.frame % self.FRAMERATE == 0:
                     if lastimage == self.player.left1:
                         lastimage  = self.player.left2                     
@@ -107,7 +107,7 @@ class Player(Group):
                     self.player.image = lastimage
             else:
                 self.dir = 3
-                self.player.image = lastimage
+                self.player.image = self.player.right
                 if setup.frame % self.FRAMERATE == 0:
                     if lastimage == self.player.right1:
                         lastimage  = self.player.right2                     
@@ -160,7 +160,7 @@ class Player(Group):
             if direction == "UP":
                 self.dir = 1
                 SPEED *= -1
-                self.player.image = lastimage
+                self.player.image = self.player.back
 
                 if setup.frame % self.FRAMERATE == 0:
                     if lastimage == self.player.back1:
@@ -170,7 +170,7 @@ class Player(Group):
                     self.player.image = lastimage
             else:
                 self.dir = 0
-                self.player.image = lastimage
+                self.player.image = self.player.front
 
                 if setup.frame % self.FRAMERATE == 0:
                     if lastimage == self.player.front1:
