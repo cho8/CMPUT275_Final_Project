@@ -10,29 +10,18 @@ def turnRight(spr):
     spr.dir -= 1
     if spr.dir < 0:
        spr.dir = 3
-def findRefuge(spr):
-    """
-    if spr.dest is not None:
-        closest = None
-        cdist = setup.screen.get_width()
-        for grass in setup.longgrass:
-            dist = manDist(spr,grass) 
-            if dist < cdist:
-                cdist = dist
-                closest = grass
-        spr.dest = closest
-    moveDest(spr)
-    """
-    if manDist(spr,setup.player.player)<120:
-        spr.dir = setup.player.dir + 1
-        if spr.dir > 3:
-            spr.dir = 0
-        move(spr)
-    elif pygame.sprite.spritecollideany(spr,setup.trees) != None:
-        move(spr)
-    else:
-        spr.mode = "Neutral"
-        spr.speed /= 5
+def flee(spr):
+
+    if spr.dest is None:
+        if setup.player.player.rect.x <= spr.rect.x:
+            spr.dest = [setup.player.player.rect.x+200,spr.rect.y]
+        elif setup.player.player.rect.x > spr.rect.x:
+            spr.dest = [setup.player.player.rect.x-200,spr.rect.y]   
+        if setup.player.player.rect.y <= spr.rect.y:
+            spr.dest[1] += 200
+        elif setup.player.player.rect.y > spr.rect.y:
+            spr.dest[1] -= 200    
+    moveDest(spr) 
         
 def manDist(spr1,spr2):
     x = abs(spr1.rect.x - spr2.rect.x)
@@ -47,86 +36,87 @@ def nearPlayer(spr):
         return False
 
 def moveDest(spr):
-        if spr.rect.x < spr.dest.rect.x:
+        if spr.rect.x < spr.dest[0]:
             spr.dir = 3
-        elif spr.rect.x > spr.dest.rect.x: 
+        elif spr.rect.x > spr.dest[0]: 
             spr.dir = 1
-        if spr.rect.y > spr.dest.rect.y:
+        if spr.rect.y > spr.dest[1]:
             spr.dir = 2
-        elif spr.rect.y < spr.dest.rect.y:
+        elif spr.rect.y < spr.dest[1]:
             spr.dir = 0
-        if manDist(spr,spr.dest)<5:
+        if abs(spr.rect.x-spr.dest[0])<5 and abs(spr.rect.y-spr.dest[1])<5:
             spr.dest = None
-            spr.mode = "Neutral"
-            return
+            if not nearPlayer(spr):
+                if pygame.sprite.spritecollideany(spr,setup.trees) != None:
+                    move(spr)
+                else:
+                    spr.mode = "Neutral"
+                    spr.speed /= 5
+                return
+        
         move(spr)
 
 def getImage(spr):
     if spr.dir == 0:
-        spr.image = spr.front
+        spr.image = spr.front1
         spr.rect.size = spr.image.get_size()
-        if spr.type == "Rabbit":
-            if setup.frame % setup.FRAMERATE == 0:
-                   if not spr.airborne:
-                       spr.rect.y -= 3
-                       spr.airborne = True
-                   else:
-                       spr.rect.y += 3
-                       spr.airborne = False
+        if setup.frame % setup.FRAMERATE == 0:
+            if spr.type == "Rabbit":
+
+                if not spr.airborne:
+                    spr.airborne = True
+                    spr.image = spr.front2
+                else:
+                    spr.airborne = False
+
+        spr.rect.size = spr.image.get_size()
 
     elif spr.dir == 2:
-        spr.image = spr.back
+        spr.image = spr.back1
+        if setup.frame % setup.FRAMERATE == 0:
+            if spr.type == "Rabbit":
+
+                if not spr.airborne:
+                    spr.airborne = True
+                    spr.image = spr.back2
+                else:
+                    spr.airborne = False
+
         spr.rect.size = spr.image.get_size()
-        if spr.type == "Rabbit":
-            if setup.frame % setup.FRAMERATE == 0:
-                   if not spr.airborne:
-                       spr.rect.y -= 3
-                       spr.airborne = True
-                   else:
-                       spr.rect.y += 3
-                       spr.airborne = False
 
     elif spr.dir == 1:
-        if spr.type == "Rabbit":
- 
-            spr.image = spr.left
-            spr.rect.size = spr.image.get_size()
+        spr.image = spr.left1
+        if setup.frame % setup.FRAMERATE == 0:
+            if spr.type == "Rabbit":
 
-            if setup.frame % setup.FRAMERATE == 0:
                 if not spr.airborne:
-                    spr.rect.y -= 3
                     spr.airborne = True
+                    spr.image = spr.left2
                 else:
-                    spr.rect.y += 3
                     spr.airborne = False
-        else:
-            if setup.frame % setup.FRAMERATE == 0:
+            else:
                 if spr.image == spr.left1:
                     spr.image = spr.left2
                 else:
                     spr.image = spr.left1
-            spr.rect.size = spr.image.get_size()
+        spr.rect.size = spr.image.get_size()
 
     elif spr.dir == 3:
-        if spr.type == "Rabbit":
- 
-            spr.image = spr.right
-            spr.rect.size = spr.image.get_size()
+        spr.image = spr.right1
+        if setup.frame % setup.FRAMERATE == 0:
+            if spr.type == "Rabbit":
 
-            if setup.frame % setup.FRAMERATE == 0:
                 if not spr.airborne:
-                    spr.rect.y -= 3
                     spr.airborne = True
+                    spr.image = spr.right2
                 else:
-                    spr.rect.y += 3
                     spr.airborne = False
-        else:
-            if setup.frame % setup.FRAMERATE == 0:
+            else:
                 if spr.image == spr.right1:
                     spr.image = spr.right2
                 else:
                     spr.image = spr.right1
-            spr.rect.size = spr.image.get_size()
+        spr.rect.size = spr.image.get_size()
     
 
 def move(spr):
@@ -143,11 +133,18 @@ def move(spr):
 
 def checkCollisions(spr):
     if spr.mode == "Flight":
-        if pygame.sprite.spritecollideany(spr,setup.trees) != None:
-            return
+        if pygame.sprite.spritecollideany(spr,setup.buildings) != None:
+            if spr.dest is not None:
+                if spr.dir == 0 or spr.dir == 2:
+                    spr.dest[1] = spr.rect.y
+                    
+                else:
+                    spr.dest[0] = spr.rect.x
+                turnRight(spr)
     if pygame.sprite.spritecollideany(spr,setup.buildings) != None\
     or pygame.sprite.spritecollideany(spr,setup.player) != None\
-    or pygame.sprite.spritecollideany(spr,setup.trees) != None:
+    or pygame.sprite.spritecollideany(spr,setup.trees) != None\
+    and spr.mode != "Flight":
         if spr.dir == 0:
             spr.rect.y -= spr.speed
         elif spr.dir == 1:
@@ -155,8 +152,12 @@ def checkCollisions(spr):
         elif spr.dir == 2:
             spr.rect.y += spr.speed
         elif spr.dir == 3:
-            spr.rect.x -= spr.speed 
-        turnLeft(spr)
+            spr.rect.x -= spr.speed
+        turn = random.randint(0,1)
+        if turn == 0: 
+            turnLeft(spr)
+        else:
+            turnRight(spr)
     if spr.rect.x < setup.gui.bgx:
         spr.rect.x = setup.gui.bgx
         turnLeft(spr)
@@ -181,16 +182,9 @@ def updateNPC(spritegroup):
         if spr.type == "Rabbit" and nearPlayer(spr) and spr.mode is not "Flight" :
             spr.mode = "Flight"
             spr.speed *= 5
-            print("Flight")
         if spr.mode == "Neutral":
-            mv = random.randrange(0,100)
-            if mv == 0 or mv == 1 or mv == 2:
-                turnLeft(spr)
-            elif mv == 2 or mv == 3 or mv == 4:
-                turnRight(spr)
-            else:
-                move(spr)
+            move(spr)
         elif spr.mode == "Flight":
-            spr.dest = findRefuge(spr)
+            flee(spr)
          
     

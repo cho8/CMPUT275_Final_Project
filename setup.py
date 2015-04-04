@@ -9,8 +9,6 @@ from npc.rabbit import Rabbit
 
 #images
 
-PLAYERIMG = "images/Gus.png"
-PLAYERIMG2 = "images/Gus2.png"
 CABIN = "images/Cabin.png"
 GAMEMAP = "images/gamemap.png"
 TREE = "images/tree1.png"
@@ -18,46 +16,41 @@ LOG = "images/log.png"
 MOUNTAIN = "images/mountain.png"
 MOUNTAIN_END = "images/mountainend.png"
 SNOWY_TREE = "images/tree2.png"
-WOLF = "images/wolf.png"
-JERKY = "images/item_jerky.png"
 GRASS = "images/grass.png"
-RABBIT ="images/rabbit2.png"
-BOTTLE ="images/item_oldwaterbottle.png"
 
 FRAMERATE = 8
 frame = FRAMERATE
 
-def load(image,x,y,group):
-     if group == npcs:
-         if image == WOLF:
-             object = Wolf()
-         elif image == RABBIT:
-             object = Rabbit()
-         object.rect.x = x*20
-         object.rect.y = y*20
-         group.add(object)
-     elif group == items:
-         if image == JERKY:
-             object = Jerky()
-             object.rect = object.image.get_rect()
-             object.rect.x = x*20
-             object.rect.y = y*20
-             group.add(object)
-             object.set_ground()
-         if image == BOTTLE:
-             object = OldWaterBottle()
-             object.rect = object.image.get_rect()
-             object.rect.x = x*20
-             object.rect.y = y*20
-             group.add(object)
-             object.set_ground()
-     else:
-         object = sprite.Sprite()
-         object.image = pygame.image.load(image).convert_alpha()
-         object.rect = object.image.get_rect()
-         object.rect.x = x*20
-         object.rect.y = y*20
-         group.add(object)
+#Object loading functions
+
+def loadSprite(image,x,y,group):
+     object = sprite.Sprite()
+     object.image = pygame.image.load(image).convert_alpha()
+     object.rect = object.image.get_rect()
+     object.rect.x = x*20
+     object.rect.y = y*20
+     group.add(object)
+
+def loadNPC(npc,x,y):
+    if npc == "wolf":
+        object = Wolf()
+    elif npc == "rabbit":
+        object = Rabbit()
+    object.rect.x = x*20
+    object.rect.y = y*20
+    npcs.add(object)
+
+def loadItem(item,x,y):
+    if item == "jerky":
+        object = Jerky()
+    elif item == "bottle":
+        object = OldWaterBottle()
+
+    object.rect = object.image.get_rect()
+    object.rect.x = x*20
+    object.rect.y = y*20
+    object.set_ground()
+    items.add(object)
 
 #Starting Positions/Sizes
 
@@ -83,36 +76,39 @@ trees = sprite.OrderedUpdates()
 npcs = sprite.Group()
 items = sprite.Group()
 longgrass = sprite.Group()
+
+# loading map
+
 for i in range(60):
     for j in range(60):
         
         if map_matrix[i][j] == 'p':
-            player = Player(j*20,i*20,PLAYERIMG,PLAYERIMG2)
+            player = Player(j*20,i*20)
         elif map_matrix[i][j] == 'w':
-            load(WOLF,j,i,npcs)
+            loadNPC("wolf",j,i)
         elif map_matrix[i][j] == 'r':
-            load(RABBIT,j,i,npcs)
+            loadNPC("rabbit",j,i)
+        elif map_matrix[i][j] == 'j':
+            loadItem("jerky",j,i)
+        elif map_matrix[i][j] == 'b':
+            loadItem("bottle",j,i)
         elif map_matrix[i][j] == 1:
-            load(TREE,j,i,trees)
+            loadSprite(TREE,j,i,trees)
         elif map_matrix[i][j] == 2:
-            load(CABIN,j,i,buildings) 
+            loadSprite(CABIN,j,i,buildings) 
         elif map_matrix[i][j] == 3:
-            load(LOG,j,i,buildings) 
+            loadSprite(LOG,j,i,buildings) 
         elif map_matrix[i][j] == 4:
-            load(MOUNTAIN,j,i,buildings)
+            loadSprite(MOUNTAIN,j,i,buildings)
         elif map_matrix[i][j] == 5:
-            load(MOUNTAIN_END,j,i,buildings)
+            loadSprite(MOUNTAIN_END,j,i,buildings)
         elif map_matrix[i][j] == 6:
-            load(SNOWY_TREE,j,i,buildings)
-        elif map_matrix[i][j] == 9:
-            load(JERKY,j,i,items)
+            loadSprite(SNOWY_TREE,j,i,buildings)
         elif map_matrix[i][j] == 7:
-            load(GRASS,j,i,longgrass)
+            loadSprite(GRASS,j,i,longgrass)
         elif map_matrix[i][j] == 8:
             #boundary trees
-            load(TREE,j,i,buildings)
-        elif map_matrix[i][j] == 'b':
-            load(BOTTLE,j,i,items)
+            loadSprite(TREE,j,i,buildings)
 
                  
          

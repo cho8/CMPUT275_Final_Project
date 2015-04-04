@@ -3,23 +3,28 @@ from pygame.sprite import Group
 
 
 class Player(Group):
-    def __init__(self, x_pos=None, y_pos=None, imagemap=None,imagemap2=None):
+    def __init__(self, x_pos=None, y_pos=None):
 
         Group.__init__(self)        
 
         self.player = pygame.sprite.Sprite()
         self.player.x_pos = x_pos
         self.player.y_pos = y_pos
-        imagemap = pygame.image.load(imagemap).convert_alpha()
-        imagemap2 = pygame.image.load(imagemap2).convert_alpha()
-        self.player.front1 = imagemap.subsurface(0,0,12,20)
-        self.player.back1 = imagemap.subsurface(12,0,12,20)
-        self.player.left1= imagemap.subsurface(24,0,10,20)
-        self.player.right1 = imagemap.subsurface(34,0,10,20)
-        self.player.front2 = imagemap2.subsurface(0,0,12,20)
-        self.player.back2 = imagemap2.subsurface(12,0,12,20)
-        self.player.left2= imagemap2.subsurface(24,0,10,20)
-        self.player.right2 = imagemap2.subsurface(34,0,10,20)
+        gus = pygame.image.load("images/gus.png").convert_alpha()
+        gus1 = pygame.image.load("images/gus1.png").convert_alpha()
+        gus2 = pygame.image.load("images/gus2.png").convert_alpha()
+        self.player.front = gus.subsurface(0,0,12,20)
+        self.player.back = gus.subsurface(12,0,12,20)
+        self.player.left= gus.subsurface(24,0,10,20)
+        self.player.right = gus.subsurface(34,0,10,20)
+        self.player.front1 = gus1.subsurface(0,0,12,20)
+        self.player.back1 = gus1.subsurface(12,0,12,20)
+        self.player.left1= gus1.subsurface(24,0,10,20)
+        self.player.right1 = gus1.subsurface(34,0,10,20)
+        self.player.front2 = gus2.subsurface(0,0,12,20)
+        self.player.back2 = gus2.subsurface(12,0,12,20)
+        self.player.left2= gus2.subsurface(24,0,10,20)
+        self.player.right2 = gus2.subsurface(34,0,10,20)
 
      
 
@@ -34,7 +39,7 @@ class Player(Group):
         self.basespeed = 2
         self.inventory = []
         self.moving = False
-        self.player.image = self.player.front1
+        self.player.image = self.player.front
         self.dir = 0
         self.FRAMERATE = 10
         self.player.rect = self.player.image.get_rect()
@@ -68,11 +73,14 @@ class Player(Group):
             if self.stamina > 0:
                 self.exhausted = False
     def movePlayer(self,direction):
+        lastimage = self.player.image
         SPEED = self.basespeed
-        if pygame.sprite.spritecollideany(self.player,setup.longgrass) != None or self.exhausted:
+        if pygame.sprite.spritecollideany(self.player,setup.longgrass) != None: 
             self.running = False
         if self.running:
             SPEED *= 2
+        if self.exhausted:
+            SPEED = 1
      
         VIEWDISTANCE = 150
         GUIWIDTH = 200
@@ -82,20 +90,22 @@ class Player(Group):
             if direction == "LEFT":
                 self.dir = 1
                 SPEED *= -1
-                #self.player.image = self.player.left1
+                self.player.image = lastimage
                 if setup.frame % self.FRAMERATE == 0:
-                    if self.player.image == self.player.left1:
-                        self.player.image = self.player.left2
+                    if lastimage == self.player.left1:
+                        lastimage  = self.player.left2                     
                     else:
-                        self.player.image = self.player.left1
+                        lastimage = self.player.left1
+                    self.player.image = lastimage
             else:
                 self.dir = 3
-                #self.player.image = self.player.right1
+                self.player.image = lastimage
                 if setup.frame % self.FRAMERATE == 0:
-                    if self.player.image == self.player.right1:
-                        self.player.image = self.player.right2
+                    if lastimage == self.player.right1:
+                        lastimage  = self.player.right2                     
                     else:
-                        self.player.image = self.player.right1
+                        lastimage = self.player.right1
+                    self.player.image = lastimage
             
             if self.player.rect.x < VIEWDISTANCE:               
                 if setup.gui.bgx < 0:
@@ -141,22 +151,24 @@ class Player(Group):
             if direction == "UP":
                 self.dir = 1
                 SPEED *= -1
-                #self.player.image = self.player.back1
+                self.player.image = lastimage
 
                 if setup.frame % self.FRAMERATE == 0:
-                    if self.player.image == self.player.back1:
-                        self.player.image = self.player.back2
+                    if lastimage == self.player.back1:
+                        lastimage  = self.player.back2                     
                     else:
-                        self.player.image = self.player.back1
+                        lastimage = self.player.back1
+                    self.player.image = lastimage
             else:
                 self.dir = 0
-              #  self.player.image = self.player.front1
+                self.player.image = lastimage
 
                 if setup.frame % self.FRAMERATE == 0:
-                    if self.player.image == self.player.front1:
-                        self.player.image = self.player.front2
+                    if lastimage == self.player.front1:
+                        lastimage  = self.player.front2                     
                     else:
-                        self.player.image = self.player.front1
+                        lastimage = self.player.front1
+                    self.player.image = lastimage
 
             if self.player.rect.y > setup.screen.get_height() - VIEWDISTANCE: 
                 if setup.gui.bgy >(0-setup.background.get_height()+setup.screen.get_height()):
