@@ -304,7 +304,7 @@ class GUI():
         Search for usable items on the current and adjacent positions of the player
         """
         #check collision between player and any item
-        eligible_items = pygame.sprite.spritecollideany(self.player.player,self.items)
+        eligible_item = pygame.sprite.spritecollideany(self.player.player,self.items)
         if eligible_item:
             eligible_item.pick_up(self.player)
             self.items.remove(eligible_item)
@@ -321,7 +321,7 @@ class GUI():
         Optimally consumes the items that restores the most hunger 
         and relieves the most inventory space
         """
-        inv_remain = 100 - self.player.encumbrance
+        inv_remain = self.player.encumbrance
         consum_list = []
         for i in self.player.inventory:
             if i.type == "Consumable":

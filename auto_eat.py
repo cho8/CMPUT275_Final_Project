@@ -1,4 +1,4 @@
-def auto_eat(inv_remain, inv_list, value, memo = None):
+def auto_eat(encumbrance, inv_list, value, memo = None):
     """
     Finds the number of items that can be consumed
     from the player's inventory that provides the most "value" replenished and
@@ -19,30 +19,32 @@ def auto_eat(inv_remain, inv_list, value, memo = None):
         memo = {}
     
     #inventory remaining
-    remain = inv_remain
+    new_enc = encumbrance
     total = 0
     #print("remain {} total {}".format(remain, total))
     new_inventory = inv_list
     sub_max = {}
     
-    print("remaining inv: {}".format(remain))
+    print("remaining encumb: {}".format(new_enc))
 
-    if not (total,remain) in memo:
-        if remain < smallest(new_inventory):
+    if not (total,new_enc) in memo:
+        if new_enc < smallest(new_inventory):
            # print("smallest {}".format(smallest(inventory)))
             return []
         else:
-            sub_sol = []
+            sub_sol = {}
             for i in new_inventory:
-                if i.size <= remain:
-                    remain -= i.size
+                if i.size <= new_enc:
+                    new_enc -= i.size
                     new_inventory.remove(i)
                     total += value(i)
-                    sub_sol.append(i)
-                    sub_sol.extend(auto_eat(remain, new_inventory, value, memo))
-            memo[(total,remain)] = sub_sol
+                    if not total in sub_sol:
+                        sub_sol[total] = []
+                    sub_sol[total].append(i)
+                    sub_sol[total].extend(auto_eat(new_enc, new_inventory, value, memo))
+            memo[(total,new_enc)] = sub_sol[max(sub_sol)] if sub_sol else []
 
-    return memo[(total,remain)]
+    return memo[(total,new_enc)]
 
 
 
