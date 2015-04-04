@@ -1,6 +1,7 @@
 import pygame, item
 from item.base_item import BaseItem
 from pygame.sprite import Sprite
+from random import randint
 
 class Jerky(BaseItem):
     """
@@ -12,11 +13,12 @@ class Jerky(BaseItem):
         super().__init__()
 
         self.name = "Dry Jerky"
+        self.type = "Consumable"
         self.description = item.descriptions[self.name]
         
         self.size = 5
-        self.heal_value = -10
-        self.stam_value = 40
+        self.heal_value = randint(-10,10)
+        self.stam_value = 10
         self.hung_value = -5
 
         self.image = pygame.image.load("images/item_jerky.png").convert_alpha()

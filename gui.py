@@ -307,7 +307,7 @@ class GUI():
         eligible_item = pygame.sprite.spritecollideany(self.player.player,setup.items)
         if eligible_item:
             eligible_item.pick_up(self.player)
-            setup.items.remove(eligible_item)
+            self.items.remove(eligible_item)
             print(self.player.encumbrance)
             print(self.player.inventory)
     
@@ -319,11 +319,12 @@ class GUI():
         and relieves the most inventory space
         """
         inv_remain = 100 - self.player.encumbrance
-        print("rem inv {}".format(inv_remain))
-        inv_copy = self.player.inventory.copy()
-        to_consume = auto_eat(inv_remain,self.player.inventory,lambda x: x.eat_value)
-        print(self.player.inventory)
-        self.player.inventory = inv_copy
+        consum_list = []
+        for i in self.player.inventory:
+            if i.type == "Consumable":
+                consum_list.append(i)
+        to_consume = auto_eat(inv_remain,consum_list,lambda x: x.hung_value)
+
         if to_consume:
             for i in to_consume:
                 i.consume_item(self.player)

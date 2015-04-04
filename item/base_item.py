@@ -1,4 +1,4 @@
-import pygame, item
+import pygame, item, gui
 from pygame.sprite import Sprite
 
 
@@ -17,11 +17,12 @@ class BaseItem(Sprite):
         Sprite.__init__(self)
         
         self.name = "Base Item"
+        self.type = "Base"
         self.description = self.description = item.descriptions[self.name]
 
         self.size = 10
         self.heal_value = 0
-        self.eat_value = 0
+        self.hung_value = 0
         self.stam_value = 0
         
         self._inventory = False
@@ -75,9 +76,18 @@ class BaseItem(Sprite):
             player.inventory.append(self)
             player.encumbrance += self.size
 
+    def put_down(self, player):
+        if self.in_inventory:
+            self.set_ground()
+            player.inventory.remove(self)
+            player.encumbrance -= self.size
+            self.rect.x, self.rect.y = player.x_pos, player.y_pos
+            gui.items.add(self)
+
     def discard(self,player):
         if self.in_inventory:
             self._inventory = False
+            self._ground = False
             player.inventory.remove(self)
             player.encumbrance -= self.size
 

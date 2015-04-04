@@ -11,7 +11,8 @@ class Berries(BaseItem):
         super().__init__(**keywords)
 
         self.name = "Berries"   
-
+        self.type = "Consumable"
+        self.description = item.descriptions[self.name]
         self.eat_value = 10
         self.stam_value = 0
         self.image = pygame.image.load("images/item_berries.png").convert_alpha()
