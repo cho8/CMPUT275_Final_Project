@@ -304,13 +304,16 @@ class GUI():
         Search for usable items on the current and adjacent positions of the player
         """
         #check collision between player and any item
-        eligible_item = pygame.sprite.spritecollideany(self.player.player,setup.items)
+        eligible_items = pygame.sprite.spritecollideany(self.player.player,self.items)
         if eligible_item:
             eligible_item.pick_up(self.player)
             self.items.remove(eligible_item)
             print(self.player.encumbrance)
             print(self.player.inventory)
-    
+        #check collision between player and grass
+        in_grass = pygame.sprite.spritecollideany(self.player.player, self.buildings)
+        ####### add item generation code ######
+            
 
     def auto_pressed(self):
         """
