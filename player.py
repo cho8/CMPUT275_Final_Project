@@ -56,6 +56,7 @@ class Player(Group):
             self.starving = True
             print("starving")
             print(self.health)
+
     def updateStamina(self):
         if self.moving == True:
             staminaloss = .01+(self.encumbrance%25)*.01
@@ -71,15 +72,22 @@ class Player(Group):
             if self.stamina < 100:
                 self.stamina += .01
             if self.stamina > 0:
+                #adjusts position, so coord is always even(Otherwise getting through
+                #tight spaces gets difficult.
+                if self.player.rect.x % 2 != 0:
+                    self.player.rect.x += 1
+                if self.player.rect.y % 2 != 0:
+                    self.player.rect.y += 1
                 self.exhausted = False
+
     def movePlayer(self,direction):
         lastimage = self.player.image
         SPEED = self.basespeed
-        if pygame.sprite.spritecollideany(self.player,setup.longgrass) != None: 
-            self.running = False
         if self.running:
             SPEED *= 2
-        if self.exhausted:
+        if pygame.sprite.spritecollideany(self.player,setup.longgrass) != None\
+        or self.exhausted: 
+            self.running = False
             SPEED = 1
      
         VIEWDISTANCE = 150
@@ -124,7 +132,8 @@ class Player(Group):
                         object.rect.x -= SPEED
 
             elif self.player.rect.x > setup.screen.get_width()-VIEWDISTANCE-GUIWIDTH:
-                if setup.gui.bgx >(0-setup.background.get_width()+setup.screen.get_width()-GUIWIDTH):
+                if setup.gui.bgx >(0-setup.background.get_width()\
+                +setup.screen.get_width()-GUIWIDTH):
                     self.player.rect.x = setup.screen.get_width()-VIEWDISTANCE-GUIWIDTH
                     setup.gui.bgx -= SPEED
                 
@@ -171,7 +180,8 @@ class Player(Group):
                     self.player.image = lastimage
 
             if self.player.rect.y > setup.screen.get_height() - VIEWDISTANCE: 
-                if setup.gui.bgy >(0-setup.background.get_height()+setup.screen.get_height()):
+                if setup.gui.bgy >(0-setup.background.get_height()\
+                +setup.screen.get_height()):
                     self.player.rect.y = setup.screen.get_height()-VIEWDISTANCE         
                     setup.gui.bgy -= SPEED
                     
@@ -213,8 +223,8 @@ class Player(Group):
 
 
     def updatePlayer(self):
-        #Takes roughly 4 min. from full health to death when starving.
 
+        #Takes roughly 4 min. from full health to death when starving.
         self.updateStamina()
             
         if self.starving:

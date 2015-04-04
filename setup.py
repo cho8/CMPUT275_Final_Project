@@ -111,6 +111,6 @@ for i in range(60):
             loadSprite(TREE,j,i,buildings)
 
                  
-         
 gui = gui.GUI()
+
     
