@@ -17,7 +17,7 @@ class Rabbit(BaseNPC):
         self.front1 = self.image.subsurface(0,12,5,6)
         self.back1 = self.image.subsurface(5,12,5,6)
         self.left1= self.image.subsurface(0,0,11,6)
-        self.right1 = self.image2.subsurface(0,6,11,6)
+        self.right1 = self.image.subsurface(0,6,11,6)
         self.front2 = self.image2.subsurface(0,18,5,9)
         self.back2 = self.image2.subsurface(5,18,5,9)
         self.left2= self.image2.subsurface(0,0,11,9)

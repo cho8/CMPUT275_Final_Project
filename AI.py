@@ -42,7 +42,6 @@ def nearPlayer(spr):
 
 def getImage(spr):
     if spr.dir == 0:
-        spr.image = spr.front1
         spr.rect.size = spr.image.get_size()
         if setup.frame % setup.FRAMERATE == 0:
             if spr.type == "Rabbit":
@@ -51,12 +50,14 @@ def getImage(spr):
                     spr.airborne = True
                     spr.image = spr.front2
                 else:
+                    spr.image = spr.front1
                     spr.airborne = False
+            else:
+                spr.image = spr.front1
 
         spr.rect.size = spr.image.get_size()
 
     elif spr.dir == 2:
-        spr.image = spr.back1
         if setup.frame % setup.FRAMERATE == 0:
             if spr.type == "Rabbit":
 
@@ -64,19 +65,22 @@ def getImage(spr):
                     spr.airborne = True
                     spr.image = spr.back2
                 else:
+                    spr.image = spr.back1
                     spr.airborne = False
+            else:
+                spr.image = spr.back1
 
         spr.rect.size = spr.image.get_size()
 
     elif spr.dir == 1:
-        spr.image = spr.left1
         if setup.frame % setup.FRAMERATE == 0:
             if spr.type == "Rabbit":
 
                 if not spr.airborne:
                     spr.airborne = True
-                    spr.image = spr.left2
+                    spr.image = spr.left1
                 else:
+                    spr.image = spr.left2
                     spr.airborne = False
             else:
                 if spr.image == spr.left1:
@@ -86,14 +90,14 @@ def getImage(spr):
         spr.rect.size = spr.image.get_size()
 
     elif spr.dir == 3:
-        spr.image = spr.right1
         if setup.frame % setup.FRAMERATE == 0:
             if spr.type == "Rabbit":
 
                 if not spr.airborne:
                     spr.airborne = True
-                    spr.image = spr.right2
+                    spr.image = spr.right1
                 else:
+                    spr.image = spr.right2
                     spr.airborne = False
             else:
                 if spr.image == spr.right1:
