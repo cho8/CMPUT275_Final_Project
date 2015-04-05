@@ -87,6 +87,9 @@ class GUI():
         #Currently Selected Item in Inventory
         self.sel_item = None
     
+        #number of items displayed in inventory
+        self.num_items = 0
+    
     def draw_gui(self):
         """
         Draws the interface on the right side of the screen.
@@ -141,8 +144,7 @@ class GUI():
                          (self.gui_rect.left + PAD,
                           FONT_SIZE*line_num + PAD))
         hunger_rect = bar_gen_rect.copy()
-        hunger_rect.x, hunger_rect.y = RESOLUTION_RECT.w - (self.gui_rect.w)/2 - PAD, \
-                                        FONT_SIZE*line_num + 2*PAD
+        hunger_rect.x, hunger_rect.y = RESOLUTION_RECT.w - (self.gui_rect.w)/2 - PAD, FONT_SIZE*line_num + 2*PAD
         hunger_rect.w = self.player.hunger
         bar_colour  = RED_BAR if self.player.hunger >= 70 else GREEN_BAR
         pygame.draw.rect(self.screen, bar_colour, hunger_rect)
@@ -186,9 +188,11 @@ class GUI():
         inventory_rect.w = INV_WIDTH
         inventory_rect.h = INV_HEIGHT
         inv_line = 0
+        self.num_items = 0
 
         pygame.draw.rect(self.screen, OUTLINE_COLOUR, inventory_rect, 1)
         for item in self.player.inventory:
+            
             item.list_rect = inventory_rect.copy()
             item.list_rect.x += 1
             item.list_rect.w -= 2
@@ -208,6 +212,7 @@ class GUI():
                             (inventory_rect.x + PAD,
                             item.list_rect.y+PAD))
             inv_line +=1
+            self.num_items += 1
     
 #        pygame.draw.rect(self.screen, OUTLINE_COLOUR, inventory_rect, 1)
 
@@ -303,9 +308,15 @@ class GUI():
         """
         Search for usable items on the current and adjacent positions of the player
         """
+        
         #check collision between player and any item
         eligible_item = pygame.sprite.spritecollideany(self.player.player,self.items)
         if eligible_item:
+            #if we can't hold the item, do thing
+            if eligible_item.size > (100 - self.player.encumbrance):
+                return
+            elif self.num_items == 10:
+                return
             eligible_item.pick_up(self.player)
             self.items.remove(eligible_item)
             print(self.player.encumbrance)
@@ -326,11 +337,16 @@ class GUI():
         for i in self.player.inventory:
             if i.type == "Consumable":
                 consum_list.append(i)
-        to_consume = auto_eat(inv_remain,consum_list,lambda x: x.hung_value)
-
+        to_consume = auto_eat(self.player,consum_list,lambda x: -1*x.hung_value)
+    
+        hung = 0
         if to_consume:
+    
             for i in to_consume:
                 i.consume_item(self.player)
+                hung += i.hung_value
+        print("Hung restored: {} player hunger: {}".format(-1*hung, self.player.hunger))
+                
 
     
     

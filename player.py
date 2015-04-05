@@ -55,6 +55,8 @@ class Player(Group):
 
     def updateHunger(self):
         if self.hunger < 100:
+            if self.stamina < 25:
+                self.hunger += 4
             self.hunger += 1
         else:
             self.starving = True
@@ -74,7 +76,7 @@ class Player(Group):
             self.moving = False
         else:
             if self.stamina < 100:
-                self.stamina += .01
+                self.stamina += .10
             if self.stamina > 0:
                 #adjusts position, so coord is always even(Otherwise getting through
                 #tight spaces gets difficult.
