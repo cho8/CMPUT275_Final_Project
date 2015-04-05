@@ -1,6 +1,8 @@
 import pygame,mapmatrix, npc, gui
+from item import *
 from item.jerky import Jerky
 from item.oldwaterbottle import OldWaterBottle
+from item.berries import Berries
 from pygame import sprite
 from player import Player
 from npc.wolf import Wolf
@@ -45,6 +47,8 @@ def loadItem(item,x,y):
         object = Jerky()
     elif item == "bottle":
         object = OldWaterBottle()
+    elif item == "berries":
+        object = Berries()
 
     object.rect = object.image.get_rect()
     object.rect.x = x*20
@@ -109,6 +113,8 @@ for i in range(60):
         elif map_matrix[i][j] == 8:
             #boundary trees
             loadSprite(TREE,j,i,buildings)
+        elif map_matrix [i][j] == 9:
+            loadItem("berries",j,i)
 
                  
 gui = gui.GUI()
