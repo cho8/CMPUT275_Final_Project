@@ -19,9 +19,15 @@ class Wolf(BaseNPC):
         self.back1 = self.image.subsurface(10,28,10,14)
         self.left1= self.image.subsurface(0,0,29,14)
         self.right1 = self.image.subsurface(0,14,29,14)
+        self.front2 = self.image.subsurface(0,28,10,14)
+        self.back2 = self.image.subsurface(10,28,10,14)
         self.left2= self.image2.subsurface(0,0,29,14)
         self.right2 = self.image2.subsurface(0,14,29,14)
         self.image = self.left1
+        self.lastleft = self.left1
+        self.lastright = self.right1
+        self.lastback = self.back1
+        self.lastfront = self.front1 
         self.rect = self.image.get_rect() 
         self.health = 10
         self.speed = 1

@@ -1,4 +1,4 @@
-import pygame, setup
+import pygame, setup, animation
 from pygame import sprite
 import random
 
@@ -6,10 +6,12 @@ def turnLeft(spr):
     spr.dir += 1
     if spr.dir > 3:
        spr.dir = 0
+    animation.handleAnimation(spr,spr.dir)
 def turnRight(spr):
     spr.dir -= 1
     if spr.dir < 0:
        spr.dir = 3
+    animation.handleAnimation(spr,spr.dir)
 def flee(spr):
 
     if manDist(spr,setup.player.player) < 120:
@@ -108,7 +110,6 @@ def getImage(spr):
     
 
 def move(spr):
-    getImage(spr)
     if spr.dir == 0:
         spr.rect.y += spr.speed
     elif spr.dir == 1:
@@ -119,6 +120,7 @@ def move(spr):
         spr.rect.x += spr.speed
 
     checkCollisions(spr)
+    animation.handleAnimation(spr,spr.dir)
 
 def checkCollisions(spr):
     if spr.mode == "Flight":

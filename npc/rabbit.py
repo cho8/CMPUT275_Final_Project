@@ -23,6 +23,10 @@ class Rabbit(BaseNPC):
         self.left2= self.image2.subsurface(0,0,11,9)
         self.right2 = self.image2.subsurface(0,9,11,9)
         self.image = self.left1
+        self.lastleft = self.left1
+        self.lastright = self.right1
+        self.lastback = self.back1
+        self.lastfront = self.front1 
         self.rect = self.image.get_rect()
         self.health = 5
         self.speed = 1

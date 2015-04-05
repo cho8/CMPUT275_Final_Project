@@ -1,4 +1,4 @@
-import pygame,setup
+import pygame,setup,animation
 from pygame.sprite import Group
 
 
@@ -47,10 +47,10 @@ class Player(Group):
         self.player.rect.y = x_pos
         self.add(self.player)
         self.running = False
-        self.lastleft = self.player.left1
-        self.lastright = self.player.right1
-        self.lastback = self.player.back1
-        self.lastfront = self.player.front1
+        self.player.lastleft = self.player.left1
+        self.player.lastright = self.player.right1
+        self.player.lastback = self.player.back1
+        self.player.lastfront = self.player.front1
         
 
     def updateHunger(self):
@@ -63,9 +63,9 @@ class Player(Group):
 
     def updateStamina(self):
         if self.moving == True:
-            staminaloss = .01+(self.encumbrance%25)*.01
+            staminaloss = .01
             if self.running:
-                staminaloss *= 5
+                staminaloss = .05
                 self.running = False
             if self.stamina > -5:
                 self.stamina -= staminaloss
@@ -85,7 +85,6 @@ class Player(Group):
                 self.exhausted = False
 
     def movePlayer(self,direction):
-        lastimage = self.player.image
         SPEED = self.basespeed
         if self.running:
             SPEED *= 2
@@ -104,26 +103,11 @@ class Player(Group):
         if direction == "LEFT" or direction == "RIGHT":
             if direction == "LEFT":
                 self.dir = 1
-                SPEED *= -1
-                
-                if setup.frame % self.FRAMERATE == 0:
-                    if self.player.image == self.player.left1:
-                        self.lastleft = self.player.image  = self.player.left2                     
-                    else:
-                        self.lastleft = self.player.image = self.player.left1
-                else:
-                    self.player.image  = self.lastleft
+                SPEED *= -1                
 
             else:
                 self.dir = 3
-                if setup.frame % self.FRAMERATE == 0:
-                    if self.player.image == self.player.right1:
-                        self.lastright = self.player.image  = self.player.right2                     
-                    else:
-                        self.lastright = self.player.image = self.player.right1
-                else:
-                    self.player.image  = self.lastright
-            
+ 
             if self.player.rect.x < VIEWDISTANCE:               
                 if setup.gui.bgx < 0:
                     self.player.rect.x = VIEWDISTANCE
@@ -167,27 +151,11 @@ class Player(Group):
 
         elif direction == "UP" or direction == "DOWN":
             if direction == "UP":
-                self.dir = 1
+                self.dir = 2
                 SPEED *= -1
-
-                if setup.frame % self.FRAMERATE == 0:
-                    if self.player.image == self.player.back1:
-                        self.lastback = self.player.image  = self.player.back2                     
-                    else:
-                        self.lastback = self.player.image = self.player.back1
-                else:
-                    self.player.image  = self.lastback
 
             else:
                 self.dir = 0
-
-                if setup.frame % self.FRAMERATE == 0:
-                    if self.player.image == self.player.front1:
-                        self.lastfront = self.player.image  = self.player.front2                     
-                    else:
-                        self.lastfront = self.player.image = self.player.front1
-                else:
-                    self.player.image  = self.lastfront
 
             if self.player.rect.y > setup.screen.get_height() - VIEWDISTANCE: 
                 if setup.gui.bgy >(0-setup.background.get_height()\
@@ -230,7 +198,7 @@ class Player(Group):
 
                 self.player.rect.y -= SPEED
 
-
+        animation.handleAnimation(self.player,self.dir)
 
     def updatePlayer(self):
 

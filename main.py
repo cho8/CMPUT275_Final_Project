@@ -46,8 +46,8 @@ while True:
                 gui.on_click(event)
 
             if event.type == setup.UPDATESTATUS:
-                print("Health:{} Stamina:{} Hunger:{} Starving:{}".format\
-        (player.health,player.stamina,player.hunger,player.starving))
+                print("Health:{} Stamina:{} Hunger:{} Starving:{} Encumbrance:{}".format\
+        (player.health,player.stamina,player.hunger,player.starving,player.encumbrance))
                 player.updateHunger()               
 
     
