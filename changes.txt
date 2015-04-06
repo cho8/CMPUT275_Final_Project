@@ -1,3 +1,7 @@
+## please added most recent changes at the top of this text file ##
+
+- GUI now displays items in “stacks”.
+
 - Depleted stamina affects hunger rate in ‘player.py’	
 - semi-working auto-eat (not optimized). Fixing logic and purpose of function	
 - can now load berries in ‘setup.py’
