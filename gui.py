@@ -87,9 +87,6 @@ class GUI():
         #Currently Selected Item in Inventory
         self.sel_item = None
     
-        #number of items displayed in inventory
-        self.num_items = 0
-    
     def draw_gui(self):
         """
         Draws the interface on the right side of the screen.
@@ -165,7 +162,15 @@ class GUI():
             stamina_rect.w = 0
         bar_colour = RED_BAR if self.player.stamina <= 30 else GREEN_BAR
         pygame.draw.rect(self.screen,bar_colour, stamina_rect)
+        # encumbered state
+        if self.player.encumbrance > 50:
+            player_encumbered = SMALLER_FONT.render("ENCUMBERED", True, RED_BAR)
+            self.screen.blit(player_encumbered,
+                        (stamina_rect.x+ 3*PAD,
+                          stamina_rect.y + 2*PAD))
         line_num += 2
+        
+       
         
         #divider
         pygame.draw.line(self.screen, OUTLINE_COLOUR, (self.gui_rect.left, FONT_SIZE*line_num), (self.gui_rect.right, FONT_SIZE*line_num))
@@ -187,37 +192,67 @@ class GUI():
         inventory_rect.y += 85
         inventory_rect.w = INV_WIDTH
         inventory_rect.h = INV_HEIGHT
+        
+        count_rect = pygame.Rect(self.screen_rect.w - 5*PAD, 0, 4*PAD, INV_HEIGHT/10)
+        
+        # item number display parameters
         inv_line = 0
-        self.num_items = 0
+        count_dict = {}
+        # dictionary of display coordinate tuples
+        item_whichline = {}
 
-        pygame.draw.rect(self.screen, OUTLINE_COLOUR, inventory_rect, 1)
-        j_count = 0
-        b_count = 0
-        wb_count = 0
         for item in self.player.inventory:
             
-            item.list_rect = inventory_rect.copy()
-            item.list_rect.x += 1
-            item.list_rect.w -= 2
-            item.list_rect.h = INV_HEIGHT/10
-            item.list_rect.y += inv_line * item.list_rect.h
-            if item.list_rect.y > inventory_rect.x + INV_HEIGHT:
-                return
-            if item == self.sel_item:
-                pygame.draw.rect(self.screen, SEL_COLOUR, item.list_rect,1)
+            #assigning the rect of item displayed
+            #if an instance of the item does not exist in displayed inventory
+            if not item.name in count_dict:
+                item.list_rect = inventory_rect.copy()
+                item.list_rect.x += 1
+                item.list_rect.w -= 2
+                item.list_rect.h = INV_HEIGHT/10
+                item.list_rect.y += inv_line * item.list_rect.h
+                item_whichline[item.name] = (item.list_rect.x,item.list_rect.y)
+                count_dict[item.name] = 1
+                inv_line +=1
+    
             
+            else:
+                item.list_rect.x, item.list_rect.y = item_whichline[item.name][0], item_whichline[item.name][1]
+                item.list_rect.h = INV_HEIGHT/10
+                item.list_rect.w = inventory_rect.w - 2
+                
+                count_dict[item.name] += 1
+            
+            # clear the rect of text
+            pygame.draw.rect(self.screen, GUI_COLOUR, item.list_rect)
+            
+            # create the window for hovering over items
             mouse_pos = pygame.mouse.get_pos()
             if item.list_rect.collidepoint(mouse_pos):
                 self.draw_hover_rect(item)
                 pygame.draw.rect(self.screen, OUTLINE_COLOUR, item.list_rect)
-            item_name = SMALL_FONT.render(item.name, True, FONT_COLOUR)
+            
+            
+            
+            # draw the name of the item on top of everything else
+            item_name = SMALL_FONT.render(item.name,
+                                        True,
+                                        FONT_COLOUR)
+
             self.screen.blit(item_name,
-                            (inventory_rect.x + PAD,
-                            item.list_rect.y+PAD))
-            inv_line +=1
-            self.num_items += 1
-    
-#        pygame.draw.rect(self.screen, OUTLINE_COLOUR, inventory_rect, 1)
+                            (inventory_rect.x + PAD, item.list_rect.y+PAD))
+            #update the item count inventory
+            item_count = SMALL_FONT.render(str(count_dict[item.name]),
+                                                True,
+                                                FONT_COLOUR)
+            self.screen.blit(item_count,
+                            (count_rect.x, item.list_rect.y+PAD))
+            
+        # draw the inventory box outline
+        pygame.draw.rect(self.screen, OUTLINE_COLOUR, inventory_rect, 1)
+        # draw the outline around the selected item
+        if self.sel_item:
+            pygame.draw.rect(self.screen, SEL_COLOUR, self.sel_item.list_rect,1)
 
     def draw_hover_rect(self, item):
         """
@@ -317,8 +352,6 @@ class GUI():
         if eligible_item:
             #if we can't hold the item, do thing
             if eligible_item.size > (100 - self.player.encumbrance):
-                return
-            elif self.num_items == 10:
                 return
             eligible_item.pick_up(self.player)
             self.items.remove(eligible_item)
