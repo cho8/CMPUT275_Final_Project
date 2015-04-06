@@ -191,6 +191,9 @@ class GUI():
         self.num_items = 0
 
         pygame.draw.rect(self.screen, OUTLINE_COLOUR, inventory_rect, 1)
+        j_count = 0
+        b_count = 0
+        wb_count = 0
         for item in self.player.inventory:
             
             item.list_rect = inventory_rect.copy()
