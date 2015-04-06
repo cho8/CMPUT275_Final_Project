@@ -8,8 +8,6 @@ class Player(Group):
         Group.__init__(self)        
 
         self.player = pygame.sprite.Sprite()
-        self.player.x_pos = x_pos
-        self.player.y_pos = y_pos
         gus1 = pygame.image.load("images/gus1.png").convert_alpha()
         gus2 = pygame.image.load("images/gus2.png").convert_alpha()
         self.player.front1 = gus1.subsurface(0,0,12,20)
@@ -20,10 +18,7 @@ class Player(Group):
         self.player.back2 = gus2.subsurface(12,0,12,20)
         self.player.left2= gus2.subsurface(24,0,10,20)
         self.player.right2 = gus2.subsurface(34,0,10,20)
-        self.player.type = "Player"
-        self.staminaloss = 0
-
-     
+        self.player.type = "Player"  
 
         #Initial attributes
         self.health = 100 #percent
@@ -34,11 +29,10 @@ class Player(Group):
         self.stamina = 100
         self.exhausted = False
         self.basespeed = 2
+        self.dir = 0
         self.inventory = []
         self.moving = False
         self.player.image = self.player.front1
-        self.dir = 0
-        self.FRAMERATE = 10
         self.player.rect = self.player.image.get_rect()
         self.player.rect.x = x_pos
         self.player.rect.y = x_pos
@@ -73,15 +67,16 @@ class Player(Group):
             self.moving = False
         else:
             if self.stamina < 100:
-                self.stamina += .10
+                self.stamina += .01
             if self.stamina > 0:
                 self.exhausted = False
 
     def movePlayer(self,direction):
-        print(self.player.rect.x)
-        print(self.player.rect.y)
         SPEED = self.basespeed
-        if self.encumbrance > 20:
+        VIEWDISTANCE = 150
+        GUIWIDTH = 200
+        self.moving = True
+        if self.encumbrance > 50:
             SPEED/=2
         if self.player.running:
             SPEED *= 2
@@ -99,11 +94,6 @@ class Player(Group):
                 if self.player.rect.y % 2 != 0:
                     print("adjusting y")
                     self.player.rect.y += 1
-
-     
-        VIEWDISTANCE = 150
-        GUIWIDTH = 200
-        self.moving = True
 
         if direction == "LEFT" or direction == "RIGHT":
             if direction == "LEFT":
