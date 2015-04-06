@@ -1,7 +1,14 @@
 import setup,player
+
 def handleAnimation(spr,dir):
 
-    if setup.frame % setup.FRAMERATE == 0:
+    framerate = setup.FRAMERATE
+
+    if spr.type == "Player" and spr.running:
+        
+        framerate /=2
+
+    if setup.frame % framerate == 0:
 
         if dir == 1:
 
@@ -27,7 +34,6 @@ def handleAnimation(spr,dir):
                 spr.lastback = spr.image  = spr.back2                     
             else:
                 spr.lastback = spr.image = spr.back1
-
        
     else:
         if dir == 1:
@@ -38,3 +44,7 @@ def handleAnimation(spr,dir):
            spr.image  = spr.lastfront
         elif dir == 2:
            spr.image  = spr.lastback
+
+
+    if spr.type is not "Player":
+        spr.rect.size = spr.image.get_size()

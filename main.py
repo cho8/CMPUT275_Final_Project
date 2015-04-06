@@ -24,7 +24,7 @@ while True:
                 keys = pygame.key.get_pressed()
 
                 if keys[pygame.K_SPACE]:
-                    player.running = True
+                    player.player.running = True
 
                 if keys[pygame.K_d]:
                     player.moving == True                
@@ -48,7 +48,8 @@ while True:
             if event.type == setup.UPDATESTATUS:
                 print("Health:{} Stamina:{} Hunger:{} Starving:{} Encumbrance:{}".format\
         (player.health,player.stamina,player.hunger,player.starving,player.encumbrance))
-                player.updateHunger()               
+                player.updateHunger() 
+                print(player.staminaloss)              
 
     
         clock.tick(30)

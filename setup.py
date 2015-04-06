@@ -1,8 +1,8 @@
 import pygame,mapmatrix, npc, gui
-from item import *
+#from item import *
 from item.jerky import Jerky
 from item.oldwaterbottle import OldWaterBottle
-from item.berries import Berries
+#from item.berries import Berries
 from pygame import sprite
 from player import Player
 from npc.wolf import Wolf
@@ -20,7 +20,7 @@ MOUNTAIN_END = "images/mountainend.png"
 SNOWY_TREE = "images/tree2.png"
 GRASS = "images/grass.png"
 
-FRAMERATE = 8
+FRAMERATE = 6
 frame = FRAMERATE
 
 #Object loading functions
@@ -107,14 +107,14 @@ for i in range(60):
         elif map_matrix[i][j] == 5:
             loadSprite(MOUNTAIN_END,j,i,buildings)
         elif map_matrix[i][j] == 6:
-            loadSprite(SNOWY_TREE,j,i,buildings)
+            loadSprite(SNOWY_TREE,j,i,trees)
         elif map_matrix[i][j] == 7:
             loadSprite(GRASS,j,i,longgrass)
         elif map_matrix[i][j] == 8:
             #boundary trees
             loadSprite(TREE,j,i,buildings)
-        elif map_matrix [i][j] == 9:
-            loadItem("berries",j,i)
+      #  elif map_matrix [i][j] == 9:
+        #    loadItem("berries",j,i)
 
                  
 gui = gui.GUI()

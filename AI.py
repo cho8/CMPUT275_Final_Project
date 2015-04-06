@@ -6,12 +6,10 @@ def turnLeft(spr):
     spr.dir += 1
     if spr.dir > 3:
        spr.dir = 0
-    animation.handleAnimation(spr,spr.dir)
 def turnRight(spr):
     spr.dir -= 1
     if spr.dir < 0:
        spr.dir = 3
-    animation.handleAnimation(spr,spr.dir)
 def flee(spr):
 
     if manDist(spr,setup.player.player) < 120:

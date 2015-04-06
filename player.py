@@ -10,13 +10,8 @@ class Player(Group):
         self.player = pygame.sprite.Sprite()
         self.player.x_pos = x_pos
         self.player.y_pos = y_pos
-        gus = pygame.image.load("images/gus.png").convert_alpha()
         gus1 = pygame.image.load("images/gus1.png").convert_alpha()
         gus2 = pygame.image.load("images/gus2.png").convert_alpha()
-        self.player.front = gus.subsurface(0,0,12,20)
-        self.player.back = gus.subsurface(12,0,12,20)
-        self.player.left= gus.subsurface(24,0,10,20)
-        self.player.right = gus.subsurface(34,0,10,20)
         self.player.front1 = gus1.subsurface(0,0,12,20)
         self.player.back1 = gus1.subsurface(12,0,12,20)
         self.player.left1= gus1.subsurface(24,0,10,20)
@@ -25,6 +20,8 @@ class Player(Group):
         self.player.back2 = gus2.subsurface(12,0,12,20)
         self.player.left2= gus2.subsurface(24,0,10,20)
         self.player.right2 = gus2.subsurface(34,0,10,20)
+        self.player.type = "Player"
+        self.staminaloss = 0
 
      
 
@@ -39,14 +36,14 @@ class Player(Group):
         self.basespeed = 2
         self.inventory = []
         self.moving = False
-        self.player.image = self.player.front
+        self.player.image = self.player.front1
         self.dir = 0
         self.FRAMERATE = 10
         self.player.rect = self.player.image.get_rect()
         self.player.rect.x = x_pos
         self.player.rect.y = x_pos
         self.add(self.player)
-        self.running = False
+        self.player.running = False
         self.player.lastleft = self.player.left1
         self.player.lastright = self.player.right1
         self.player.lastback = self.player.back1
@@ -65,12 +62,12 @@ class Player(Group):
 
     def updateStamina(self):
         if self.moving == True:
-            staminaloss = .01
-            if self.running:
-                staminaloss = .05
-                self.running = False
+            self.staminaloss = .01 + (self.encumbrance/25)*.01
+            if self.player.running:
+                self.staminaloss *= 2
+                self.player.running = False
             if self.stamina > -5:
-                self.stamina -= staminaloss
+                self.stamina -= self.staminaloss
             if self.stamina < 0:
                 self.exhausted = True
             self.moving = False
@@ -88,15 +85,15 @@ class Player(Group):
 
     def movePlayer(self,direction):
         SPEED = self.basespeed
-        if self.running:
+        if self.encumbrance > 20:
+            SPEED/=2
+        if self.player.running:
             SPEED *= 2
-            self.FRAMERATE = 5
-        else:
-            self.FRAMERATE = 10
         if pygame.sprite.spritecollideany(self.player,setup.longgrass) != None\
         or self.exhausted: 
-            self.running = False
+            self.player.running = False
             SPEED = 1
+        print(SPEED)
      
         VIEWDISTANCE = 150
         GUIWIDTH = 200
