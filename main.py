@@ -48,9 +48,7 @@ while True:
             if event.type == setup.UPDATESTATUS:
                 print("Health:{} Stamina:{} Hunger:{} Starving:{} Encumbrance:{}".format\
         (player.health,player.stamina,player.hunger,player.starving,player.encumbrance))
-                player.updateHunger() 
-                print(player.staminaloss)              
-
+                player.updateHunger()            
     
         clock.tick(30)
         setup.frame +=1
@@ -58,6 +56,7 @@ while True:
         player.updatePlayer()
         gui.update()
 
+    #Working on kill screen
     endscreen = pygame.Surface(pygame.display.get_surface().get_size()).convert_alpha()
     endscreen.fill((0,0,0))
     alpha = 0

@@ -12,7 +12,7 @@ def turnRight(spr):
        spr.dir = 3
 def flee(spr):
 
-    if manDist(spr,setup.player.player) < 120:
+    if nearPlayer(spr,120):
         if setup.player.player.rect.x <= spr.rect.x and setup.player.dir == 3:
             spr.dir = 3
         elif setup.player.player.rect.x > spr.rect.x and setup.player.dir == 1:
@@ -33,79 +33,12 @@ def manDist(spr1,spr2):
     y = abs(spr1.rect.y - spr2.rect.y)
     return x+y
 
-def nearPlayer(spr):
+def nearPlayer(spr, minDist = 30):
     
-    if manDist(spr,setup.player.player) < 30:
+    if manDist(spr,setup.player.player) < minDist:
         return True
     else:
         return False
-
-def getImage(spr):
-    if spr.dir == 0:
-        spr.rect.size = spr.image.get_size()
-        if setup.frame % setup.FRAMERATE == 0:
-            if spr.type == "Rabbit":
-
-                if not spr.airborne:
-                    spr.airborne = True
-                    spr.image = spr.front2
-                else:
-                    spr.image = spr.front1
-                    spr.airborne = False
-            else:
-                spr.image = spr.front1
-
-        spr.rect.size = spr.image.get_size()
-
-    elif spr.dir == 2:
-        if setup.frame % setup.FRAMERATE == 0:
-            if spr.type == "Rabbit":
-
-                if not spr.airborne:
-                    spr.airborne = True
-                    spr.image = spr.back2
-                else:
-                    spr.image = spr.back1
-                    spr.airborne = False
-            else:
-                spr.image = spr.back1
-
-        spr.rect.size = spr.image.get_size()
-
-    elif spr.dir == 1:
-        if setup.frame % setup.FRAMERATE == 0:
-            if spr.type == "Rabbit":
-
-                if not spr.airborne:
-                    spr.airborne = True
-                    spr.image = spr.left1
-                else:
-                    spr.image = spr.left2
-                    spr.airborne = False
-            else:
-                if spr.image == spr.left1:
-                    spr.image = spr.left2
-                else:
-                    spr.image = spr.left1
-        spr.rect.size = spr.image.get_size()
-
-    elif spr.dir == 3:
-        if setup.frame % setup.FRAMERATE == 0:
-            if spr.type == "Rabbit":
-
-                if not spr.airborne:
-                    spr.airborne = True
-                    spr.image = spr.right1
-                else:
-                    spr.image = spr.right2
-                    spr.airborne = False
-            else:
-                if spr.image == spr.right1:
-                    spr.image = spr.right2
-                else:
-                    spr.image = spr.right1
-        spr.rect.size = spr.image.get_size()
-    
 
 def move(spr):
     if spr.dir == 0:
@@ -163,7 +96,7 @@ def checkCollisions(spr):
 def updateNPC(spritegroup):
     for spr in spritegroup:
 
-        if spr.type == "Rabbit" and nearPlayer(spr) and spr.mode is not "Flight" :
+        if spr.type == "Rabbit" and nearPlayer(spr) and spr.mode is not "Flight":
             spr.mode = "Flight"
             spr.speed *= 5
         if spr.mode == "Neutral":
