@@ -1,0 +1,3 @@
+- Depleted stamina affects hunger rate in ‘player.py’	
+- semi-working auto-eat (not optimized). Fixing logic and purpose of function	
+- can now load berries in ‘setup.py’
