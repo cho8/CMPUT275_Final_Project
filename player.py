@@ -75,15 +75,11 @@ class Player(Group):
             if self.stamina < 100:
                 self.stamina += .10
             if self.stamina > 0:
-                #adjusts position, so coord is always even(Otherwise getting through
-                #tight spaces gets difficult.
-                if self.player.rect.x % 2 != 0:
-                    self.player.rect.x += 1
-                if self.player.rect.y % 2 != 0:
-                    self.player.rect.y += 1
                 self.exhausted = False
 
     def movePlayer(self,direction):
+        print(self.player.rect.x)
+        print(self.player.rect.y)
         SPEED = self.basespeed
         if self.encumbrance > 20:
             SPEED/=2
@@ -93,7 +89,17 @@ class Player(Group):
         or self.exhausted: 
             self.player.running = False
             SPEED = 1
-        print(SPEED)
+        else:
+                #adjusts position, so coord is always even(Otherwise getting through
+                #tight spaces gets difficult.
+                #This doesn't work great yet.
+                if self.player.rect.x % 2 != 0:
+                    print("adjusting x")
+                    self.player.rect.x += 1
+                if self.player.rect.y % 2 != 0:
+                    print("adjusting y")
+                    self.player.rect.y += 1
+
      
         VIEWDISTANCE = 150
         GUIWIDTH = 200

@@ -45,7 +45,7 @@ def loadNPC(npc,x,y):
 def loadItem(item,x,y):
     if item == "jerky":
         object = Jerky()
-    elif item == "bottle":
+    elif item == "water":
         object = OldWaterBottle()
     elif item == "berries":
         object = Berries()
@@ -94,8 +94,10 @@ for i in range(60):
             loadNPC("rabbit",j,i)
         elif map_matrix[i][j] == 'j':
             loadItem("jerky",j,i)
-        elif map_matrix[i][j] == 'b':
-            loadItem("bottle",j,i)
+        elif map_matrix[i][j] == 'wb':
+            loadItem("water",j,i)
+        #elif map_matrix[i][j] == 'b':
+            #loadItem("berries",j,i)
         elif map_matrix[i][j] == 1:
             loadSprite(TREE,j,i,trees)
         elif map_matrix[i][j] == 2:
@@ -110,11 +112,12 @@ for i in range(60):
             loadSprite(SNOWY_TREE,j,i,trees)
         elif map_matrix[i][j] == 7:
             loadSprite(GRASS,j,i,longgrass)
+
+        #boundary trees
         elif map_matrix[i][j] == 8:
-            #boundary trees
             loadSprite(TREE,j,i,buildings)
-      #  elif map_matrix [i][j] == 9:
-        #    loadItem("berries",j,i)
+        elif map_matrix [i][j] == 9:
+            loadSprite(SNOWY_TREE,j,i,buildings)
 
                  
 gui = gui.GUI()
