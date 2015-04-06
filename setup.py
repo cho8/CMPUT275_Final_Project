@@ -1,8 +1,8 @@
 import pygame,mapmatrix, npc, gui
-#from item import *
+from item import *
 from item.jerky import Jerky
 from item.oldwaterbottle import OldWaterBottle
-#from item.berries import Berries
+from item.berries import Berries
 from pygame import sprite
 from player import Player
 from npc.wolf import Wolf
@@ -96,8 +96,8 @@ for i in range(60):
             loadItem("jerky",j,i)
         elif map_matrix[i][j] == 'wb':
             loadItem("water",j,i)
-        #elif map_matrix[i][j] == 'b':
-            #loadItem("berries",j,i)
+        elif map_matrix[i][j] == 'b':
+            loadItem("berries",j,i)
         elif map_matrix[i][j] == 1:
             loadSprite(TREE,j,i,trees)
         elif map_matrix[i][j] == 2:
