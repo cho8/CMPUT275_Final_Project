@@ -6,6 +6,7 @@ class Berries(BaseItem):
     """
     Consumable item.
     Berries found in the wild are definitely safe to consume.
+    Berries can be found on the ground over some periods of time.
     Restores a bit of hunger and stamina.
     """
     def __init__(self):

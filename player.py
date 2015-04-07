@@ -186,7 +186,6 @@ class Player(Group):
                         object.rect.y -= SPEED
 
             self.player.rect.y += SPEED
-            print (type(pygame.sprite.spritecollideany(self.player, setup.items)))
             if pygame.sprite.spritecollideany(self.player,setup.buildings) != None\
             or pygame.sprite.spritecollideany(self.player,setup.npcs) != None\
             or pygame.sprite.spritecollideany(self.player,setup.trees) != None\

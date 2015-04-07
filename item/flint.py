@@ -6,8 +6,7 @@ import setup
 class Flint(BaseItem):
     """
     Consumable Item.
-    Fuel for a fire.
-    When used it drops on the ground at the player's location
+    When used on a tile with firewood it can create a fire.
     """
 
     def __init__(self):

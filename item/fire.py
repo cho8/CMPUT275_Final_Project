@@ -3,7 +3,7 @@ from item.base_item import BaseItem
 
 class Fire(BaseItem):
     """
-    Non-consumable
+    Non-consumable. Hurts player if they stand too close to it.
     """
 
     def __init__(self):

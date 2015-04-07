@@ -1,4 +1,5 @@
 import pygame
+from pygame import sprite
 import setup
 from collections import namedtuple
 from textwrap import drawText
@@ -17,6 +18,7 @@ BAR_WIDTH = 100
 INV_HEIGHT = 220
 INV_WIDTH = 190
 PAD = 5
+TILE_SIZE = 20
 
 # Set fonts
 pygame.font.init()
@@ -186,7 +188,8 @@ class GUI():
     def draw_inventory_list(self, inventory):
         """
         Draws the list of items (inventory) into the gui. Also handles cursor
-        highlighting items.
+        highlighting items and item selection.
+        If there are multiples of an item, keep the item selected.
         """
         inventory_rect = self.gui_rect.copy()
         inventory_rect.x += PAD
@@ -212,12 +215,14 @@ class GUI():
                 item.list_rect.w -= 2
                 item.list_rect.h = INV_HEIGHT/10
                 item.list_rect.y += inv_line * item.list_rect.h
+                # keep track of the item location in the displayedlist
                 item_whichline[item.name] = (item.list_rect.x,item.list_rect.y)
                 count_dict[item.name] = 1
                 inv_line +=1
     
             
             else:
+                #get the item location of the same item in the displayed list
                 item.list_rect.x, item.list_rect.y = item_whichline[item.name][0], item_whichline[item.name][1]
                 item.list_rect.h = INV_HEIGHT/10
                 item.list_rect.w = inventory_rect.w - 2
@@ -251,13 +256,15 @@ class GUI():
             
         # draw the inventory box outline
         pygame.draw.rect(self.screen, OUTLINE_COLOUR, inventory_rect, 1)
-        # draw the outline around the selected item
+        # draw the outline around the selected item, otherwise clear it
         if self.sel_item:
             pygame.draw.rect(self.screen, SEL_COLOUR, self.sel_item.list_rect,1)
+
 
     def draw_hover_rect(self, item):
         """
         Draw the popup menu that appears when an item is hovered over.
+        Displays item name and description when hovering over an item in the inventory.
         """
         hover_rect = pygame.Rect(self.gui_rect.h - HOVER_WIDTH, 0,HOVER_WIDTH, HOVER_HEIGHT)
         hover_out_rect = hover_rect.copy()
@@ -283,6 +290,7 @@ class GUI():
         Renders a button to the bar.
         If the mouse is hovering over the button it is rendered in white,
         else grey.
+        The button is disabled if conditions to click it are not met.
         """
         but_x = self.screen_rect.w - (self.gui_rect.w/2)*(button.slot_x+1) + PAD
         but_y = self.screen_rect.h - (self.gui_rect.h/9)*(button.slot_y+1) 
@@ -331,16 +339,24 @@ class GUI():
             return
         #if the item is usable, consume it and remove it from inventory
         self.sel_item.consume_item(self.player)
+        for i in self.player.inventory:
+            # if there are still items of that type in the inventory, keep it selected
+            if i.name == self.sel_item.name:
+                self.sel_item = i
+                return
         self.sel_item = None
-        
-
     def discard_pressed(self):
         """
         Discard button is clicked while an inventory item is selected.
         """
         if self.sel_item == None:
             return
-        self.sel_item.discard(self.player.inventory)
+        self.sel_item.discard(self.player)
+        for i in self.player.inventory:
+        # if there are still items of that type in the inventory, keep it selected
+            if i.name == self.sel_item.name:
+                self.sel_item = i
+                return
         self.sel_item = None
 
     def search_pressed(self):
@@ -358,6 +374,7 @@ class GUI():
             self.items.remove(eligible_item)
             print(self.player.encumbrance)
             print(self.player.inventory)
+    
         #check collision between player and grass
         in_grass = pygame.sprite.spritecollideany(self.player.player, setup.longgrass)
         ####### add item generation code ######
@@ -388,8 +405,6 @@ class GUI():
                 i.consume_item(self.player)
                 hung += i.hung_value
         print("Hung restored: {} player hunger: {}".format(-1*hung, self.player.hunger))
-                
-
     
     
     def item_selected(self):
@@ -452,6 +467,9 @@ class GUI():
     
    
     def update(self):
+        """
+        Update the drawing of everything display related.
+        """
         self.screen.blit(self.background,(self.bgx,self.bgy))
         setup.items.draw(self.screen)
         

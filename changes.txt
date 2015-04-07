@@ -1,10 +1,12 @@
-## please added most recent changes at the top of this text file ##
+## please add most recent changes at the top of this text file
+## remove problematic items as you fix them
+## for game-breaking things, post an issue to github
 
+- memo is still wonking out
 - We have fire!!! Need to work on placing fire in front of Gus
 - Flint now found in tall grass
 - Loadable fire, firewood, need to animate fire
 - GUI now displays items in “stacks”.
 
-- Depleted stamina affects hunger rate in ‘player.py’	
-- semi-working auto-eat (not optimized). Fixing logic and purpose of function	
+- Depleted stamina affects hunger rate in ‘player.py’		
 - can now load berries in ‘setup.py’

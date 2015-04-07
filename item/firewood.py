@@ -6,7 +6,8 @@ import setup
 class Firewood(BaseItem):
     """
     Fuel for a fire.
-    When used it drops on the ground at the player's location
+    When used it drops on the ground at the player's location.
+    Flint can be used when standing by some firewood to create a fire.
     """
 
     def __init__(self):
