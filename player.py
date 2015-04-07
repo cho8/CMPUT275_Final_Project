@@ -1,5 +1,6 @@
 import pygame,setup,animation
 from pygame.sprite import Group
+from item import *
 
 
 class Player(Group):
@@ -46,7 +47,7 @@ class Player(Group):
 
     def updateHunger(self):
         if self.hunger < 100:
-            self.hunger += 1 + (int(100 - self.stamina) % 6)
+            self.hunger += 1 + (int((100 - abs(self.stamina)) /20))
         else:
             self.starving = True
             print("starving")
@@ -138,7 +139,8 @@ class Player(Group):
 
             if pygame.sprite.spritecollideany(self.player,setup.buildings) != None\
             or pygame.sprite.spritecollideany(self.player,setup.npcs) != None\
-            or pygame.sprite.spritecollideany(self.player,setup.trees) != None:
+            or pygame.sprite.spritecollideany(self.player,setup.trees) != None\
+            or type(pygame.sprite.spritecollideany(self.player,setup.items)) == fire.Fire:
 
                 self.player.rect.x -= SPEED
 
@@ -184,11 +186,11 @@ class Player(Group):
                         object.rect.y -= SPEED
 
             self.player.rect.y += SPEED
-
+            print (type(pygame.sprite.spritecollideany(self.player, setup.items)))
             if pygame.sprite.spritecollideany(self.player,setup.buildings) != None\
             or pygame.sprite.spritecollideany(self.player,setup.npcs) != None\
-            or pygame.sprite.spritecollideany(self.player,setup.trees) != None:
-
+            or pygame.sprite.spritecollideany(self.player,setup.trees) != None\
+            or type(pygame.sprite.spritecollideany(self.player,setup.items)) == fire.Fire:
                 self.player.rect.y -= SPEED
 
         animation.handleAnimation(self.player,self.dir)

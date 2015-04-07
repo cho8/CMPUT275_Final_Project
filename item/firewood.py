@@ -1,7 +1,7 @@
 import pygame, item
 from item.base_item import BaseItem
 from pygame.sprite import Sprite
-import setup, gui
+import setup
 
 class Firewood(BaseItem):
     """
@@ -12,13 +12,13 @@ class Firewood(BaseItem):
     def __init__(self):
         super().__init__()
 
-        self.name = "Dry Jerky"
+        self.name = "Firewood"
         self.type = "Tool"
         self.description = item.descriptions[self.name]
 
         self.size = 20
 
-        self.image = pygame.image.load("image/item_firewood.png").convert_alpha()
+        self.image = pygame.image.load("images/item_firewood.png").convert_alpha()
 
     def consume_item(self, player):
         """
@@ -26,11 +26,12 @@ class Firewood(BaseItem):
         Overrides base class definition of method.
         """
         # if the player is standing on something, do nothing
-        if pygame.sprite.sprigecollideany(player, setup.items):
+        if pygame.sprite.spritecollideany(player.player, setup.items):
             return
         
         super().consume_item(player)
         #place item on floor
-        setup.loadItem(self,player.x_pos, player.y_pos)
+        self.rect.x, self.rect.y = player.player.rect.x, player.player.rect.y
+        setup.items.add(self)
         self._ground = True
         self._inventory = False

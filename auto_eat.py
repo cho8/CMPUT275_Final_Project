@@ -26,28 +26,28 @@ def auto_eat(player, inv_list, value, memo = None, remain = None):
     #player value remaining
     new_remain = remain
 
-    total = 0
     new_inventory = inv_list
     inv_id = tuple(new_inventory)
 
     if not (new_remain, inv_id) in memo:
-        if new_remain < smallest(new_inventory,value) or new_remain < 0:
+        if new_remain < smallest(new_inventory,value):
             memo[(new_remain, inv_id)] = []
         else:
             # try using a dictionary again
             sub_sol = {}
-            len = 0
+            total = 0
             for i in new_inventory:
                 new_inventory.remove(i)
                 if value(i) <= new_remain and value(i) > 0:
                     new_remain -= value(i)
                     inv_id = tuple(new_inventory)
                     total += value(i)
-                    print("new remain {} total {}".format(new_remain, total))
+                    print("new remain {} total size {}".format(new_remain, total))
                     if not total in sub_sol:
                         sub_sol[total] = []
                     sub_sol[total].append(i)
                     sub_sol[total].extend(auto_eat(player, new_inventory, value, memo,new_remain))
+                    print("sub {} total {}".format(sub_sol[total], total))
 
             memo[(new_remain, inv_id)] = sub_sol[max(sub_sol)] if sub_sol else []
     return memo[(new_remain, inv_id)]

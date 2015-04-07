@@ -3,6 +3,7 @@ import setup
 from collections import namedtuple
 from textwrap import drawText
 from auto_eat import auto_eat
+from item import *
 
 # GUI size things
 RESOLUTION_RECT = pygame.Rect(0,0, 600,400)
@@ -349,7 +350,7 @@ class GUI():
         
         #check collision between player and any item
         eligible_item = pygame.sprite.spritecollideany(self.player.player,self.items)
-        if eligible_item:
+        if eligible_item and eligible_item.name != "Fire":
             #if we can't hold the item, do thing
             if eligible_item.size > (100 - self.player.encumbrance):
                 return
@@ -358,8 +359,12 @@ class GUI():
             print(self.player.encumbrance)
             print(self.player.inventory)
         #check collision between player and grass
-        in_grass = pygame.sprite.spritecollideany(self.player.player, self.buildings)
+        in_grass = pygame.sprite.spritecollideany(self.player.player, setup.longgrass)
         ####### add item generation code ######
+        if in_grass:
+            object = flint.Flint()
+            object.set_inventory()
+            self.player.inventory.append(object)
             
 
     def auto_pressed(self):
@@ -378,7 +383,7 @@ class GUI():
     
         hung = 0
         if to_consume:
-    
+            print(to_consume)
             for i in to_consume:
                 i.consume_item(self.player)
                 hung += i.hung_value
@@ -449,6 +454,7 @@ class GUI():
     def update(self):
         self.screen.blit(self.background,(self.bgx,self.bgy))
         setup.items.draw(self.screen)
+        
         self.player.draw(self.screen)
         setup.npcs.draw(self.screen)
         self.buildings.draw(self.screen)

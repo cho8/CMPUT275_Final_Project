@@ -16,9 +16,12 @@ class Fire(BaseItem):
         self.heal_value = -20
 
         self._ground = True
-        self.image = pygame.image.load("image/item_fire.png").convert_alpha()
-        self.subimage1 = self.subsurface(0,0,20,20)
-        self.subimage2 = self.subsurface(20,0,20,20)
+        self.image = pygame.image.load("images/item_fire.png").convert_alpha()
+        self.subimage1 = self.image.subsurface(0,0,20,20)
+        self.subimage2 = self.image.subsurface(20,0,20,20)
+    
+        self.lastimage = [self.subimage1, self.subimage2]
+        self.image = self.subimage1
 
     def consume_item(self, player):
         """

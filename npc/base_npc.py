@@ -8,8 +8,6 @@ class BaseNPC(Sprite):
     Base NPC respresentation for which predators and prey extend from.
     """
 
-    #active_NPCs =  pygame.sprite.LayeredUpdates()
-
     def __init__(self,
                  x_pos = 0,
                  y_pos = 0):

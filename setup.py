@@ -1,12 +1,8 @@
 import pygame,mapmatrix, npc, gui
 from item import *
-from item.jerky import Jerky
-from item.oldwaterbottle import OldWaterBottle
-from item.berries import Berries
 from pygame import sprite
 from player import Player
-from npc.wolf import Wolf
-from npc.rabbit import Rabbit
+from npc import *
 
 
 #images
@@ -35,20 +31,14 @@ def loadSprite(image,x,y,group):
 
 def loadNPC(npc,x,y):
     if npc == "wolf":
-        object = Wolf()
+        object = wolf.Wolf()
     elif npc == "rabbit":
-        object = Rabbit()
+        object = rabbit.Rabbit()
     object.rect.x = x*20
     object.rect.y = y*20
     npcs.add(object)
 
-def loadItem(item,x,y):
-    if item == "jerky":
-        object = Jerky()
-    elif item == "water":
-        object = OldWaterBottle()
-    elif item == "berries":
-        object = Berries()
+def loadItem(object,x,y):
 
     object.rect = object.image.get_rect()
     object.rect.x = x*20
@@ -92,12 +82,7 @@ for i in range(60):
             loadNPC("wolf",j,i)
         elif map_matrix[i][j] == 'r':
             loadNPC("rabbit",j,i)
-        elif map_matrix[i][j] == 'j':
-            loadItem("jerky",j,i)
-        elif map_matrix[i][j] == 'wb':
-            loadItem("water",j,i)
-        elif map_matrix[i][j] == 'b':
-            loadItem("berries",j,i)
+
         elif map_matrix[i][j] == 1:
             loadSprite(TREE,j,i,trees)
         elif map_matrix[i][j] == 2:
@@ -118,6 +103,18 @@ for i in range(60):
             loadSprite(TREE,j,i,buildings)
         elif map_matrix [i][j] == 9:
             loadSprite(SNOWY_TREE,j,i,buildings)
+
+        #items
+        elif map_matrix[i][j] == 'j':
+            loadItem(jerky.Jerky(),j,i)
+        elif map_matrix[i][j] == 'wb':
+            loadItem(oldwaterbottle.OldWaterBottle(),j,i)
+        elif map_matrix[i][j] == 'b':
+            loadItem(berries.Berries(),j,i)
+        elif map_matrix[i][j] == 'f':
+            loadItem(fire.Fire(),j,i)
+        elif map_matrix[i][j] == 'fw':
+            loadItem(firewood.Firewood(),j,i)
 
                  
 gui = gui.GUI()

@@ -1,5 +1,8 @@
 ## please added most recent changes at the top of this text file ##
 
+- We have fire!!! Need to work on placing fire in front of Gus
+- Flint now found in tall grass
+- Loadable fire, firewood, need to animate fire
 - GUI now displays items in “stacks”.
 
 - Depleted stamina affects hunger rate in ‘player.py’	

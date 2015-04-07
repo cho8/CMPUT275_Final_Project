@@ -1,5 +1,6 @@
 import pygame, setup, animation
 from pygame import sprite
+from item import *
 import random
 
 def turnLeft(spr):
@@ -61,6 +62,7 @@ def checkCollisions(spr):
     if pygame.sprite.spritecollideany(spr,setup.buildings) != None\
     or pygame.sprite.spritecollideany(spr,setup.player) != None\
     or pygame.sprite.spritecollideany(spr,setup.trees) != None\
+    or pygame.sprite.spritecollideany(spr,setup.items) ==  fire.Fire()\
     and spr.mode != "Flight":
         if spr.dir == 0:
             spr.rect.y -= spr.speed

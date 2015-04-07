@@ -1,4 +1,5 @@
-__all__ = {}
+__all__ = ["rabbit",
+            "wolf"]
 
 
 

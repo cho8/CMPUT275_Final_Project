@@ -7,7 +7,7 @@ player = setup.player
 npcs = setup.npcs
 clock = pygame.time.Clock()
 pygame.key.set_repeat(1)
-pygame.time.set_timer(setup.UPDATESTATUS,6000)#Ten minutes until starving
+pygame.time.set_timer(setup.UPDATESTATUS,600)#Ten minutes until starving
 endscreen = pygame.Surface((setup.screen.get_width(),setup.screen.get_height()))
 endscreen.fill(55)
 while True:
