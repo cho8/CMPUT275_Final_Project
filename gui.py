@@ -369,6 +369,7 @@ class GUI():
         and relieves the most inventory space
         """
         inv_remain = self.player.encumbrance
+        print("player hunger: {}".format(self.player.hunger))
         consum_list = []
         for i in self.player.inventory:
             if i.type == "Consumable":

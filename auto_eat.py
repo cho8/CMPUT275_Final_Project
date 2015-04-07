@@ -1,6 +1,6 @@
 def auto_eat(player, inv_list, value, memo = None, remain = None):
     """
-    Finds the smallest number of items that can restore the amount of missing
+    Finds the smallest list of items that can restore the highest amount of missing
     'value' (health, hunger, stamina, etc.)
     
     Input:
@@ -20,35 +20,37 @@ def auto_eat(player, inv_list, value, memo = None, remain = None):
         memo = {}
     if remain is None:
         remain = player.hunger
-    if inv_list is None:
+    if inv_list == []:
         return []
     
     #player value remaining
     new_remain = remain
-    total = 0
-    #print("remain {} total {}".format(remain, total))
-    new_inventory = inv_list
 
-    if not (total, remain) in memo:
-        if remain < smallest(new_inventory,value):
-            print("remain smaller than smallest")
-            return []
+    total = 0
+    new_inventory = inv_list
+    inv_id = tuple(new_inventory)
+
+    if not (new_remain, inv_id) in memo:
+        if new_remain < smallest(new_inventory,value) or new_remain < 0:
+            memo[(new_remain, inv_id)] = []
         else:
+            # try using a dictionary again
             sub_sol = {}
+            len = 0
             for i in new_inventory:
-                if value(i) <= remain and value(i) > 0:
+                new_inventory.remove(i)
+                if value(i) <= new_remain and value(i) > 0:
                     new_remain -= value(i)
-                    new_inventory.remove(i)
+                    inv_id = tuple(new_inventory)
                     total += value(i)
+                    print("new remain {} total {}".format(new_remain, total))
                     if not total in sub_sol:
                         sub_sol[total] = []
                     sub_sol[total].append(i)
-                    print("appended i {}".format(sub_sol[total]))
                     sub_sol[total].extend(auto_eat(player, new_inventory, value, memo,new_remain))
-            memo[(total,remain)] = sub_sol[max(sub_sol)] if sub_sol else []
-    print("total {}".format(total))
-    print("memo {}" .format(memo[(total,remain)]))
-    return memo[(total,remain)]
+
+            memo[(new_remain, inv_id)] = sub_sol[max(sub_sol)] if sub_sol else []
+    return memo[(new_remain, inv_id)]
 
 
 
