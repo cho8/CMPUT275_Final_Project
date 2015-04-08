@@ -1,4 +1,4 @@
-import pygame
+import pygame,animation
 from pygame import sprite
 import setup
 from collections import namedtuple
@@ -471,6 +471,11 @@ class GUI():
         Update the drawing of everything display related.
         """
         self.screen.blit(self.background,(self.bgx,self.bgy))
+        for spr in setup.items:
+            if spr.name == "Fire":
+                animation.handleAnimation(spr,0)
+        for spr in setup.npcs:
+            animation.handleAnimation(spr,spr.dir)
         setup.items.draw(self.screen)
         
         self.player.draw(self.screen)

@@ -46,5 +46,5 @@ def handleAnimation(spr,dir):
            spr.image  = spr.lastback
 
 
-    if spr.type is not "Player":
+    if spr.type is not "Player" and spr.type is not "Tool":
         spr.rect.size = spr.image.get_size()

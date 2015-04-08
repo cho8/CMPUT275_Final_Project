@@ -1,4 +1,4 @@
-import pygame, setup, animation
+import pygame, setup
 from pygame import sprite
 from item import *
 import random
@@ -52,7 +52,6 @@ def move(spr):
         spr.rect.x += spr.speed
 
     checkCollisions(spr)
-    animation.handleAnimation(spr,spr.dir)
 
 def checkCollisions(spr):
     if spr.mode == "Flight":

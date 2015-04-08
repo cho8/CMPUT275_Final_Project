@@ -53,7 +53,7 @@ while True:
         clock.tick(30)
         setup.frame +=1
         AI.updateNPC(npcs)
-        player.updatePlayer()
+        player.updatePlayer()    
         gui.update()
 
     #Working on kill screen
