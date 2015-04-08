@@ -100,6 +100,8 @@ def updateNPC(spritegroup):
         if spr.type == "Rabbit" and nearPlayer(spr) and spr.mode is not "Flight":
             spr.mode = "Flight"
             spr.speed *= 5
+        if spr.type == "Wolf" and nearPlayer(spr,15) and spr.mode is not "Flight":
+            pass
         if spr.mode == "Neutral":
             move(spr)
         elif spr.mode == "Flight":

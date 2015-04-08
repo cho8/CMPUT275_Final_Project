@@ -1,4 +1,4 @@
-import pygame,mapmatrix, npc, gui
+import pygame,mapmatrix, npc, gui,random
 from item import *
 from pygame import sprite
 from player import Player
@@ -38,13 +38,41 @@ def loadNPC(npc,x,y):
     object.rect.y = y*20
     npcs.add(object)
 
-def loadItem(object,x,y):
+def loadItem(i,x,y):
+    
+    if i == 0:
+        object = jerky.Jerky()
+    elif i == 1:
+        object = oldwaterbottle.OldWaterBottle()
+    elif i == 2:
+        object = berries.Berries()
+    elif i == 3:
+        object = firewood.Firewood()
+    elif i == 4:
+        object = can.Can()
+    else:
+        return
 
     object.rect = object.image.get_rect()
     object.rect.x = x*20
     object.rect.y = y*20
     object.set_ground()
     items.add(object)
+def generateItem(i,x,y):
+    
+    if i == 0:
+         return jerky.Jerky()
+    elif i == 1:
+        return oldwaterbottle.OldWaterBottle()
+    elif i == 2:
+        return berries.Berries()
+    elif i == 3:
+        return firewood.Firewood()
+    elif i == 4:
+        return can.Can()
+    else:
+        return
+
 
 #Starting Positions/Sizes
 
@@ -105,18 +133,8 @@ for i in range(60):
             loadSprite(SNOWY_TREE,j,i,buildings)
 
         #items
-        elif map_matrix[i][j] == 'j':
-            loadItem(jerky.Jerky(),j,i)
-        elif map_matrix[i][j] == 'wb':
-            loadItem(oldwaterbottle.OldWaterBottle(),j,i)
-        elif map_matrix[i][j] == 'b':
-            loadItem(berries.Berries(),j,i)
-        elif map_matrix[i][j] == 'f':
-            loadItem(fire.Fire(),j,i)
-        elif map_matrix[i][j] == 'fw':
-            loadItem(firewood.Firewood(),j,i)
-        elif map_matrix[i][j] == 'c':
-            loadItem(can.Can(),j,i)
+        elif map_matrix[i][j] == 'i':
+            loadItem(random.randint(0,8),j,i)
 
                  
 gui = gui.GUI()
