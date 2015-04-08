@@ -1,4 +1,4 @@
-import sys,pygame,setup,AI,animation
+import sys,pygame,setup,AI,animation, item.fire
 from gui import GUI
 
 pygame.init()
@@ -48,7 +48,13 @@ while True:
             if event.type == setup.UPDATESTATUS:
                 print("Health:{} Stamina:{} Hunger:{} Starving:{} Encumbrance:{}".format\
         (player.health,player.stamina,player.hunger,player.starving,player.encumbrance))
-                player.updateHunger()            
+                player.updateHunger()
+                for i in setup.items:
+                    if i.name == "Fire":
+                        i.timer += 1
+                        if i.timer >= 5:
+                            setup.items.remove(i)
+    
     
         clock.tick(30)
         setup.frame +=1

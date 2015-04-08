@@ -1,7 +1,6 @@
 def auto_eat(player, inv_list, value, memo = None, remain = None):
     """
-    Finds the smallest list of items that can restore the highest amount of missing
-    'value' (health, hunger, stamina, etc.)
+    Finds the list of items that restores the amount of hunger and relieves the highest amount of 'value' (encumbrance)
     
     Input:
      encumbrance: the total amount of space filled in the inventory
@@ -30,7 +29,7 @@ def auto_eat(player, inv_list, value, memo = None, remain = None):
     inv_id = tuple(new_inventory)
 
     if not (new_remain, inv_id) in memo:
-        if new_remain < smallest(new_inventory,value):
+        if new_remain < smallest(new_inventory):
             memo[(new_remain, inv_id)] = []
         else:
             # try using a dictionary again
@@ -54,16 +53,16 @@ def auto_eat(player, inv_list, value, memo = None, remain = None):
 
 
 
-def smallest(ilist,value):
+def smallest(ilist):
     """
     Helper function that finds the smallest size in the list of items.
     """
     if ilist == []:
         return 0
-    current = value(ilist[0])
+    current = ilist[0]
     for i in ilist:
-        if value(i) < current:
-            current = value(i)
+        if -1*i.hung_value < current:
+            current = -1*i.hung_value
     return current
 
 
