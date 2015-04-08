@@ -236,7 +236,6 @@ class Player(Group):
                 self.health += .01
         if self.health <= 0:
             self.alive = False
-<<<<<<< HEAD
 
     def get_dir(self):
         if self.dir == 0:
@@ -247,6 +246,4 @@ class Player(Group):
             return "UP"
         elif self.dir == 3:
             return "RIGHT"
-=======
-            
->>>>>>> 031fd66a67fa5409dc5f8369c9b5849f2ea41f1a
+
