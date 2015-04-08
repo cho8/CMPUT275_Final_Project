@@ -31,7 +31,7 @@ class Player(Group):
         self.encumbered = False
         self.exhausted = False
         self.basespeed = 2
-        self.dir = 0
+        self.player.dir = 0
         self.inventory = []
         self.moving = False
         self.player.image = self.player.front1

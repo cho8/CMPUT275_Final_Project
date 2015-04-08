@@ -1,5 +1,5 @@
 import setup,player
-
+        
 def handleAnimation(spr,dir):
 
     framerate = setup.FRAMERATE

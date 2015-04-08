@@ -1,4 +1,4 @@
-import sys,pygame,setup,AI
+import sys,pygame,setup,AI,animation
 from gui import GUI
 
 pygame.init()
@@ -59,6 +59,8 @@ while True:
 
     endscreen = pygame.Surface((gui.screen.get_width(),\
     gui.screen.get_height()),pygame.SRCALPHA)
+
+    gui.killPlayer()
 
     alpha = 0
     while alpha < 255:

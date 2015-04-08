@@ -473,7 +473,28 @@ class GUI():
                     print("{} was clicked".format(button.text))
                     return button
     
-   
+    def killPlayer(self):
+        DELAY = 200
+
+        deadgus = pygame.image.load("images/deadgus.png").convert_alpha()
+        p = setup.player.player
+        for i in range(0,4):
+            animation.handleAnimation(p,p.dir)
+            self.update()
+            pygame.time.delay(DELAY)
+            p.dir += 1
+            if p.dir > 3:
+                p.dir = 0 
+        while p.dir != 1:
+            p.dir += 1
+            if p.dir > 3:
+                p.dir = 0 
+            animation.handleAnimation(p,p.dir)
+            self.update()
+            pygame.time.delay(DELAY)
+        p.image = deadgus
+        self.update()
+        pygame.time.delay(DELAY)
     def update(self):
         """
         Update the drawing of everything display related.
