@@ -30,8 +30,20 @@ class Flint(BaseItem):
             setup.items.remove(item_at_pos)
             new_fire = item.fire.Fire()
             new_fire.rect = new_fire.image.get_rect()
-            new_fire.rect.x = player.player.rect.x + 20
             new_fire.rect.y = player.player.rect.y
-            new_fire.set_ground()
+            new_fire.rect.x = player.player.rect.x
+
+            if player.dir == 0:
+                new_fire.rect.y = player.player.rect.y + 20
+            elif player.dir == 1:
+                new_fire.rect.x = player.player.rect.x - 30
+            elif player.dir == 2:
+                new_fire.rect.y = player.player.rect.y - 20
+            elif player.dir == 3:
+                new_fire.rect.y = player.player.rect.x + 30
+                
             setup.items.add(new_fire)
+
+
+
 

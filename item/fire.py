@@ -14,6 +14,7 @@ class Fire(BaseItem):
 
         self.size = 20
         self.heal_value = -20
+        self.timer = 0
 
         self._ground = True
         self.baseimage = pygame.image.load("images/item_fire.png").convert_alpha()
@@ -31,3 +32,5 @@ class Fire(BaseItem):
         # Cannot pick up from ground.
         if self.on_ground:
             return
+
+
