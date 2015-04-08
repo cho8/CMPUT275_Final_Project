@@ -1,6 +1,6 @@
 import pygame,animation
 from pygame import sprite
-import setup
+import setup, random
 from collections import namedtuple
 from textwrap import drawText
 from auto_eat import auto_eat
@@ -53,7 +53,7 @@ class GUI():
     def __init__(self):
         
         if GUI.num_instances != 0:
-            raise Exception("GUIL can only have one instance of a simulation")
+            raise Exception("GUI can only have one instance of a simulation")
         num_instance = 1
         
         self.screen = setup.screen
@@ -166,7 +166,7 @@ class GUI():
         bar_colour = RED_BAR if self.player.stamina <= 30 else GREEN_BAR
         pygame.draw.rect(self.screen,bar_colour, stamina_rect)
         # encumbered state
-        if self.player.encumbrance > 50:
+        if self.player.encumbrance > 70:
             player_encumbered = SMALLER_FONT.render("ENCUMBERED", True, RED_BAR)
             self.screen.blit(player_encumbered,
                         (stamina_rect.x+ 3*PAD,
@@ -316,18 +316,27 @@ class GUI():
                 # Highlight on mouse over
                 but_colour = BUTTON_HIGHLIGHT_COLOUR
         
+        
         # Draw the button
         pygame.draw.rect(self.screen, but_colour, but_rect)
             
         # Draw the outline
         pygame.draw.rect(self.screen, OUTLINE_COLOUR, but_out_rect, 2)
 
+        # Special case: search button bolds when on searchable area
+        if button.text == "SEARCH":
+            if pygame.sprite.spritecollideany(self.player.player,setup.longgrass) or\
+                pygame.sprite.spritecollideany(self.player.player, setup.items):
+                but_text = FONT.set_bold(True)
         # Draw the text
         but_text = FONT.render(button.text, True, FONT_COLOUR)
+
+
         self.screen.blit(
             but_text,
             (but_rect.centerx - (but_text.get_width()/2),
             but_rect.y + (BUTTON_HEIGHT//2) - but_text.get_height()//2))
+        but_text = FONT.set_bold(False)
                 
     
     def use_pressed(self):
@@ -345,6 +354,7 @@ class GUI():
                 self.sel_item = i
                 return
         self.sel_item = None
+
     def discard_pressed(self):
         """
         Discard button is clicked while an inventory item is selected.
@@ -352,8 +362,8 @@ class GUI():
         if self.sel_item == None:
             return
         self.sel_item.discard(self.player)
-        for i in self.player.inventory:
         # if there are still items of that type in the inventory, keep it selected
+        for i in self.player.inventory:
             if i.name == self.sel_item.name:
                 self.sel_item = i
                 return
@@ -367,9 +377,6 @@ class GUI():
         #check collision between player and any item
         eligible_item = pygame.sprite.spritecollideany(self.player.player,self.items)
         if eligible_item and eligible_item.name != "Fire":
-            #if we can't hold the item, do thing
-            if eligible_item.size > (100 - self.player.encumbrance):
-                return
             eligible_item.pick_up(self.player)
             self.items.remove(eligible_item)
             print(self.player.encumbrance)
@@ -379,6 +386,7 @@ class GUI():
         in_grass = pygame.sprite.spritecollideany(self.player.player, setup.longgrass)
         ####### add item generation code ######
         if in_grass:
+            
             object = flint.Flint()
             object.set_inventory()
             self.player.inventory.append(object)
@@ -387,7 +395,7 @@ class GUI():
     def auto_pressed(self):
         """
         Calls auto-use function based on which stat is selected.
-        Optimally consumes the items that restores the most hunger 
+        Optimally consumes the items that restores the most hunger
         and relieves the most inventory space
         """
         inv_remain = self.player.encumbrance
@@ -396,7 +404,7 @@ class GUI():
         for i in self.player.inventory:
             if i.type == "Consumable":
                 consum_list.append(i)
-        to_consume = auto_eat(self.player,consum_list,lambda x: -1*x.hung_value)
+        to_consume = auto_eat(self.player,consum_list,lambda x: x.size)
     
         hung = 0
         if to_consume:

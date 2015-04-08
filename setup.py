@@ -115,6 +115,8 @@ for i in range(60):
             loadItem(fire.Fire(),j,i)
         elif map_matrix[i][j] == 'fw':
             loadItem(firewood.Firewood(),j,i)
+        elif map_matrix[i][j] == 'c':
+            loadItem(can.Can(),j,i)
 
                  
 gui = gui.GUI()

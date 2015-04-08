@@ -19,6 +19,7 @@ class Player(Group):
         self.player.back2 = gus2.subsurface(12,0,12,20)
         self.player.left2= gus2.subsurface(24,0,10,20)
         self.player.right2 = gus2.subsurface(34,0,10,20)
+        self.player.dead = gus1.subsurface(45,0,20,12)
         self.player.type = "Player"  
 
         #Initial attributes

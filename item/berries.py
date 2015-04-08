@@ -1,6 +1,5 @@
 import pygame, item
 from item.base_item import BaseItem
-from pygame.sprite import Sprite
 
 class Berries(BaseItem):
     """
