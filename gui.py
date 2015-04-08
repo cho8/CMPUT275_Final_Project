@@ -384,12 +384,37 @@ class GUI():
     
         #check collision between player and grass
         in_grass = pygame.sprite.spritecollideany(self.player.player, setup.longgrass)
-        ####### add item generation code ######
+        
         if in_grass:
-            
-            object = flint.Flint()
-            object.set_inventory()
-            self.player.inventory.append(object)
+            i_rand = random.randint(1,20)
+            object = setup.generateItem(i_rand)
+            if object:
+                self.player.inventory.append(object)
+                object.set_inventory()
+
+        else:
+            self.search_front(self.player.player.rect.x, self.player.player.rect.y, self.player.player.dir)
+
+    def search_front(self, player_x, player_y, dir):
+        print("Searching front")
+        search_rect = pygame.Rect(player_x,player_y,TILE_SIZE,TILE_SIZE)
+        if dir == "UP":
+            search_rect.y -= TILE_SIZE
+        
+        elif dir == "RIGHT":
+            search_rext.x += TILE_SIZE
+        elif dir == "LEFT":
+            search_rect.x -= TILE_SIZE
+        elif dir == "DOWN":
+            search_rect.y += TILE_SIZE
+        
+        for b in setup.logs:
+            if search_rect.colliderect(b.rect):
+                print("Found wood")
+                object = firewood.Firewood()
+                self.player.inventory.append(object)
+                object.set_inventory()
+
             
 
     def auto_pressed(self):
@@ -404,8 +429,8 @@ class GUI():
         for i in self.player.inventory:
             if i.type == "Consumable":
                 consum_list.append(i)
-        to_consume = auto_eat(self.player,consum_list,lambda x: x.size)
-    
+        print(consum_list)
+        to_consume = auto_eat(self.player,consum_list,lambda x: -1*x.hung_value)
         hung = 0
         if to_consume:
             print(to_consume)
@@ -444,7 +469,7 @@ class GUI():
 
     def get_item_at_point(self,pos):
         """
-        Returns the item if the click position is within its rect
+        Returns the item if the inventory position is within its rect
         """
         for i in self.player.inventory:
             if i.list_rect.collidepoint(pos):
@@ -495,6 +520,7 @@ class GUI():
         p.image = deadgus
         self.update()
         pygame.time.delay(DELAY)
+
     def update(self):
         """
         Update the drawing of everything display related.
@@ -512,6 +538,7 @@ class GUI():
         self.buildings.draw(self.screen)
         setup.longgrass.draw(self.screen)
         setup.trees.draw(self.screen)
+        setup.logs.draw(self.screen)
 
         self.draw_gui()
         pygame.display.flip()

@@ -40,36 +40,29 @@ def loadNPC(npc,x,y):
 
 def loadItem(i,x,y):
     
-    if i == 0:
-        object = jerky.Jerky()
-    elif i == 1:
-        object = oldwaterbottle.OldWaterBottle()
-    elif i == 2:
-        object = berries.Berries()
-    elif i == 3:
-        object = firewood.Firewood()
-    elif i == 4:
-        object = can.Can()
-    else:
-        return
+    object = generateItem(i)
+    if object:
+        if object.image:
+            object.rect = object.image.get_rect()
+            object.rect.x = x*20
+            object.rect.y = y*20
+            object.set_ground()
+            items.add(object)
 
-    object.rect = object.image.get_rect()
-    object.rect.x = x*20
-    object.rect.y = y*20
-    object.set_ground()
-    items.add(object)
-def generateItem(i,x,y):
+def generateItem(i):
     
     if i == 0:
-         return jerky.Jerky()
+        return firewood.Firewood()
     elif i == 1:
         return oldwaterbottle.OldWaterBottle()
     elif i == 2:
         return berries.Berries()
     elif i == 3:
-        return firewood.Firewood()
+        return jerky.Jerky()
     elif i == 4:
         return can.Can()
+    elif i == 5:
+        return flint.Flint()
     else:
         return
 
@@ -98,6 +91,7 @@ trees = sprite.OrderedUpdates()
 npcs = sprite.Group()
 items = sprite.Group()
 longgrass = sprite.Group()
+logs = sprite.Group()
 
 # loading map
 
@@ -116,7 +110,7 @@ for i in range(60):
         elif map_matrix[i][j] == 2:
             loadSprite(CABIN,j,i,buildings) 
         elif map_matrix[i][j] == 3:
-            loadSprite(LOG,j,i,buildings) 
+            loadSprite(LOG,j,i,logs)
         elif map_matrix[i][j] == 4:
             loadSprite(MOUNTAIN,j,i,buildings)
         elif map_matrix[i][j] == 5:
@@ -134,7 +128,7 @@ for i in range(60):
 
         #items
         elif map_matrix[i][j] == 'i':
-            loadItem(random.randint(0,8),j,i)
+            loadItem(random.randint(0,9),j,i)
 
                  
 gui = gui.GUI()

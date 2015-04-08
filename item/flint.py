@@ -33,13 +33,13 @@ class Flint(BaseItem):
             new_fire.rect.y = player.player.rect.y
             new_fire.rect.x = player.player.rect.x
 
-            if player.dir == 0:
+            if player.get_dir() == "DOWN":
                 new_fire.rect.y = player.player.rect.y + 20
-            elif player.dir == 1:
+            elif player.get_dir() == "LEFT":
                 new_fire.rect.x = player.player.rect.x - 30
-            elif player.dir == 2:
+            elif player.get_dir() == "UP":
                 new_fire.rect.y = player.player.rect.y - 20
-            elif player.dir == 3:
+            elif player.get_dir() == "RIGHT":
                 new_fire.rect.y = player.player.rect.x + 30
                 
             setup.items.add(new_fire)

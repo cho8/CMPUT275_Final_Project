@@ -140,6 +140,8 @@ class Player(Group):
                         object.rect.x -= SPEED
                     for object in setup.trees:
                         object.rect.x -= SPEED
+                    for object in setup.logs:
+                        object.rect.x -= SPEED
 
             elif self.player.rect.x > setup.screen.get_width()-VIEWDISTANCE-GUIWIDTH:
                 if setup.gui.bgx >(0-setup.background.get_width()\
@@ -157,12 +159,15 @@ class Player(Group):
                         object.rect.x -= SPEED
                     for object in setup.trees:
                         object.rect.x -= SPEED
+                    for object in setup.logs:
+                        object.rect.x -= SPEED
 
             self.player.rect.x += SPEED
 
             if pygame.sprite.spritecollideany(self.player,setup.buildings) != None\
             or pygame.sprite.spritecollideany(self.player,setup.npcs) != None\
-            or pygame.sprite.spritecollideany(self.player,setup.trees) != None:
+            or pygame.sprite.spritecollideany(self.player,setup.trees) != None\
+            or pygame.sprite.spritecollideany(self.player, setup.logs) != None:
 
                 self.player.rect.x -= SPEED
 
@@ -194,6 +199,8 @@ class Player(Group):
                         object.rect.y -= SPEED
                     for object in setup.trees:
                         object.rect.y -= SPEED
+                    for object in setup.logs:
+                        object.rect.y -= SPEED
             
             elif self.player.rect.y < VIEWDISTANCE:
                 if setup.gui.bgy < 0:
@@ -210,11 +217,14 @@ class Player(Group):
                         object.rect.y -= SPEED
                     for object in setup.trees:
                         object.rect.y -= SPEED
+                    for object in setup.logs:
+                        object.rect.y -= SPEED
 
             self.player.rect.y += SPEED
             if pygame.sprite.spritecollideany(self.player,setup.buildings) != None\
             or pygame.sprite.spritecollideany(self.player,setup.npcs) != None\
-            or pygame.sprite.spritecollideany(self.player,setup.trees) != None:
+            or pygame.sprite.spritecollideany(self.player,setup.trees) != None\
+            or pygame.sprite.spritecollideany(self.player,setup.logs) != None:
 
                 self.player.rect.y -= SPEED
 
@@ -236,4 +246,13 @@ class Player(Group):
                 self.health += .01
         if self.health <= 0:
             self.alive = False
-            
+
+    def get_dir(self):
+        if self.player.dir == 0:
+            return "DOWN"
+        elif self.player.dir == 1:
+            return "LEFT"
+        elif self.player.dir == 2:
+            return "UP"
+        elif self.player.dir == 3:
+            return "RIGHT"
