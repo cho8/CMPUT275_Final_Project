@@ -7,7 +7,7 @@ player = setup.player
 npcs = setup.npcs
 clock = pygame.time.Clock()
 pygame.key.set_repeat(1)
-pygame.time.set_timer(setup.UPDATESTATUS,600)#Ten minutes until starving
+pygame.time.set_timer(setup.UPDATESTATUS,6000)#Ten minutes until starving
 endscreen = pygame.Surface((setup.screen.get_width(),setup.screen.get_height()))
 endscreen.fill(55)
 while True:
@@ -57,14 +57,14 @@ while True:
         gui.update()
 
     #Working on kill screen
-    endscreen = pygame.Surface(pygame.display.get_surface().get_size()).convert_alpha()
-    endscreen.fill((0,0,0))
+    endscreen = pygame.Surface((gui.screen.get_width(),gui.screen.get_height()),pygame.SRCALPHA)
     alpha = 0
-    endscreen.blit(pygame.display.get_surface(),(0,0))
     while alpha < 255:
-        pygame.time.delay(50)
+        pygame.time.delay(100)
         alpha += 5
-        endscreen.set_alpha(alpha)
+        endscreen.fill((0,0,0,alpha))
+        gui.screen.blit(endscreen,(0,0))
+        print(endscreen.get_alpha())
         pygame.display.flip()
 
 

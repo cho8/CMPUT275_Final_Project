@@ -19,7 +19,6 @@ class Player(Group):
         self.player.back2 = gus2.subsurface(12,0,12,20)
         self.player.left2= gus2.subsurface(24,0,10,20)
         self.player.right2 = gus2.subsurface(34,0,10,20)
-        self.player.dead = gus1.subsurface(45,0,20,12)
         self.player.type = "Player"  
 
         #Initial attributes
@@ -29,6 +28,7 @@ class Player(Group):
         self.starving = False
         self.encumbrance = 0
         self.stamina = 100
+        self.encumbered = False
         self.exhausted = False
         self.basespeed = 2
         self.dir = 0
@@ -40,6 +40,8 @@ class Player(Group):
         self.player.rect.y = x_pos
         self.add(self.player)
         self.player.running = False
+        self.adjustx = 1
+        self.adjust = 1
         self.player.lastleft = self.player.left1
         self.player.lastright = self.player.right1
         self.player.lastback = self.player.back1
@@ -48,7 +50,7 @@ class Player(Group):
 
     def updateHunger(self):
         if self.hunger < 100:
-            self.hunger += 1 + (int((100 - abs(self.stamina)) /20))
+            self.hunger += 1 + (int((100 - self.stamina)/20))
         else:
             self.starving = True
             print("starving")
@@ -76,24 +78,33 @@ class Player(Group):
         VIEWDISTANCE = 150
         GUIWIDTH = 200
         self.moving = True
-        if self.encumbrance > 50:
+        if self.encumbrance > 75:
+            self.encumbered = True
             SPEED/=2
+        else:
+            self.encumbered = False
         if self.player.running:
             SPEED *= 2
         if pygame.sprite.spritecollideany(self.player,setup.longgrass) != None\
-        or self.exhausted: 
+        or self.encumbered or self.exhausted: 
             self.player.running = False
             SPEED = 1
         else:
-                #adjusts position, so coord is always even(Otherwise getting through
-                #tight spaces gets difficult.
-                #This doesn't work great yet.
-                if self.player.rect.x % 2 != 0:
-                    print("adjusting x")
-                    self.player.rect.x += 1
-                if self.player.rect.y % 2 != 0:
-                    print("adjusting y")
-                    self.player.rect.y += 1
+
+            if self.player.rect.x % 2 != 0:
+                print("adjusting x")
+                if self.adjustx == 1:
+                    self.adjustx = -1
+                else:
+                    self.adjusty = 1
+                self.player.rect.x += self.adjustx
+            if self.player.rect.y % 2 != 0:
+                print("adjusting y")
+                if self.adjusty == 1:
+                    self.adjusty = -1
+                else:
+                    self.adjusty = 1
+                self.player.rect.y += self.adjusty
 
         if direction == "LEFT" or direction == "RIGHT":
             if direction == "LEFT":
@@ -140,10 +151,13 @@ class Player(Group):
 
             if pygame.sprite.spritecollideany(self.player,setup.buildings) != None\
             or pygame.sprite.spritecollideany(self.player,setup.npcs) != None\
-            or pygame.sprite.spritecollideany(self.player,setup.trees) != None\
-            or type(pygame.sprite.spritecollideany(self.player,setup.items)) == fire.Fire:
+            or pygame.sprite.spritecollideany(self.player,setup.trees) != None:
 
                 self.player.rect.x -= SPEED
+
+            if type(pygame.sprite.spritecollideany(self.player,setup.items)) == fire.Fire:
+                self.player.rect.x -= SPEED*4
+                self.health -= 2
 
         elif direction == "UP" or direction == "DOWN":
             if direction == "UP":
@@ -189,9 +203,13 @@ class Player(Group):
             self.player.rect.y += SPEED
             if pygame.sprite.spritecollideany(self.player,setup.buildings) != None\
             or pygame.sprite.spritecollideany(self.player,setup.npcs) != None\
-            or pygame.sprite.spritecollideany(self.player,setup.trees) != None\
-            or type(pygame.sprite.spritecollideany(self.player,setup.items)) == fire.Fire:
+            or pygame.sprite.spritecollideany(self.player,setup.trees) != None:
+
                 self.player.rect.y -= SPEED
+
+            if type(pygame.sprite.spritecollideany(self.player,setup.items)) == fire.Fire:
+                self.player.rect.y -= SPEED*4
+                self.health -= 2
 
         animation.handleAnimation(self.player,self.dir)
 
