@@ -119,11 +119,11 @@ class Player(Group):
 
         if direction == "LEFT" or direction == "RIGHT":
             if direction == "LEFT":
-                self.dir = 1
+                self.player.dir = 1
                 SPEED *= -1                
 
             else:
-                self.dir = 3
+                self.player.dir = 3
  
             if self.player.rect.x < VIEWDISTANCE:               
                 if setup.gui.bgx < 0:
@@ -139,8 +139,6 @@ class Player(Group):
                     for object in setup.longgrass:
                         object.rect.x -= SPEED
                     for object in setup.trees:
-                        object.rect.x -= SPEED
-                    for object in setup.logs:
                         object.rect.x -= SPEED
 
             elif self.player.rect.x > setup.screen.get_width()-VIEWDISTANCE-GUIWIDTH:
@@ -159,15 +157,12 @@ class Player(Group):
                         object.rect.x -= SPEED
                     for object in setup.trees:
                         object.rect.x -= SPEED
-                    for object in setup.logs:
-                        object.rect.x -= SPEED
 
             self.player.rect.x += SPEED
 
             if pygame.sprite.spritecollideany(self.player,setup.buildings) != None\
             or pygame.sprite.spritecollideany(self.player,setup.npcs) != None\
-            or pygame.sprite.spritecollideany(self.player,setup.trees) != None\
-            or pygame.sprite.spritecollideany(self.player, setup.logs) != None:
+            or pygame.sprite.spritecollideany(self.player,setup.trees) != None:
 
                 self.player.rect.x -= SPEED
 
@@ -177,11 +172,11 @@ class Player(Group):
 
         elif direction == "UP" or direction == "DOWN":
             if direction == "UP":
-                self.dir = 2
+                self.player.dir = 2
                 SPEED *= -1
 
             else:
-                self.dir = 0
+                self.player.dir = 0
 
             if self.player.rect.y > setup.screen.get_height() - VIEWDISTANCE: 
                 if setup.gui.bgy >(0-setup.background.get_height()\
@@ -199,8 +194,6 @@ class Player(Group):
                         object.rect.y -= SPEED
                     for object in setup.trees:
                         object.rect.y -= SPEED
-                    for object in setup.logs:
-                        object.rect.y -= SPEED
             
             elif self.player.rect.y < VIEWDISTANCE:
                 if setup.gui.bgy < 0:
@@ -217,14 +210,11 @@ class Player(Group):
                         object.rect.y -= SPEED
                     for object in setup.trees:
                         object.rect.y -= SPEED
-                    for object in setup.logs:
-                        object.rect.y -= SPEED
 
             self.player.rect.y += SPEED
             if pygame.sprite.spritecollideany(self.player,setup.buildings) != None\
             or pygame.sprite.spritecollideany(self.player,setup.npcs) != None\
-            or pygame.sprite.spritecollideany(self.player,setup.trees) != None\
-            or pygame.sprite.spritecollideany(self.player,setup.logs) != None:
+            or pygame.sprite.spritecollideany(self.player,setup.trees) != None:
 
                 self.player.rect.y -= SPEED
 
@@ -232,7 +222,7 @@ class Player(Group):
                 self.player.rect.y -= SPEED*4
                 self.health -= 2
 
-        animation.handleAnimation(self.player,self.dir)
+        animation.handleAnimation(self.player,self.player.dir)
 
     def updatePlayer(self):
 
@@ -246,6 +236,7 @@ class Player(Group):
                 self.health += .01
         if self.health <= 0:
             self.alive = False
+<<<<<<< HEAD
 
     def get_dir(self):
         if self.dir == 0:
@@ -256,3 +247,6 @@ class Player(Group):
             return "UP"
         elif self.dir == 3:
             return "RIGHT"
+=======
+            
+>>>>>>> 031fd66a67fa5409dc5f8369c9b5849f2ea41f1a
