@@ -41,7 +41,7 @@ class Player(Group):
         self.add(self.player)
         self.player.running = False
         self.adjustx = 1
-        self.adjust = 1
+        self.adjusty = 1
         self.player.lastleft = self.player.left1
         self.player.lastright = self.player.right1
         self.player.lastback = self.player.back1
@@ -56,6 +56,14 @@ class Player(Group):
             print("starving")
             print(self.health)
 
+    def nearFire(self):
+        for item in setup.items:
+            if item.name == "Fire":
+                if abs(item.rect.x-self.player.rect.x) < 30\
+                or abs(item.rect.x-self.player.rect.x) < 30:
+                    return True
+        return False 
+
     def updateStamina(self):
         if self.moving == True:
             self.staminaloss = .01 + (self.encumbrance/25)*.01
@@ -69,7 +77,10 @@ class Player(Group):
             self.moving = False
         else:
             if self.stamina < 100:
-                self.stamina += .01
+                if self.nearFire():
+                    self.stamina += .02
+                else:
+                    self.stamina += .01
             if self.stamina > 0:
                 self.exhausted = False
 
@@ -220,6 +231,9 @@ class Player(Group):
             
         if self.starving:
             self.health -= .1
+        if self.nearFire():
+            if self.health < 100:
+                self.health += .01
         if self.health <= 0:
             self.alive = False
             

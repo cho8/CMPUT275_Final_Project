@@ -56,8 +56,10 @@ while True:
         player.updatePlayer()    
         gui.update()
 
-    #Working on kill screen
-    endscreen = pygame.Surface((gui.screen.get_width(),gui.screen.get_height()),pygame.SRCALPHA)
+
+    endscreen = pygame.Surface((gui.screen.get_width(),\
+    gui.screen.get_height()),pygame.SRCALPHA)
+
     alpha = 0
     while alpha < 255:
         pygame.time.delay(100)
