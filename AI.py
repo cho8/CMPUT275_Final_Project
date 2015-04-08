@@ -14,13 +14,13 @@ def turnRight(spr):
 def flee(spr):
 
     if nearPlayer(spr,120):
-        if setup.player.player.rect.x <= spr.rect.x and setup.player.dir == 3:
+        if setup.player.player.rect.x <= spr.rect.x and setup.player.player.dir == 3:
             spr.dir = 3
-        elif setup.player.player.rect.x > spr.rect.x and setup.player.dir == 1:
+        elif setup.player.player.rect.x > spr.rect.x and setup.player.player.dir == 1:
             spr.dir = 1
-        elif setup.player.player.rect.y <= spr.rect.y and setup.player.dir == 0:
+        elif setup.player.player.rect.y <= spr.rect.y and setup.player.player.dir == 0:
             spr.dir = 0
-        elif setup.player.player.rect.y > spr.rect.y and setup.player.dir == 2:
+        elif setup.player.player.rect.y > spr.rect.y and setup.player.player.dir == 2:
             spr.dir = 2
         move(spr)
     elif pygame.sprite.spritecollideany(spr,setup.trees) != None:
@@ -101,7 +101,10 @@ def updateNPC(spritegroup):
             spr.mode = "Flight"
             spr.speed *= 5
         if spr.type == "Wolf" and nearPlayer(spr,15) and spr.mode is not "Flight":
-            pass
+           # moveToPlayer(spr)
+           # attackPlayer(spr)
+           # spr.mode == "Flight"
+           pass
         if spr.mode == "Neutral":
             move(spr)
         elif spr.mode == "Flight":
