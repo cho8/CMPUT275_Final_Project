@@ -31,7 +31,7 @@ class Player(Group):
         self.encumbered = False
         self.exhausted = False
         self.basespeed = 2
-        self.player.dir = 0
+        self.dir = 0
         self.inventory = []
         self.moving = False
         self.player.image = self.player.front1
@@ -248,11 +248,11 @@ class Player(Group):
             self.alive = False
 
     def get_dir(self):
-        if self.player.dir == 0:
+        if self.dir == 0:
             return "DOWN"
-        elif self.player.dir == 1:
+        elif self.dir == 1:
             return "LEFT"
-        elif self.player.dir == 2:
+        elif self.dir == 2:
             return "UP"
-        elif self.player.dir == 3:
+        elif self.dir == 3:
             return "RIGHT"

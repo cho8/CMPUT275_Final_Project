@@ -38,6 +38,7 @@ def auto_eat(player, inv_list, value, memo = None, remain = None):
             for i in new_inventory:
                 if value(i) <= new_remain and value(i) > 0:
                     new_remain -= value(i)
+                    new_inventory.remove(i)
                     inv_id = tuple(new_inventory)
                     total += i.size
                     print("new remain {} total size {}".format(new_remain, total))

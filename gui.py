@@ -42,6 +42,8 @@ BUTTON_DISABLED_COLOUR = (64, 64, 64)
 RED_BAR = (255,0,0)
 GREEN_BAR = (0,255,0)
 
+DROP_RATE = 0.75
+
 
 # A container class which stores button information.
 # slot_height and slot_width represents the number of BUTTON_HEIGHT and BUTTON WIDTH of the button relative to the bottom and right edge of gui.
@@ -387,22 +389,24 @@ class GUI():
         
         if in_grass:
             i_rand = random.randint(1,20)
-            object = setup.generateItem(i_rand)
-            if object:
-                self.player.inventory.append(object)
-                object.set_inventory()
-
+            rand_p = random.random()
+            if rand_p > DROP_RATE:
+                object = setup.generateItem(i_rand)
+                if object:
+                    self.player.inventory.append(object)
+                    object.set_inventory()
         else:
-            self.search_front(self.player.player.rect.x, self.player.player.rect.y, self.player.player.dir)
+            print("dir {}".format(self.player.dir))
+            self.search_log(self.player.player.rect.x, self.player.player.rect.y, self.player.get_dir())
 
-    def search_front(self, player_x, player_y, dir):
+    def search_log(self, player_x, player_y, dir):
         print("Searching front")
         search_rect = pygame.Rect(player_x,player_y,TILE_SIZE,TILE_SIZE)
         if dir == "UP":
             search_rect.y -= TILE_SIZE
-        
+            print("UP")
         elif dir == "RIGHT":
-            search_rext.x += TILE_SIZE
+            search_rect.x += TILE_SIZE
         elif dir == "LEFT":
             search_rect.x -= TILE_SIZE
         elif dir == "DOWN":
@@ -411,9 +415,11 @@ class GUI():
         for b in setup.logs:
             if search_rect.colliderect(b.rect):
                 print("Found wood")
-                object = firewood.Firewood()
-                self.player.inventory.append(object)
-                object.set_inventory()
+                rand_p = random.random()
+                if rand_p > DROP_RATE:
+                    object = firewood.Firewood()
+                    self.player.inventory.append(object)
+                    object.set_inventory()
 
             
 
@@ -537,8 +543,9 @@ class GUI():
         setup.npcs.draw(self.screen)
         self.buildings.draw(self.screen)
         setup.longgrass.draw(self.screen)
-        setup.trees.draw(self.screen)
         setup.logs.draw(self.screen)
+        setup.trees.draw(self.screen)
+
 
         self.draw_gui()
         pygame.display.flip()
