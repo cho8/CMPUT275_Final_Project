@@ -22,6 +22,7 @@ class BaseNPC(Sprite):
         self.atk = 1
         self.type = "Base NPC"
         self.dir = 0
+        self.fleeing = False
         
         
         # Required pygame parameters
@@ -36,10 +37,13 @@ class BaseNPC(Sprite):
     def set_npc_mode(self, mode):
         if mode == "Neutral":
             self.mode = "Neutral"
+            self.fleeing = False
         if mode == "Fight":
             self.mode = "Fight"
-        if mode == "Escape":
-            self.mode = "Escape"
+            self.fleeing = False
+        if mode == "Flight":
+            self.mode = "Flight"
+
 
 
 
