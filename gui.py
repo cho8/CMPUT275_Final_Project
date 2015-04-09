@@ -607,8 +607,8 @@ class GUI():
         setup.items.draw(self.screen)
         
         setup.logs.draw(self.screen)
-        self.player.draw(self.screen)
         setup.npcs.draw(self.screen)
+        self.player.draw(self.screen)
         self.buildings.draw(self.screen)
         setup.longgrass.draw(self.screen)
         setup.logs.draw(self.screen)

@@ -78,6 +78,7 @@ def checkCollisions(spr):
             return
     if pygame.sprite.spritecollideany(spr,setup.buildings) != None\
     or pygame.sprite.spritecollideany(spr,setup.trees) != None\
+    or pygame.sprite.spritecollideany(spr,setup.logs) != None\
     or pygame.sprite.spritecollideany(spr,setup.items) ==  fire.Fire()\
     and spr.mode != "Flight":
 
