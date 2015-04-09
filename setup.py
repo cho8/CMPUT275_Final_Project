@@ -137,18 +137,25 @@ loadItem(jerky.Jerky(),8,6)
 loadItem(jerky.Jerky(),8,7)
 loadItem(jerky.Jerky(),8,8)
 
-loadItem(berries.Berries(),9,5) #size 5 hung -5
+loadItem(berries.Berries(),9,5) #size 3 hung -5
 loadItem(berries.Berries(),9,6)
 loadItem(berries.Berries(),9,7)
 
-loadItem(can.Can(), 10,5) #size 10 hung -43
+loadItem(can.Can(), 10,5) #size 15 hung -42
 loadItem(can.Can(), 10,6)
 
 '''
 For hunger 20
-hung 18, size 10
+hung 18, size 8
 
-For hunger 
+For hunger 30
+hung 18 size 10
+
+for hunger 50
+hung 47 size 18
+
+for hunger 65
+hung 65 size 20
 '''
 
     
