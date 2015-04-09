@@ -67,6 +67,10 @@ class GUI():
         self.player = setup.player
         self.buildings = setup.buildings
         self.items = setup.items
+        
+        #timer for last item dialogue
+        self.timer = 0
+        self.last_item = None
     
     
         #rect for gui
@@ -186,6 +190,8 @@ class GUI():
         #buttons
         for button in self.buttons:
             self.draw_gui_button(button)
+    
+    
         
     def draw_inventory_list(self, inventory):
         """
@@ -258,9 +264,17 @@ class GUI():
             
         # draw the inventory box outline
         pygame.draw.rect(self.screen, OUTLINE_COLOUR, inventory_rect, 1)
+
         # draw the outline around the selected item, otherwise clear it
         if self.sel_item:
             pygame.draw.rect(self.screen, SEL_COLOUR, self.sel_item.list_rect,1)
+
+        #draw message dialogue for the last item picked up
+        if self.last_item and (self.timer <=5):
+            self.draw_message_rect(self.last_item)
+        else:
+            self.last_item = None
+            self.timer = 0
 
 
     def draw_hover_rect(self, item):
@@ -268,7 +282,7 @@ class GUI():
         Draw the popup menu that appears when an item is hovered over.
         Displays item name and description when hovering over an item in the inventory.
         """
-        hover_rect = pygame.Rect(self.gui_rect.h - HOVER_WIDTH, 0,HOVER_WIDTH, HOVER_HEIGHT)
+        hover_rect = pygame.Rect(self.gui_rect.x - HOVER_WIDTH, 0,HOVER_WIDTH, HOVER_HEIGHT)
         hover_out_rect = hover_rect.copy()
         hover_out_rect.w -= 1
         hover_out_rect.h -= 1
@@ -280,13 +294,32 @@ class GUI():
         pygame.draw.rect(self.screen, OUTLINE_COLOUR, hover_out_rect, 2)
         
         text_rect = hover_rect.copy()
-        text_rect.x += 5
-        text_rect.y += 5
+        text_rect.x += PAD
+        text_rect.y += PAD
+        
+        #drawText utilizes text wrapping
         drawText(self.screen, item_name, FONT_COLOUR, text_rect, SMALL_FONT)
         text_rect.y += PAD + FONT_SIZE
         drawText(self.screen, item_desc, FONT_COLOUR, text_rect, SMALL_FONT)
-
-
+    
+    def draw_message_rect(self,itm):
+        
+        msg_rect = pygame.Rect(self.gui_rect.x - HOVER_WIDTH, self.screen_rect.h-HOVER_HEIGHT, HOVER_WIDTH, HOVER_HEIGHT/2)
+        msg_out_rect = msg_rect.copy()
+        msg_out_rect.w -= 1
+        msg_out_rect.h -= 1
+        
+        pygame.draw.rect(self.screen, GUI_COLOUR, msg_rect)
+        pygame.draw.rect(self.screen, OUTLINE_COLOUR, msg_out_rect, 2)
+    
+        msg = "Found item:"
+        text_rect = msg_out_rect.copy()
+        text_rect.x += PAD
+        text_rect.y += PAD
+        drawText(self.screen, msg, FONT_COLOUR, text_rect, SMALL_FONT)
+        text_rect.y += PAD + FONT_SIZE
+        drawText(self.screen, itm.name, SEL_COLOUR, text_rect, SMALL_FONT)
+    
     def draw_gui_button(self, button):
         """
         Renders a button to the bar.
@@ -303,7 +336,7 @@ class GUI():
         
         # The outline needs a slightly smaller rectangle
         but_out_rect = but_rect
-        but_out_rect.width -= 10
+        but_out_rect.width -= 2*PAD
 
         # Determine the button color
         but_colour = GUI_COLOUR
@@ -327,9 +360,13 @@ class GUI():
 
         # Special case: search button bolds when on searchable area
         if button.text == "SEARCH":
-            if pygame.sprite.spritecollideany(self.player.player,setup.longgrass) or\
-                pygame.sprite.spritecollideany(self.player.player, setup.items):
+            if pygame.sprite.spritecollideany(self.player.player,
+                                                setup.longgrass) or\
+                pygame.sprite.spritecollideany(self.player.player,
+                                                setup.items) or\
+                self.search_log_possible(self.player.player,self.player.get_dir()):
                 but_text = FONT.set_bold(True)
+        
         # Draw the text
         but_text = FONT.render(button.text, True, FONT_COLOUR)
 
@@ -337,7 +374,7 @@ class GUI():
         self.screen.blit(
             but_text,
             (but_rect.centerx - (but_text.get_width()/2),
-            but_rect.y + (BUTTON_HEIGHT//2) - but_text.get_height()//2))
+            but_rect.y + (BUTTON_HEIGHT/2) - but_text.get_height()/2))
         but_text = FONT.set_bold(False)
                 
     
@@ -391,20 +428,26 @@ class GUI():
             i_rand = random.randint(1,20)
             rand_p = random.random()
             if rand_p > DROP_RATE:
-                object = setup.generateItem(i_rand)
-                if object:
-                    self.player.inventory.append(object)
-                    object.set_inventory()
-        else:
-            print("dir {}".format(self.player.dir))
-            self.search_log(self.player.player.rect.x, self.player.player.rect.y, self.player.get_dir())
+                eligible_item = setup.generateItem(i_rand)
+                if eligible_item:
+                    self.player.inventory.append(eligible_item)
+                    eligible_item.set_inventory()
+        #Check if a log is in front
+        elif self.search_log_possible(self.player.player, self.player.get_dir()):
+            rand_p = random.random()
+            if rand_p > DROP_RATE:
+                eligible_item = firewood.Firewood()
+                self.player.inventory.append(eligible_item)
+                eligible_item.set_inventory()
+       
+        self.last_item = eligible_item
 
-    def search_log(self, player_x, player_y, dir):
-        print("Searching front")
-        search_rect = pygame.Rect(player_x,player_y,TILE_SIZE,TILE_SIZE)
+
+    def search_log_possible(self, player, dir):
+
+        search_rect = pygame.Rect(player.rect.x,player.rect.y,TILE_SIZE,TILE_SIZE)
         if dir == "UP":
             search_rect.y -= TILE_SIZE
-            print("UP")
         elif dir == "RIGHT":
             search_rect.x += TILE_SIZE
         elif dir == "LEFT":
@@ -414,14 +457,7 @@ class GUI():
         
         for b in setup.logs:
             if search_rect.colliderect(b.rect):
-                print("Found wood")
-                rand_p = random.random()
-                if rand_p > DROP_RATE:
-                    object = firewood.Firewood()
-                    self.player.inventory.append(object)
-                    object.set_inventory()
-
-            
+                return b
 
     def auto_pressed(self):
         """
@@ -526,6 +562,9 @@ class GUI():
         p.image = deadgus
         self.update()
         pygame.time.delay(DELAY)
+        
+    def update_timer(self):
+        self.timer +=1
 
     def update(self):
         """
@@ -539,6 +578,7 @@ class GUI():
             animation.handleAnimation(spr,spr.dir)
         setup.items.draw(self.screen)
         
+        setup.logs.draw(self.screen)
         self.player.draw(self.screen)
         setup.npcs.draw(self.screen)
         self.buildings.draw(self.screen)

@@ -1,5 +1,6 @@
 import pygame, item
 from item.base_item import BaseItem
+import setup
 
 class Fire(BaseItem):
     """

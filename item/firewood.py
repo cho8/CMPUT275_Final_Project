@@ -16,7 +16,7 @@ class Firewood(BaseItem):
         self.type = "Tool"
         self.description = item.descriptions[self.name]
 
-        self.size = 20
+        self.size = 30
 
         self.image = pygame.image.load("images/item_firewood.png").convert_alpha()
 

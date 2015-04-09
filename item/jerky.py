@@ -18,7 +18,7 @@ class Jerky(BaseItem):
         self.size = 5
         self.heal_value = randint(-10,10)
         self.stam_value = 10
-        self.hung_value = -10
+        self.hung_value = -13
 
         self.image = pygame.image.load("images/item_jerky.png").convert_alpha()
 

@@ -14,6 +14,7 @@ class Berries(BaseItem):
         self.name = "Berries"
         self.type = "Consumable"
         self.description = item.descriptions[self.name]
+        self.size = 5
         self.hung_value = -5
         self.stam_value = 0
         

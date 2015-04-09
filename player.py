@@ -21,7 +21,7 @@ class Player(Group):
         self.player.right2 = gus2.subsurface(34,0,10,20)
         self.player.type = "Player"  
 
-        #Initial attributes
+        #Initial Group attributes
         self.health = 100 #percent
         self.hunger = 0
         self.alive = True
@@ -31,17 +31,21 @@ class Player(Group):
         self.encumbered = False
         self.exhausted = False
         self.basespeed = 2
-        self.dir = 0
+        self.dir = 0    #Player group direction
         self.inventory = []
         self.moving = False
-        self.player.image = self.player.front1
-        self.player.rect = self.player.image.get_rect()
-        self.player.rect.x = x_pos
-        self.player.rect.y = x_pos
+
         self.add(self.player)
         self.player.running = False
         self.adjustx = 1
         self.adjusty = 1
+        
+        # Individual player character attributes
+        self.player.image = self.player.front1
+        self.player.rect = self.player.image.get_rect()
+        self.player.rect.x = x_pos
+        self.player.rect.y = x_pos
+        self.player.dir = 0 #player direction
         self.player.lastleft = self.player.left1
         self.player.lastright = self.player.right1
         self.player.lastback = self.player.back1
@@ -140,6 +144,8 @@ class Player(Group):
                         object.rect.x -= SPEED
                     for object in setup.trees:
                         object.rect.x -= SPEED
+                    for object in setup.logs:
+                        object.rect.x -= SPEED
 
             elif self.player.rect.x > setup.screen.get_width()-VIEWDISTANCE-GUIWIDTH:
                 if setup.gui.bgx >(0-setup.background.get_width()\
@@ -157,12 +163,15 @@ class Player(Group):
                         object.rect.x -= SPEED
                     for object in setup.trees:
                         object.rect.x -= SPEED
+                    for object in setup.logs:
+                        object.rect.x -= SPEED
 
             self.player.rect.x += SPEED
 
             if pygame.sprite.spritecollideany(self.player,setup.buildings) != None\
             or pygame.sprite.spritecollideany(self.player,setup.npcs) != None\
-            or pygame.sprite.spritecollideany(self.player,setup.trees) != None:
+            or pygame.sprite.spritecollideany(self.player,setup.trees) != None\
+            or pygame.sprite.spritecollideany(self.player,setup.logs) != None:
 
                 self.player.rect.x -= SPEED
 
@@ -194,6 +203,8 @@ class Player(Group):
                         object.rect.y -= SPEED
                     for object in setup.trees:
                         object.rect.y -= SPEED
+                    for object in setup.logs:
+                        object.rect.y -= SPEED
             
             elif self.player.rect.y < VIEWDISTANCE:
                 if setup.gui.bgy < 0:
@@ -210,11 +221,14 @@ class Player(Group):
                         object.rect.y -= SPEED
                     for object in setup.trees:
                         object.rect.y -= SPEED
+                    for object in setup.logs:
+                        object.rect.y -= SPEED
 
             self.player.rect.y += SPEED
             if pygame.sprite.spritecollideany(self.player,setup.buildings) != None\
             or pygame.sprite.spritecollideany(self.player,setup.npcs) != None\
-            or pygame.sprite.spritecollideany(self.player,setup.trees) != None:
+            or pygame.sprite.spritecollideany(self.player,setup.trees) != None\
+            or pygame.sprite.spritecollideany(self.player,setup.logs) != None:
 
                 self.player.rect.y -= SPEED
 
@@ -238,12 +252,12 @@ class Player(Group):
             self.alive = False
 
     def get_dir(self):
-        if self.dir == 0:
+        if self.player.dir == 0:
             return "DOWN"
-        elif self.dir == 1:
+        elif self.player.dir == 1:
             return "LEFT"
-        elif self.dir == 2:
+        elif self.player.dir == 2:
             return "UP"
-        elif self.dir == 3:
+        elif self.player.dir == 3:
             return "RIGHT"
 

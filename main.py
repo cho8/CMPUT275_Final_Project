@@ -49,11 +49,14 @@ while True:
                 print("Health:{} Stamina:{} Hunger:{} Starving:{} Encumbrance:{}".format\
         (player.health,player.stamina,player.hunger,player.starving,player.encumbrance))
                 player.updateHunger()
+                gui.update_timer()
+                #update fire
                 for i in setup.items:
                     if i.name == "Fire":
                         i.timer += 1
                         if i.timer >= 5:
                             setup.items.remove(i)
+    
     
     
         clock.tick(30)
