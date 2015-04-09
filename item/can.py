@@ -15,10 +15,10 @@ class Can(BaseItem):
         self.type = "Consumable"
         self.description = item.descriptions[self.name]
         
-        self.size = 10
+        self.size = 15
         self.heal_value = 10
         self.stam_value = 40
-        self.hung_value = -43
+        self.hung_value = -42
 
         self.image = pygame.image.load("images/item_can.png").convert_alpha()
 

@@ -38,9 +38,8 @@ def loadNPC(npc,x,y):
     object.rect.y = y*20
     npcs.add(object)
 
-def loadItem(i,x,y):
+def loadItem(object,x,y):
     
-    object = generateItem(i)
     if object:
         if object.image:
             object.rect = object.image.get_rect()
@@ -128,9 +127,28 @@ for i in range(60):
 
         #items
         elif map_matrix[i][j] == 'i':
-            loadItem(random.randint(0,9),j,i)
+            loadItem(generateItem(random.randint(0,9)),j,i)
 
-                 
 gui = gui.GUI()
+
+# demo purposes
+loadItem(jerky.Jerky(),8,5) #size 5 hung -13
+loadItem(jerky.Jerky(),8,6)
+loadItem(jerky.Jerky(),8,7)
+loadItem(jerky.Jerky(),8,8)
+
+loadItem(berries.Berries(),9,5) #size 5 hung -5
+loadItem(berries.Berries(),9,6)
+loadItem(berries.Berries(),9,7)
+
+loadItem(can.Can(), 10,5) #size 10 hung -43
+loadItem(can.Can(), 10,6)
+
+'''
+For hunger 20
+hung 18, size 10
+
+For hunger 
+'''
 
     

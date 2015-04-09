@@ -70,11 +70,10 @@ class BaseItem(Sprite):
         """
         Changes item location from ground to inventory
         """
-        if self.on_ground:
-            self.set_inventory()
-            # update inventory to have item
-            player.inventory.append(self)
-            player.encumbrance += self.size
+        self.set_inventory()
+        # update inventory to have item
+        player.inventory.append(self)
+        player.encumbrance += self.size
 
     def put_down(self, player):
         if self.in_inventory:

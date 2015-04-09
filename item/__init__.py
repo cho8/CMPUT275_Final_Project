@@ -13,7 +13,7 @@ descriptions = { "Base Item":"Base Item Description",
                  "Flint" : "Sturdy piece of flint. Can probably start a fire on some fuel.",
                  "Firewood" : "Perfectly good fuel for campfires. Place it on the floor by using the item.",
                  "Canned Beans" : "Hearty and wholesome. Filling and energizing."
-                 }
+                }
 
 
 

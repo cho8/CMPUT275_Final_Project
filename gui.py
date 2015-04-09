@@ -50,6 +50,10 @@ DROP_RATE = 0.75
 Button = namedtuple('Button', ['slot_x', 'slot_y', 'rect','text', 'onClick', 'condition'])
 
 class GUI():
+    """ 
+    Graphic User Interface class
+    Handles GUI drawing, gui button behavior, and some animations.
+    """
     
     num_instances = 0
     def __init__(self):
@@ -68,9 +72,11 @@ class GUI():
         self.buildings = setup.buildings
         self.items = setup.items
         
-        #timer for last item dialogue
+        #timer for dialogue box
         self.timer = 0
         self.last_item = None
+        self.has_stamina = True
+        
     
     
         #rect for gui
@@ -191,6 +197,10 @@ class GUI():
         for button in self.buttons:
             self.draw_gui_button(button)
     
+        #Player has stamina?
+        if not self.has_stamina:
+            self.draw_message_rect(RED_BAR,"Not enough stamina.")
+    
     
         
     def draw_inventory_list(self, inventory):
@@ -270,11 +280,8 @@ class GUI():
             pygame.draw.rect(self.screen, SEL_COLOUR, self.sel_item.list_rect,1)
 
         #draw message dialogue for the last item picked up
-        if self.last_item and (self.timer <=5):
-            self.draw_message_rect(self.last_item)
-        else:
-            self.last_item = None
-            self.timer = 0
+        if self.last_item:
+            self.draw_message_rect(SEL_COLOUR, self.last_item.name, itmfound = True)
 
 
     def draw_hover_rect(self, item):
@@ -302,23 +309,29 @@ class GUI():
         text_rect.y += PAD + FONT_SIZE
         drawText(self.screen, item_desc, FONT_COLOUR, text_rect, SMALL_FONT)
     
-    def draw_message_rect(self,itm):
+    def draw_message_rect(self, txtcolour, msg, itmfound = False):
+        if (self.timer <1): #6 second interval
+            msg_rect = pygame.Rect(self.gui_rect.x - HOVER_WIDTH, self.screen_rect.h-HOVER_HEIGHT, HOVER_WIDTH, HOVER_HEIGHT/2)
+            msg_out_rect = msg_rect.copy()
+            msg_out_rect.w -= 1
+            msg_out_rect.h -= 1
         
-        msg_rect = pygame.Rect(self.gui_rect.x - HOVER_WIDTH, self.screen_rect.h-HOVER_HEIGHT, HOVER_WIDTH, HOVER_HEIGHT/2)
-        msg_out_rect = msg_rect.copy()
-        msg_out_rect.w -= 1
-        msg_out_rect.h -= 1
-        
-        pygame.draw.rect(self.screen, GUI_COLOUR, msg_rect)
-        pygame.draw.rect(self.screen, OUTLINE_COLOUR, msg_out_rect, 2)
+            pygame.draw.rect(self.screen, GUI_COLOUR, msg_rect)
+            pygame.draw.rect(self.screen, OUTLINE_COLOUR, msg_out_rect, 2)
+            
+            text_rect = msg_out_rect.copy()
+            text_rect.x += PAD
+            text_rect.y += PAD
     
-        msg = "Found item:"
-        text_rect = msg_out_rect.copy()
-        text_rect.x += PAD
-        text_rect.y += PAD
-        drawText(self.screen, msg, FONT_COLOUR, text_rect, SMALL_FONT)
-        text_rect.y += PAD + FONT_SIZE
-        drawText(self.screen, itm.name, SEL_COLOUR, text_rect, SMALL_FONT)
+            if itmfound:
+                drawText(self.screen, "Found item:", FONT_COLOUR, text_rect, SMALL_FONT)
+                text_rect.y += PAD + FONT_SIZE
+            drawText(self.screen, msg, txtcolour, text_rect, SMALL_FONT)
+    
+        else:
+            self.last_item = None
+            self.timer = 0
+            self.has_stamina = True if self.has_stamina == False else False
     
     def draw_gui_button(self, button):
         """
@@ -412,35 +425,48 @@ class GUI():
         """
         Search for usable items on the current and adjacent positions of the player
         """
-        
-        #check collision between player and any item
+        #check collision between player and grass
+        in_grass = pygame.sprite.spritecollideany(self.player.player, setup.longgrass)
+
+        #check collision between player and any item on the ground
         eligible_item = pygame.sprite.spritecollideany(self.player.player,self.items)
         if eligible_item and eligible_item.name != "Fire":
             eligible_item.pick_up(self.player)
             self.items.remove(eligible_item)
             print(self.player.encumbrance)
-            print(self.player.inventory)
-    
-        #check collision between player and grass
-        in_grass = pygame.sprite.spritecollideany(self.player.player, setup.longgrass)
-        
-        if in_grass:
+
+        elif in_grass:
+            #reduce stamina
+            if self.player.stamina < 20:
+                print("no stamina")
+                self.has_stamina = False
+                return
+            else:
+                self.player.stamina -= 20
             i_rand = random.randint(1,20)
             rand_p = random.random()
             if rand_p > DROP_RATE:
                 eligible_item = setup.generateItem(i_rand)
                 if eligible_item:
-                    self.player.inventory.append(eligible_item)
+                    eligible_item.pick_up(self.player)
                     eligible_item.set_inventory()
         #Check if a log is in front
         elif self.search_log_possible(self.player.player, self.player.get_dir()):
+            #reduce stamina
+            if self.player.stamina < 20:
+                self.has_stamina = False
+                return
+            else:
+                self.player.stamina -= 20
             rand_p = random.random()
             if rand_p > DROP_RATE:
                 eligible_item = firewood.Firewood()
-                self.player.inventory.append(eligible_item)
+                eligible_item.pick_up(self.player)
                 eligible_item.set_inventory()
-       
-        self.last_item = eligible_item
+        
+        if eligible_item: #is found
+            self.last_item = eligible_item
+            self.timer = 0
 
 
     def search_log_possible(self, player, dir):
@@ -474,12 +500,14 @@ class GUI():
         print(consum_list)
         to_consume = auto_eat(self.player,consum_list,lambda x: -1*x.hung_value)
         hung = 0
+        enc = 0
         if to_consume:
             print(to_consume)
             for i in to_consume:
                 i.consume_item(self.player)
-                hung += i.hung_value
-        print("Hung restored: {} player hunger: {}".format(-1*hung, self.player.hunger))
+                hung -= i.hung_value
+                enc += i.size
+        print("Hung restored: {} player hunger: {} encb: {}".format(hung, self.player.hunger, enc))
     
     
     def item_selected(self):
@@ -564,7 +592,7 @@ class GUI():
         pygame.time.delay(DELAY)
         
     def update_timer(self):
-        self.timer +=1
+        self.timer +=1 #increments every 6 seconds as per pygame clock in main
 
     def update(self):
         """
