@@ -11,6 +11,8 @@ def turnRight(spr):
     spr.dir -= 1
     if spr.dir < 0:
        spr.dir = 3
+
+#Flee a set distance away from the Player, then set mode to neutral.
 def flee(spr):
 
     if nearPlayer(spr,80) and not spr.fleeing:
@@ -73,6 +75,7 @@ def move(spr):
     checkCollisions(spr)
 
 def checkCollisions(spr):
+    #If rabbit is in "Flight" they can go through trees
     if spr.mode == "Flight" and spr.type == "Rabbit":
         if pygame.sprite.spritecollideany(spr,setup.trees) != None\
         and pygame.sprite.spritecollideany(spr,setup.buildings) == None:
@@ -121,11 +124,13 @@ def updateNPC(spritegroup):
         if spr.type == "Rabbit" and nearPlayer(spr) and spr.mode is not "Flight":
             spr.set_npc_mode("Flight")
             spr.speed *= 5
+
         if spr.type == "Wolf" and nearPlayer(spr,30) and spr.mode is not "Fight"\
         and spr.mode is not "Flight":
            spr.set_npc_mode("Fight")
            spr.speed *= 5
            print("fight")
+
         if spr.mode == "Flight":
             flee(spr)
         elif spr.mode == "Fight":
