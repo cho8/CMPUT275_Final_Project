@@ -55,6 +55,7 @@ class Player(Group):
     def updateHunger(self):
         if self.hunger < 100:
             self.hunger += 1 + (int((100 - self.stamina)/20))
+            self.starving = False
         else:
             self.starving = True
             print("starving")

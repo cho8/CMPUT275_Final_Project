@@ -125,7 +125,7 @@ def updateNPC(spritegroup):
             spr.set_npc_mode("Flight")
             spr.speed *= 5
 
-        if spr.type == "Wolf" and nearPlayer(spr,30) and spr.mode is not "Fight"\
+        if spr.type == "Wolf" and nearPlayer(spr,40) and spr.mode is not "Fight"\
         and spr.mode is not "Flight":
            spr.set_npc_mode("Fight")
            spr.speed *= 5
