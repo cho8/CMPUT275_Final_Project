@@ -15,7 +15,7 @@ class Can(BaseItem):
         self.type = "Consumable"
         self.description = item.descriptions[self.name]
         
-        self.size = 15
+        self.size = 14
         self.heal_value = 10
         self.stam_value = 40
         self.hung_value = -42

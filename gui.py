@@ -43,6 +43,12 @@ RED_BAR = (255,0,0)
 GREEN_BAR = (0,255,0)
 
 DROP_RATE = 0.75
+=======
+DROP_RATE = 0.30
+STAMINA_LOSS = 10
+ENCUMBERED_VAL = 70
+HUNGER_VAL = 70
+>>>>>>> Stashed changes
 
 
 # A container class which stores button information.
@@ -158,7 +164,7 @@ class GUI():
         hunger_rect = bar_gen_rect.copy()
         hunger_rect.x, hunger_rect.y = RESOLUTION_RECT.w - (self.gui_rect.w)/2 - PAD, FONT_SIZE*line_num + 2*PAD
         hunger_rect.w = self.player.hunger
-        bar_colour  = RED_BAR if self.player.hunger >= 70 else GREEN_BAR
+        bar_colour  = RED_BAR if self.player.hunger >= HUNGER_VAL else GREEN_BAR
         pygame.draw.rect(self.screen, bar_colour, hunger_rect)
         line_num += 1
         
@@ -178,7 +184,7 @@ class GUI():
         bar_colour = RED_BAR if self.player.stamina <= 30 else GREEN_BAR
         pygame.draw.rect(self.screen,bar_colour, stamina_rect)
         # encumbered state
-        if self.player.encumbrance > 70:
+        if self.player.encumbrance > ENCUMBERED_VAL:
             player_encumbered = SMALLER_FONT.render("ENCUMBERED", True, RED_BAR)
             self.screen.blit(player_encumbered,
                         (stamina_rect.x+ 3*PAD,
@@ -489,7 +495,10 @@ class GUI():
         """
         Calls auto-use function based on which stat is selected.
         Optimally consumes the items that restores the most hunger
-        and relieves the most inventory space
+        and out of the items that relieves encumbrance.
+        Relieves half of encumbrance.
+        If encumbered, auto eat should eat until player is no longer encumbered, then eat until half encumbered
+        
         """
         inv_remain = self.player.encumbrance
         print("player hunger: {}".format(self.player.hunger))
@@ -497,8 +506,19 @@ class GUI():
         for i in self.player.inventory:
             if i.type == "Consumable":
                 consum_list.append(i)
+        
         print(consum_list)
         to_consume = auto_eat(self.player,consum_list,lambda x: -1*x.hung_value)
+        remain = int(self.player.encumbrance/2)
+        if self.player.encumbrance > ENCUMBERED_VAL:
+            remain = ENCUMBERED_VAL - self.player.encumbrance
+            remain += int(remain/2)
+        
+        print("remain ",remain)
+        to_consume = auto_eat(remain,consum_list,lambda x: -1*x.hung_value)
+        print("player hunger: {}".format(self.player.hunger))
+        print("player encbrn: {}".format(self.player.encumbrance))
+
         hung = 0
         enc = 0
         if to_consume:

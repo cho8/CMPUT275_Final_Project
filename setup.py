@@ -133,27 +133,46 @@ gui = gui.GUI()
 
 # demo purposes
 
-def demo_inv(hunger):
-    player.hunger = hunger
-#    jerky.Jerky().pick_up(player)       #size 5 hung 13
-#    berries.Berries().pick_up(player)   #size 3 hung 5
-#    can.Can().pick_up(player)           #size 15 hung 42
+def demo_inv(num):
+    player.hunger = 65
+    
+    if num == 1:
+        berries.Berries().pick_up(player)   #size 3 hung 5
+        berries.Berries().pick_up(player)
+        berries.Berries().pick_up(player)
+        jerky.Jerky().pick_up(player)       #size 5 hung 13
+        jerky.Jerky().pick_up(player)
+        can.Can().pick_up(player)           #size 14 hung 42
+        can.Can().pick_up(player)
+    elif num == 2:
+        berries.Berries().pick_up(player)   #size 3 hung 5
+        jerky.Jerky().pick_up(player)
+        can.Can().pick_up(player)           #size 14 hung 42
+    elif num == 3:
+        berries.Berries().pick_up(player)   #size 3 hung 5
+        berries.Berries().pick_up(player)
+        berries.Berries().pick_up(player)
+    elif num == 4:
+        berries.Berries().pick_up(player)   #size 3 hung 5
+        jerky.Jerky().pick_up(player)       #size 5 hung 13
+        can.Can().pick_up(player)           #size 14 hung 42
+        can.Can().pick_up(player)
+    
     loadItem(jerky.Jerky(),10,5)
+
     loadItem(berries.Berries(),10,6)
+
     loadItem(can.Can(),10,7)
 
-
-
-        
-
-
 '''
-for hunger 50
-hung 47 size 18
-
-for hunger 65 - 42 = 23 =13 = 10 - 5 = 5
-can and jerky
-hung 60 size 23
+            elif keys[pygame.K_v]:
+                setup.demo_inv(65,70)
+            elif keys[pygame.K_b]:
+                setup.demo_inv(65,80)
+            elif keys[pygame.K_n]:
+                setup.demo_inv(50,60)
+            elif keys[pygame.K_m]:
+                setup.demo_inv(48,70)
 
 '''
 
