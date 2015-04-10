@@ -96,7 +96,7 @@ while player.alive:
             for i in setup.items:
                 if i.name == "Fire":
                     i.timer += 1
-                    if i.timer >= 5:
+                    if i.timer >= 20:
                         setup.items.remove(i) 
     
     clock.tick(30)

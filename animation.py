@@ -1,7 +1,7 @@
 import setup,player,pygame
 
 def playerHurt(gui):
-
+    #Flashes red when player is hurt.
     hurtscreen = pygame.Surface((gui.screen.get_width(),\
     gui.screen.get_height()),pygame.SRCALPHA)
 
@@ -24,6 +24,7 @@ def handleAnimation(spr,dir):
 
     if setup.frame % framerate == 0:
 
+        #If framerate interval, switch images. Keep track of last image.
         if dir == 1:
 
             if spr.image == spr.left1:
@@ -50,6 +51,7 @@ def handleAnimation(spr,dir):
                 spr.lastback = spr.image = spr.back1
        
     else:
+        #if not frame interval, assign last image used for particular direction
         if dir == 1:
            spr.image  = spr.lastleft
         elif dir == 3:
@@ -59,6 +61,6 @@ def handleAnimation(spr,dir):
         elif dir == 2:
            spr.image  = spr.lastback
 
-
+    #Don't readjust rect for player or tools.  Cause issue with collisions otherwise.
     if spr.type is not "Player" and spr.type is not "Tool":
         spr.rect.size = spr.image.get_size()

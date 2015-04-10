@@ -55,13 +55,16 @@ class Player(Group):
     def updateHunger(self):
         if self.hunger < 100:
             self.hunger += 1 + (int((100 - self.stamina)/20))
+            #if player was starving, but is no longer, reset starving to False
             self.starving = False
         else:
+            #If hunger >= 100, player is starving.
             self.starving = True
             print("starving")
             print(self.health)
 
     def nearFire(self):
+        #Is player close enough to fire to receive benefits.
         for item in setup.items:
             if item.name == "Fire":
                 if abs(item.rect.x-self.player.rect.x) < 30\
@@ -91,9 +94,11 @@ class Player(Group):
 
     def movePlayer(self,direction):
         SPEED = self.basespeed
+        #buffer distance to the edge of screen before initiating scrolling.
         VIEWDISTANCE = 150
         GUIWIDTH = 200
         self.moving = True
+        #If encumbered, reduce player speed.
         if self.encumbrance > 75:
             self.encumbered = True
             SPEED/=2
@@ -101,8 +106,9 @@ class Player(Group):
             self.encumbered = False
         if self.player.running:
             SPEED *= 2
+        #If player is exhausted or in grass, they cannot run, and they move slowly.
         if pygame.sprite.spritecollideany(self.player,setup.longgrass) != None\
-        or self.encumbered or self.exhausted: 
+        or self.exhausted: 
             self.player.running = False
             SPEED = 1
         else:
@@ -169,7 +175,8 @@ class Player(Group):
                         object.rect.x -= SPEED
 
             self.player.rect.x += SPEED
-
+ 
+            #Check collisions
             if pygame.sprite.spritecollideany(self.player,setup.buildings) != None\
             or pygame.sprite.spritecollideany(self.player,setup.npcs) != None\
             or pygame.sprite.spritecollideany(self.player,setup.trees) != None\
@@ -177,7 +184,7 @@ class Player(Group):
 
                 self.player.rect.x -= SPEED
 
-            #Fire Hurts
+            #Fire Hurts(player collides with fire)
             if type(pygame.sprite.spritecollideany(self.player,setup.items)) == fire.Fire:
                 self.player.rect.x -= SPEED*4
                 self.health -= 2
@@ -229,6 +236,8 @@ class Player(Group):
                         object.rect.y -= SPEED
 
             self.player.rect.y += SPEED
+
+            #Check collisions
             if pygame.sprite.spritecollideany(self.player,setup.buildings) != None\
             or pygame.sprite.spritecollideany(self.player,setup.npcs) != None\
             or pygame.sprite.spritecollideany(self.player,setup.trees) != None\
@@ -236,12 +245,13 @@ class Player(Group):
 
                 self.player.rect.y -= SPEED
 
-            #Fire Hurts
+            #Fire Hurts(player collides with fire)
             if type(pygame.sprite.spritecollideany(self.player,setup.items)) == fire.Fire:
                 self.player.rect.y -= SPEED*4
                 self.health -= 2
                 animation.playerHurt(setup.gui)
-
+        
+        #Update player animation
         animation.handleAnimation(self.player,self.player.dir)
 
     def updatePlayer(self):

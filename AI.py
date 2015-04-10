@@ -34,12 +34,14 @@ def flee(spr):
         spr.speed /= 5
         
 def manDist(spr1,spr2):
+    #returns manhattan distance from spree to spr 2.
     x = abs(spr1.rect.x - spr2.rect.x)
     y = abs(spr1.rect.y - spr2.rect.y)
     return x+y
 
 def nearPlayer(spr, minDist = 30):
     
+    #returns True if spr is <= the distance from the player.  Defaults to 30.
     if manDist(spr,setup.player.player) < minDist:
         return True
     else:
@@ -58,6 +60,7 @@ def moveToPlayer(spr):
     move(spr)
 
 def attackPlayer(spr):
+    #hurt player, then flee
     setup.player.health -= spr.atk
     animation.playerHurt(setup.gui)
     spr.mode = "Flight"
@@ -83,7 +86,7 @@ def checkCollisions(spr):
     if pygame.sprite.spritecollideany(spr,setup.buildings) != None\
     or pygame.sprite.spritecollideany(spr,setup.trees) != None\
     or pygame.sprite.spritecollideany(spr,setup.logs) != None\
-    or pygame.sprite.spritecollideany(spr,setup.items) ==  fire.Fire()\
+    or type(pygame.sprite.spritecollideany(spr,setup.items)) ==  fire.Fire\
     and spr.mode != "Flight":
 
         if spr.dir == 0:
@@ -101,6 +104,7 @@ def checkCollisions(spr):
         else:
             turnRight(spr)
 
+    #Make sure npc's don't go off map.
     if spr.rect.x < setup.gui.bgx:
         spr.rect.x = setup.gui.bgx
         turnLeft(spr)
@@ -121,10 +125,12 @@ def checkCollisions(spr):
 def updateNPC(spritegroup):
     for spr in spritegroup:
 
+        #Rabbit goes into flight mode if near player.
         if spr.type == "Rabbit" and nearPlayer(spr) and spr.mode is not "Flight":
             spr.set_npc_mode("Flight")
             spr.speed *= 5
 
+        #Wolf goes into fight mode if near player
         if spr.type == "Wolf" and nearPlayer(spr,40) and spr.mode is not "Fight"\
         and spr.mode is not "Flight":
            spr.set_npc_mode("Fight")
