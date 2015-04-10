@@ -21,6 +21,14 @@ The woods are home to some rabbits and wolves. Without any gear, Gus is not able
 Fire can be created if there is sufficient firewood and flint.
 
 ### CMPUT275 Stuff
-One of the primary requirements of this project was to create algorithmically challenging problems. For our project, we included an "auto-eat" function that effectively maximizes the amount of hunger you can relieve based on your inventory size. The function produces a subset of items from the player's inventory that has the higher "hunger" value, and is the "size" or weight of half of the weight of the total inventory. Essentially, the auto-eat function relieves half of the inventory weight and provides the best amount of consumable value out of all possible subsets.
+One of the primary requirements of this project was to create algorithmically challenging problems. For our project, we included an "auto-eat" function that effectively maximizes the amount of hunger you can relieve based on your inventory size. The function produces a subset of items from the player's inventory that has the highest "hunger" value, and is half the "size" or weight of total inventory. Essentially, the auto-eat function relieves half of the inventory weight and provides the best amount of consumable value out of all possible subsets.
+If the player encumbrance
 
 Pygame module were used extensively in this project as well as animations. Custom item and npc modules were created. All sprites and images were custom created. Code that was referenced are cited in the appropriate files.
+
+For the purpose of demonstration, several shortcut keys can be used to spawn items and such.
+>   V,B,N,M     - spawn individual items and a single set of items
+>   K           - kill the player, jump straight to game over screen
+>   /(slash)    - reset player status, remove items from inventory
+>   R           - Spawn firewood in inventory
+>   F           - Spawn flint in inventory

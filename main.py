@@ -43,9 +43,7 @@ while player.alive:
                 player.moving == True
                 player.movePlayer("UP")
 
-            #Kill switch for testing
-            elif keys[pygame.K_k]:
-                player.alive = False
+
 
     
         elif event.type == pygame.KEYUP:
@@ -73,7 +71,9 @@ while player.alive:
                 setup.demo_inv(3)
             elif keys[pygame.K_m]:  #spawn set of 3
                 setup.demo_inv(4)
-            elif keys[pygame.K_SLASH]: #reset stats
+            elif keys[pygame.K_k]:  #Kill switch for testing
+                player.alive = False
+            elif keys[pygame.K_SLASH]: #reset stats, clear inventory
                 player.health = 100
                 player.hunger = 0
                 player.stamina = 100

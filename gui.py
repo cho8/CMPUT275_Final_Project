@@ -310,6 +310,7 @@ class GUI():
         drawText(self.screen, item_desc, FONT_COLOUR, text_rect, SMALL_FONT)
     
     def draw_message_rect(self, txtcolour, msg, itmfound = False):
+    
         if (self.timer <1): #6 second interval
             msg_rect = pygame.Rect(self.gui_rect.x - HOVER_WIDTH, self.screen_rect.h-HOVER_HEIGHT, HOVER_WIDTH, HOVER_HEIGHT/2)
             msg_out_rect = msg_rect.copy()
@@ -472,7 +473,12 @@ class GUI():
 
 
     def search_log_possible(self, player, dir):
-
+        """
+        Searches area in front of player
+        Returns log if log found
+        None otherwise
+        """
+        # Create a rect where the player is facing
         search_rect = pygame.Rect(player.rect.x,player.rect.y,TILE_SIZE,TILE_SIZE)
         if dir == "UP":
             search_rect.y -= TILE_SIZE
@@ -483,6 +489,7 @@ class GUI():
         elif dir == "DOWN":
             search_rect.y += TILE_SIZE
         
+        # look for a log
         for b in setup.logs:
             if search_rect.colliderect(b.rect):
                 return b
@@ -527,6 +534,9 @@ class GUI():
         else: return False
     
     def can_click_auto(self):
+        """
+        Auto-eat button is available to be clicked. Returns true or false.
+        """
         if self.can_auto: return True
         else: return False
     
@@ -581,6 +591,9 @@ class GUI():
                     return button
     
     def killPlayer(self):
+        """
+        Handles animation for player death.
+        """
         DELAY = 200
 
         deadgus = pygame.image.load("images/deadgus.png").convert_alpha()

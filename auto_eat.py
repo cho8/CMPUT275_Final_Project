@@ -33,6 +33,7 @@ def auto_eat(remain_enc, inv_list, value,memo = None):
         sub_sol = list()
         copy = inv_list.copy()
         copy.remove(i)
+        # Create a tuple representation of the list to be checked
         layer = tuple(copy)
         
         # If the layer's empty, return
@@ -46,7 +47,7 @@ def auto_eat(remain_enc, inv_list, value,memo = None):
                 sub_sol.append(i)
                 sub_sol.extend(auto_eat(remain_enc,copy,value,memo))
                 
-                
+                # Calculate the total value of the sub_sol list
                 sub_sol_val = list_value(sub_sol,value)
                 
                 #if the 'sub_sol' list has a higher value than 'max', then 'sub_sol'
@@ -74,4 +75,7 @@ def list_value(list,value):
     for val in list:
         total += value(val)
     return total
+
+
+
 

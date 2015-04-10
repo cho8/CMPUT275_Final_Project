@@ -157,6 +157,7 @@ def demo_inv(num):
         loadItem(can.Can(),10,7)
         loadItem(oldwaterbottle.OldWaterBottle(), 9,6) #size 10
 
+
 '''
 For the demo, use the shortcut keys:
 esc = exit game
