@@ -89,7 +89,6 @@ endmsg = FONT.render(message,True,(255,0,0,alpha),pygame.SRCALPHA)
 gui.screen.blit(endmsg,(100,(gui.screen.get_height()/2)-32))
 pygame.display.flip()
  
-#rect = pygame.Rect(endgame.get_width()/2-32,endgame.get_height()/2-100,32,100)
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:

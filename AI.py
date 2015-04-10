@@ -1,4 +1,4 @@
-import pygame, setup
+import pygame, setup, animation
 from pygame import sprite
 from item import *
 import random
@@ -57,6 +57,7 @@ def moveToPlayer(spr):
 
 def attackPlayer(spr):
     setup.player.health -= spr.atk
+    animation.playerHurt(setup.gui)
     spr.mode = "Flight"
 
 def move(spr):

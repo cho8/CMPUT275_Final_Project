@@ -1,4 +1,18 @@
-import setup,player
+import setup,player, pygame
+
+def playerHurt(gui):
+
+    hurtscreen = pygame.Surface((gui.screen.get_width(),\
+    gui.screen.get_height()),pygame.SRCALPHA)
+
+
+    alpha = 20
+    while alpha > 0:
+        pygame.time.delay(10)
+        hurtscreen.fill((255,0,0,alpha))
+        gui.screen.blit(hurtscreen,(0,0))
+        pygame.display.flip()
+        alpha -= 5
         
 def handleAnimation(spr,dir):
 
