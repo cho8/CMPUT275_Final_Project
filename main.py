@@ -51,9 +51,11 @@ while player.alive:
         elif event.type == pygame.KEYUP:
             if keys[pygame.K_RETURN]:
                 gui.search_pressed()
+            
             elif keys[pygame.K_RSHIFT]:
                 if gui.can_click_auto():
                     gui.auto_pressed()
+                    
             elif keys[pygame.K_ESCAPE]:
                 pygame.display.quit()
                 sys.exit()
