@@ -180,7 +180,7 @@ class Player(Group):
             if type(pygame.sprite.spritecollideany(self.player,setup.items)) == fire.Fire:
                 self.player.rect.x -= SPEED*4
                 self.health -= 2
-                animation.hurtPlayer(setup.gui)
+                animation.playerHurt(setup.gui)
 
         elif direction == "UP" or direction == "DOWN":
             if direction == "UP":
@@ -239,7 +239,7 @@ class Player(Group):
             if type(pygame.sprite.spritecollideany(self.player,setup.items)) == fire.Fire:
                 self.player.rect.y -= SPEED*4
                 self.health -= 2
-                animation.hurtPlayer(setup.gui)
+                animation.playerHurt(setup.gui)
 
         animation.handleAnimation(self.player,self.player.dir)
 
