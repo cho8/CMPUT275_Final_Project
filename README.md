@@ -7,12 +7,12 @@ To play the game, in the main directory with main.py, run the game with the comm
 > python3 main.py
 
 Controls:
->   WASD    - Movement
->   Cursor is used to interact with the gui. Hotkeys are available as follows:
->   SPACE   - Hold to sprint
->   ESC     - Quit game
->   ENTER   - Search the area around you
->   RSHIFT  - Auto-eat
+>   * WASD    - Movement
+>   * Cursor is used to interact with the gui. Hotkeys are available as follows:
+>   - SPACE   - Hold to sprint
+>   - ESC     - Quit game
+>   - ENTER   - Search the area around you
+>   - RSHIFT  - Auto-eat
     
 
 How long can you survive? There are various places to look for supplies. The search button indicates searchable spots around the woods. The more items you carry, the more tired you'll be when moving around.
