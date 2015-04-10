@@ -82,9 +82,9 @@ class Player(Group):
         else:
             if self.stamina < 100:
                 if self.nearFire():
-                    self.stamina += .02
+                    self.stamina += .04
                 else:
-                    self.stamina += .01
+                    self.stamina += .02
             if self.stamina > 0:
                 self.exhausted = False
 
@@ -245,7 +245,6 @@ class Player(Group):
 
     def updatePlayer(self):
 
-        #Takes roughly 4 min. from full health to death when starving.
         self.updateStamina()
             
         if self.starving:

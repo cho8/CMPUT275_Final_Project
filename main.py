@@ -41,36 +41,10 @@ while player.alive:
             elif keys[pygame.K_w]:
                 player.moving == True
                 player.movePlayer("UP")
-            
+
+            #Kill switch for testing
             elif keys[pygame.K_k]:
                 player.alive = False
-
-
-    
-        elif event.type == pygame.KEYUP:
-            if keys[pygame.K_RETURN]:
-                gui.search_pressed()
-            elif keys[pygame.K_RSHIFT]:
-                gui.auto_pressed()
-            elif keys[pygame.K_ESCAPE]:
-                pygame.display.quit()
-                sys.exit()
-            # Keys used to adjust stats during demo
-            if keys[pygame.K_f]:
-                flint.Flint().pick_up(player)
-            elif keys[pygame.K_r]:
-                firewood.Firewood().pick_up(player)
-            elif keys[pygame.K_b]:
-                setup.demo_inv(65)
-            elif keys[pygame.K_n]:
-                setup.demo_inv(50)
-            elif keys[pygame.K_m]:
-                setup.demo_inv(47)
-            elif keys[pygame.K_SLASH]:
-                while not player.inventory == []:
-                    for i in player.inventory:
-                        i.discard(player)
-
 
         elif event.type == pygame.MOUSEBUTTONUP:
             gui.on_click(event)
@@ -86,12 +60,7 @@ while player.alive:
                 if i.name == "Fire":
                     i.timer += 1
                     if i.timer >= 5:
-                        setup.items.remove(i)
-
-
-                player.updateHunger()
-                gui.update_timer()
-    
+                        setup.items.remove(i) 
     
     clock.tick(30)
     setup.frame +=1
@@ -99,24 +68,24 @@ while player.alive:
     player.updatePlayer()    
     gui.update()
 
-
 endscreen = pygame.Surface((gui.screen.get_width(),\
 gui.screen.get_height()),pygame.SRCALPHA)
 
 gui.killPlayer()
 
+#Fade to Black
 alpha = 0
 while alpha < 100:
     pygame.time.delay(50)
     alpha += 5
     endscreen.fill((0,0,0,alpha))
     gui.screen.blit(endscreen,(0,0))
-    print(endscreen.get_alpha())
     pygame.display.flip()
+
+#Display message with survival time
 message = "You survived for {} minutes!".format(time/60)
 FONT = pygame.font.SysFont("Arial", 32)
 endmsg = FONT.render(message,True,(255,0,0,alpha),pygame.SRCALPHA)
-
 gui.screen.blit(endmsg,(100,(gui.screen.get_height()/2)-32))
 pygame.display.flip()
  
