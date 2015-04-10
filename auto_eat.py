@@ -1,4 +1,4 @@
-def auto_eat(player, inv_list, value, memo = None, remain = None):
+def auto_eat(remain, inv_list, value, memo = None):
     """
     Finds the list of items that restores the amount of value and relieves the highest amount of encumbrance
     
@@ -17,8 +17,6 @@ def auto_eat(player, inv_list, value, memo = None, remain = None):
     
     if memo is None:
         memo = {}
-    if remain is None:
-        remain = player.hunger
     if inv_list == []:
         return []
     
@@ -45,10 +43,12 @@ def auto_eat(player, inv_list, value, memo = None, remain = None):
                     if not total in sub_sol:
                         sub_sol[total] = []
                     sub_sol[total].append(i)
-                    sub_sol[total].extend(auto_eat(player, new_inventory, value, memo,new_remain))
-                    print("sub {} total {}".format(sub_sol[total], total))
+                    sub_sol[total].extend(auto_eat(new_remain, new_inventory, value, memo))
+                    print("sub {}".format(sub_sol[total]))
 
             memo[(new_remain, inv_id)] = sub_sol[max(sub_sol)] if sub_sol else []
+    else:
+        print("memo!")
     return memo[(new_remain, inv_id)]
 
 

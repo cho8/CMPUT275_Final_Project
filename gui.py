@@ -495,23 +495,22 @@ class GUI():
         Optimally consumes the items that restores the most hunger
         and relieves the most inventory space
         """
-        inv_remain = self.player.encumbrance
-        print("player hunger: {}".format(self.player.hunger))
         consum_list = []
         for i in self.player.inventory:
             if i.type == "Consumable":
                 consum_list.append(i)
         print(consum_list)
-        to_consume = auto_eat(self.player,consum_list,lambda x: -1*x.hung_value)
+        to_consume = auto_eat(self.player.hunger,consum_list,lambda x: -1*x.hung_value)
+        print(to_consume)
+        print("player hunger: {}".format(self.player.hunger))
         hung = 0
         enc = 0
         if to_consume:
-            print(to_consume)
             for i in to_consume:
                 i.consume_item(self.player)
                 hung -= i.hung_value
                 enc += i.size
-        print("Hung restored: {} player hunger: {} encb: {}".format(hung, self.player.hunger, enc))
+        print("Hung restored: {} Current hunger: {} Enc recovered: {}".format(hung, self.player.hunger, enc))
     
     
     def item_selected(self):
@@ -596,6 +595,11 @@ class GUI():
         
     def update_timer(self):
         self.timer +=1 #increments every 6 seconds as per pygame clock in main
+        for i in self.items:
+            if i.name == "Fire":
+                i.timer +=1
+                if i.timer > 5:
+                    self.items.remove(i)
 
     def update(self):
         """
@@ -616,7 +620,6 @@ class GUI():
         setup.longgrass.draw(self.screen)
         setup.logs.draw(self.screen)
         setup.trees.draw(self.screen)
-
 
         self.draw_gui()
         pygame.display.flip()

@@ -132,30 +132,29 @@ for i in range(60):
 gui = gui.GUI()
 
 # demo purposes
-loadItem(jerky.Jerky(),8,5) #size 5 hung -13
-loadItem(jerky.Jerky(),8,6)
-loadItem(jerky.Jerky(),8,7)
-loadItem(jerky.Jerky(),8,8)
 
-loadItem(berries.Berries(),9,5) #size 3 hung -5
-loadItem(berries.Berries(),9,6)
-loadItem(berries.Berries(),9,7)
+def demo_inv(hunger):
+    player.hunger = hunger
+#    jerky.Jerky().pick_up(player)       #size 5 hung 13
+#    berries.Berries().pick_up(player)   #size 3 hung 5
+#    can.Can().pick_up(player)           #size 15 hung 42
+    loadItem(jerky.Jerky(),10,5)
+    loadItem(berries.Berries(),10,6)
+    loadItem(can.Can(),10,7)
 
-loadItem(can.Can(), 10,5) #size 15 hung -42
-loadItem(can.Can(), 10,6)
+
+
+        
+
 
 '''
-For hunger 20
-hung 18, size 8
-
-For hunger 30
-hung 18 size 10
-
 for hunger 50
 hung 47 size 18
 
-for hunger 65
-hung 65 size 20
+for hunger 65 - 42 = 23 =13 = 10 - 5 = 5
+can and jerky
+hung 60 size 23
+
 '''
 
     
