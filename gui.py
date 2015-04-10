@@ -43,7 +43,7 @@ BUTTON_DISABLED_COLOUR = (64, 64, 64)
 RED_BAR = (255,0,0)
 GREEN_BAR = (0,255,0)
 
-DROP_RATE = 0.25
+DROP_RATE = 0.7
 STAMINA_LOSS = 10
 ENCUMBERED_VAL = 70
 HUNGER_VAL = 70
@@ -451,9 +451,9 @@ class GUI():
                 return
             else:
                 self.player.stamina -= 20
-            i_rand = random.randint(1,20)
+            i_rand = random.randint(1,9)
             rand_p = random.random()
-            if rand_p > 1-DROP_RATE:
+            if rand_p > (1-DROP_RATE):
                 eligible_item = setup.generateItem(i_rand)
                 if eligible_item:
                     eligible_item.pick_up(self.player)
@@ -468,7 +468,7 @@ class GUI():
             else:
                 self.player.stamina -= 20
             rand_p = random.random()
-            if rand_p > 1-DROP_RATE:
+            if rand_p > (1-DROP_RATE):
                 eligible_item = firewood.Firewood()
                 eligible_item.pick_up(self.player)
                 eligible_item.set_inventory()

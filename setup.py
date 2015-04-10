@@ -150,10 +150,12 @@ def demo_inv(num):
         berries.Berries().pick_up(player)   #size 3 hung 5
         jerky.Jerky().pick_up(player)       #size 5 hung 13
         can.Can().pick_up(player)           #size 14 hung 42
+        oldwaterbottle.OldWaterBottle().pick_up(player)
 
         loadItem(jerky.Jerky(),9,7)
         loadItem(berries.Berries(),10,6)
         loadItem(can.Can(),10,7)
+        loadItem(oldwaterbottle.OldWaterBottle(), 9,6)
 
 '''
 For the demo, use the shortcut keys:

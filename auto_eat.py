@@ -28,10 +28,10 @@ def auto_eat(remain_enc, inv_list, value,memo = None):
     max = list()
 
     maxvalue = 0
-    for u in inv_list:
+    for i in inv_list:
         sub_sol = list()
         copy = inv_list.copy()
-        copy.remove(u)
+        copy.remove(i)
         layer = tuple(copy)
         
         # If the layer's empty, return
@@ -40,9 +40,9 @@ def auto_eat(remain_enc, inv_list, value,memo = None):
 
         #Check if we already have a max value list for this layer.
         if layer not in memo:
-            if u.size <= remain_enc:
-                remain_enc -= u.size
-                sub_sol.append(u)
+            if i.size <= remain_enc and value(i) > 0:
+                remain_enc -= i.size
+                sub_sol.append(i)
                 sub_sol.extend(auto_eat(remain_enc,copy,value,memo))
                 
                 
@@ -55,7 +55,7 @@ def auto_eat(remain_enc, inv_list, value,memo = None):
                     max = sub_sol
                     
         remain_enc = max_remain
-        inv_list.remove(u)
+        inv_list.remove(i)
 
         #After iterating through all possibilities in inv_list, assign the max value
         #list for the layer to memo[layer]
