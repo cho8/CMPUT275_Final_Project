@@ -82,10 +82,6 @@ class GUI():
         self.can_auto = True
         self.last_item = None
         self.has_stamina = True
-        
-        
-        
-    
     
         #rect for gui
         self.gui_rect = pygame.Rect(RESOLUTION_RECT.w - GUI_WIDTH,
@@ -193,8 +189,6 @@ class GUI():
                           stamina_rect.y + 2*PAD))
         line_num += 2
         
-       
-        
         #divider
         pygame.draw.line(self.screen, OUTLINE_COLOUR, (self.gui_rect.left, FONT_SIZE*line_num), (self.gui_rect.right, FONT_SIZE*line_num))
         
@@ -204,8 +198,6 @@ class GUI():
         #buttons
         for button in self.buttons:
             self.draw_gui_button(button)
-    
-    
         
     def draw_inventory_list(self, inventory):
         """

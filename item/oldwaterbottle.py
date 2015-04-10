@@ -16,6 +16,7 @@ class OldWaterBottle(BaseItem):
         self.description = item.descriptions[self.name]
     
         self.stam_value = 20
+        self.size = 10
         
         self.image = pygame.image.load("images/item_oldwaterbottle.png").convert_alpha()
 

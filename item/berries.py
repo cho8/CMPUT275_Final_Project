@@ -15,6 +15,7 @@ class Berries(BaseItem):
         self.type = "Consumable"
         self.description = item.descriptions[self.name]
         self.size = 3
+        self.heal_value = 10
         self.hung_value = -5
         self.stam_value = 0
         

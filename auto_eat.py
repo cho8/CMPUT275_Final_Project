@@ -14,8 +14,9 @@ def auto_eat(remain_enc, inv_list, value,memo = None):
      subset of items from inventory.
      
     Complexity:
-     We believe the running time is approximately O(n*m), where n is the number of
-     items in the inventory, and m is the remaining target encumbrance
+     We think the run time is worst case O(n*m^2), where n is the number of
+     items in the inventory, and m is the remaining target encumbrance.
+     This is because gather
     """
     if memo is None:
         memo = {}

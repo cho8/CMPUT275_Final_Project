@@ -155,7 +155,7 @@ def demo_inv(num):
         loadItem(jerky.Jerky(),9,7)
         loadItem(berries.Berries(),10,6)
         loadItem(can.Can(),10,7)
-        loadItem(oldwaterbottle.OldWaterBottle(), 9,6)
+        loadItem(oldwaterbottle.OldWaterBottle(), 9,6) #size 10
 
 '''
 For the demo, use the shortcut keys:
@@ -166,6 +166,22 @@ r = spawn firewood in inventory
 p = pause
 k = killplayer
 right shift = auto_eat
+
+berries.Berries().pick_up(player)
+    size 3 hung 5
+jerky.Jerky().pick_up(player)
+    size 5 hung 13
+can.Can().pick_up(player)
+    size 14 hung 42
+oldwaterbottle.OldWaterBottle().pick_up(player)
+    size 10
+
+Target encumbrance = (3 + 5 + 14 + 10)/2 = 32/2 = 16
+10 + 3 ==> hung 5
+10 + 5 ==> hung 13
+14     ==> hung 42 <---- best solution!!
+10 (ignored)
+3 + 5  ==> hung 18
 
 
 
