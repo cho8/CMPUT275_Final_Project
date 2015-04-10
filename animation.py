@@ -1,4 +1,4 @@
-import setup,player, pygame
+import setup,player,pygame
 
 def playerHurt(gui):
 

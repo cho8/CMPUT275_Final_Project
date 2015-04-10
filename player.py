@@ -105,13 +105,14 @@ class Player(Group):
             self.player.running = False
             SPEED = 1
         else:
-
+            #adjust player's position so he doesn't have trouble getting through
+            #tight spaces.
             if self.player.rect.x % 2 != 0:
                 print("adjusting x")
                 if self.adjustx == 1:
                     self.adjustx = -1
                 else:
-                    self.adjusty = 1
+                    self.adjustx = 1
                 self.player.rect.x += self.adjustx
             if self.player.rect.y % 2 != 0:
                 print("adjusting y")
@@ -175,6 +176,7 @@ class Player(Group):
 
                 self.player.rect.x -= SPEED
 
+            #Fire Hurts
             if type(pygame.sprite.spritecollideany(self.player,setup.items)) == fire.Fire:
                 self.player.rect.x -= SPEED*4
                 self.health -= 2
@@ -233,6 +235,7 @@ class Player(Group):
 
                 self.player.rect.y -= SPEED
 
+            #Fire Hurts
             if type(pygame.sprite.spritecollideany(self.player,setup.items)) == fire.Fire:
                 self.player.rect.y -= SPEED*4
                 self.health -= 2
