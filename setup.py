@@ -155,11 +155,7 @@ def demo_inv(num):
         loadItem(jerky.Jerky(),9,7)
         loadItem(berries.Berries(),10,6)
         loadItem(can.Can(),10,7)
-<<<<<<< Updated upstream
         loadItem(oldwaterbottle.OldWaterBottle(), 9,6)
-=======
-        
->>>>>>> Stashed changes
 
 '''
 For the demo, use the shortcut keys:
