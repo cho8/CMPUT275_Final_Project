@@ -41,8 +41,36 @@ while player.alive:
             elif keys[pygame.K_w]:
                 player.moving == True
                 player.movePlayer("UP")
+            
             elif keys[pygame.K_k]:
                 player.alive = False
+
+
+    
+        elif event.type == pygame.KEYUP:
+            if keys[pygame.K_RETURN]:
+                gui.search_pressed()
+            elif keys[pygame.K_RSHIFT]:
+                gui.auto_pressed()
+            elif keys[pygame.K_ESCAPE]:
+                pygame.display.quit()
+                sys.exit()
+            # Keys used to adjust stats during demo
+            if keys[pygame.K_f]:
+                flint.Flint().pick_up(player)
+            elif keys[pygame.K_r]:
+                firewood.Firewood().pick_up(player)
+            elif keys[pygame.K_b]:
+                setup.demo_inv(65)
+            elif keys[pygame.K_n]:
+                setup.demo_inv(50)
+            elif keys[pygame.K_m]:
+                setup.demo_inv(47)
+            elif keys[pygame.K_SLASH]:
+                while not player.inventory == []:
+                    for i in player.inventory:
+                        i.discard(player)
+
 
         elif event.type == pygame.MOUSEBUTTONUP:
             gui.on_click(event)
@@ -59,7 +87,10 @@ while player.alive:
                     i.timer += 1
                     if i.timer >= 5:
                         setup.items.remove(i)
-    
+
+
+                player.updateHunger()
+                gui.update_timer()
     
     
     clock.tick(30)

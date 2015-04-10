@@ -249,7 +249,7 @@ class Player(Group):
             self.health -= .1
         if self.nearFire():
             if self.health < 100:
-                self.health += .01
+                self.health += .10
         if self.health <= 0:
             self.alive = False
 
