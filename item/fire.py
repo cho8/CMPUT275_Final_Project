@@ -2,6 +2,7 @@ import pygame, item
 from item.base_item import BaseItem
 import setup
 
+
 class Fire(BaseItem):
     """
     Non-consumable. Hurts player if they stand too close to it.

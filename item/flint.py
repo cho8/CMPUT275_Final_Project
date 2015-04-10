@@ -1,6 +1,6 @@
 import pygame, item
 from item.base_item import BaseItem
-import setup
+import setup, gui
 
 class Flint(BaseItem):
     """

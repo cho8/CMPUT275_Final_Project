@@ -1,6 +1,7 @@
-def auto_eat(remain_enc, inv_list, value, memo = None):
+
+def auto_eat(remain_enc, inv_list, value,memo = None):
     """
-    Finds the list of items that restores the amount of value and relieves the highest amount of encumbrance.
+    Finds the list of items that relieves the encumbered state and relieves the highest amount of hunger.
     Prioritizes encumbrance relief over hunger.
     
     Input:
@@ -8,63 +9,64 @@ def auto_eat(remain_enc, inv_list, value, memo = None):
      inv_list: list of items in inventory.
      player: player class
      value - function that maps an item to some value. Currently using to map the heal_val attribute from items
-        
+
     Output:
-     list of items from inventory.
-    
+     subset of items from inventory.
     """
-    # Currently this function is not working as designed
-    # Just base code that is used to test the auto_eat button
-    
     if memo is None:
         memo = {}
     if inv_list == []:
         return []
+
+    max_remain = remain_enc
+
+    #The maximum valued list for this specific layer
+    max = list()
+
+    maxvalue = 0
+    for u in inv_list:
+        sub_sol = list()
+        copy = inv_list.copy()
+        copy.remove(u)
+        layer = tuple(copy)
+        
+        # If the layer's empty, return
+        if layer == tuple([]):
+            return []
+
+        #Check if we already have a max value list for this layer.
+        if layer not in memo:
+            if u.size <= remain_enc:
+                remain_enc -= u.size
+                sub_sol.append(u)
+                sub_sol.extend(auto_eat(remain_enc,copy,value,memo))
+                
+                
+                sub_sol_val = list_value(sub_sol,value)
+                
+                #if the 'sub_sol' list has a higher value than 'max', then 'sub_sol'
+                #becomes 'max' for this layer.
+                if sub_sol_val > maxvalue: 
+                    maxvalue = sub_sol_val
+                    max = sub_sol
+                    
+        remain_enc = max_remain
+        inv_list.remove(u)
+
+        #After iterating through all possibilities in inv_list, assign the max value
+        #list for the layer to memo[layer]
+        memo[layer] = max
     
-    #player value remaining
-    new_remain = remain_enc
-
-    new_inventory = inv_list
-    inv_id = tuple(new_inventory)
-
-    if not (new_remain, inv_id) in memo:
-        if new_remain < smallest(new_inventory,value):
-            memo[(new_remain, inv_id)] = []
-        else:
-            # try using a dictionary again
-            sub_sol = {}
-            total = 0
-            for i in inv_list:
-                if i.size <= new_remain:
-                    new_remain -= i.size
-                    new_inventory.remove(i)
-                    inv_id = tuple(new_inventory)
-                    total += value(i)
-                    print("new remain {} total size {}".format(new_remain, total))
-                    if not total in sub_sol:
-                        sub_sol[total] = []
-                    sub_sol[total].append(i)
-                    sub_sol[total].extend(auto_eat(new_remain, new_inventory, value, memo))
-                    print("sub {}".format(sub_sol[total]))
-                new_remain = remain_enc
-            memo[(new_remain, inv_id)] = sub_sol[max(sub_sol)] if sub_sol else []
-    else:
-        print("memo!")
-    return memo[(new_remain, inv_id)]
+    return memo[layer]
 
 
-
-def smallest(ilist, value):
+def list_value(list,value):
     """
-    Helper function that finds the smallest size in the list of items.
+    #returns the total value of the list passed in based on the function 'value' that is
+    #taken as an argument.
     """
-    if ilist == []:
-        return 0
-    current = ilist[0]
-    for i in ilist:
-        if value(i) < value(current):
-            current = i
-    return value(current)
-
-
+    total = 0
+    for val in list:
+        total += value(val)
+    return total
 

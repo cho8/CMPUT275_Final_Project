@@ -138,42 +138,45 @@ def demo_inv(num):
     
     if num == 1:
         berries.Berries().pick_up(player)   #size 3 hung 5
-        berries.Berries().pick_up(player)
-        berries.Berries().pick_up(player)
-        jerky.Jerky().pick_up(player)       #size 5 hung 13
-        jerky.Jerky().pick_up(player)
-        can.Can().pick_up(player)           #size 14 hung 42
-        can.Can().pick_up(player)
+        loadItem(berries.Berries(),10,6)
     elif num == 2:
-        berries.Berries().pick_up(player)   #size 3 hung 5
-        jerky.Jerky().pick_up(player)
-        can.Can().pick_up(player)           #size 14 hung 42
+        jerky.Jerky().pick_up(player)       #size 5 hung 13
+        loadItem(jerky.Jerky(),9,7)
     elif num == 3:
-        berries.Berries().pick_up(player)   #size 3 hung 5
-        berries.Berries().pick_up(player)
-        berries.Berries().pick_up(player)
+        can.Can().pick_up(player)           #size 14 hung 42
+        loadItem(can.Can(),10,7)
+
     elif num == 4:
         berries.Berries().pick_up(player)   #size 3 hung 5
         jerky.Jerky().pick_up(player)       #size 5 hung 13
         can.Can().pick_up(player)           #size 14 hung 42
-        can.Can().pick_up(player)
-    
-    loadItem(jerky.Jerky(),10,5)
 
-    loadItem(berries.Berries(),10,6)
-
-    loadItem(can.Can(),10,7)
+        loadItem(jerky.Jerky(),9,7)
+        loadItem(berries.Berries(),10,6)
+        loadItem(can.Can(),10,7)
 
 '''
-            elif keys[pygame.K_v]:
-                setup.demo_inv(65,70)
-            elif keys[pygame.K_b]:
-                setup.demo_inv(65,80)
-            elif keys[pygame.K_n]:
-                setup.demo_inv(50,60)
-            elif keys[pygame.K_m]:
-                setup.demo_inv(48,70)
+For the demo, use the shortcut keys:
+esc = exit game
+v,b,n,m =  generate items into inventory and on the ground
+f = spawn flint in inventory
+r = spawn firewood in inventory
+p = pause
+k = killplayer
+right shift = auto_eat
+
+
 
 '''
+
+
+
+
+
+
+
+
+
+
 
     

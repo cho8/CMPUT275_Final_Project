@@ -6,6 +6,7 @@ from textwrap import drawText
 from auto_eat import auto_eat
 from item import *
 
+
 # GUI size things
 RESOLUTION_RECT = pygame.Rect(0,0, 600,400)
 BUTTON_HEIGHT = 40
@@ -42,8 +43,7 @@ BUTTON_DISABLED_COLOUR = (64, 64, 64)
 RED_BAR = (255,0,0)
 GREEN_BAR = (0,255,0)
 
-DROP_RATE = 0.75
-DROP_RATE = 0.30
+DROP_RATE = 0.25
 STAMINA_LOSS = 10
 ENCUMBERED_VAL = 70
 HUNGER_VAL = 70
@@ -76,10 +76,14 @@ class GUI():
         self.buildings = setup.buildings
         self.items = setup.items
         
-        #timer for dialogue box
+        #timers
         self.timer = 0
+        self.auto_timer = 0
+        self.can_auto = True
         self.last_item = None
         self.has_stamina = True
+        
+        
         
     
     
@@ -101,7 +105,7 @@ class GUI():
             Button(1, 1, temp_rect, "USE", self.use_pressed, self.item_selected),
             Button(0, 1, temp_rect, "DISCARD", self.discard_pressed, self.item_selected),
             Button(0, 0, temp_rect, "SEARCH", self.search_pressed, None),
-            Button(1, 0, temp_rect, "AUTO-EAT", self.auto_pressed, None)]
+            Button(1, 0, temp_rect, "AUTO-EAT", self.auto_pressed, self.can_click_auto)]
     
         #Currently Selected Item in Inventory
         self.sel_item = None
@@ -201,10 +205,6 @@ class GUI():
         for button in self.buttons:
             self.draw_gui_button(button)
     
-        #Player has stamina?
-        if not self.has_stamina:
-            self.draw_message_rect(RED_BAR,"Not enough stamina.")
-    
     
         
     def draw_inventory_list(self, inventory):
@@ -286,6 +286,9 @@ class GUI():
         #draw message dialogue for the last item picked up
         if self.last_item:
             self.draw_message_rect(SEL_COLOUR, self.last_item.name, itmfound = True)
+        #Player has stamina?
+        if not self.has_stamina:
+            self.draw_message_rect(RED_BAR,"Not enough stamina.")
 
 
     def draw_hover_rect(self, item):
@@ -308,7 +311,8 @@ class GUI():
         text_rect.x += PAD
         text_rect.y += PAD
         
-        #drawText utilizes text wrapping
+        # drawText utilizes text wrapping
+        # this function is imported from textwrap.py
         drawText(self.screen, item_name, FONT_COLOUR, text_rect, SMALL_FONT)
         text_rect.y += PAD + FONT_SIZE
         drawText(self.screen, item_desc, FONT_COLOUR, text_rect, SMALL_FONT)
@@ -335,7 +339,7 @@ class GUI():
         else:
             self.last_item = None
             self.timer = 0
-            self.has_stamina = True if self.has_stamina == False else False
+            self.has_stamina = True
     
     def draw_gui_button(self, button):
         """
@@ -437,7 +441,7 @@ class GUI():
         if eligible_item and eligible_item.name != "Fire":
             eligible_item.pick_up(self.player)
             self.items.remove(eligible_item)
-            print(self.player.encumbrance)
+        
 
         elif in_grass:
             #reduce stamina
@@ -449,11 +453,12 @@ class GUI():
                 self.player.stamina -= 20
             i_rand = random.randint(1,20)
             rand_p = random.random()
-            if rand_p > DROP_RATE:
+            if rand_p > 1-DROP_RATE:
                 eligible_item = setup.generateItem(i_rand)
                 if eligible_item:
                     eligible_item.pick_up(self.player)
                     eligible_item.set_inventory()
+    
         #Check if a log is in front
         elif self.search_log_possible(self.player.player, self.player.get_dir()):
             #reduce stamina
@@ -463,13 +468,14 @@ class GUI():
             else:
                 self.player.stamina -= 20
             rand_p = random.random()
-            if rand_p > DROP_RATE:
+            if rand_p > 1-DROP_RATE:
                 eligible_item = firewood.Firewood()
                 eligible_item.pick_up(self.player)
                 eligible_item.set_inventory()
         
         if eligible_item: #is found
             self.last_item = eligible_item
+            
             self.timer = 0
 
 
@@ -498,29 +504,22 @@ class GUI():
         If encumbered, auto eat should eat until player is no longer encumbered, then eat until half encumbered
         
         """
-        inv_remain = self.player.encumbrance
-        print("player hunger: {}".format(self.player.hunger))
-        consum_list = []
-        for i in self.player.inventory:
-            if i.type == "Consumable":
-                consum_list.append(i)
-        
-        print(consum_list)
-        to_consume = auto_eat(self.player,consum_list,lambda x: -1*x.hung_value)
-        remain = int(self.player.encumbrance/2)
-        if self.player.encumbrance > ENCUMBERED_VAL:
-            remain = ENCUMBERED_VAL - self.player.encumbrance
-            remain += int(remain/2)
-        
-        print("remain ",remain)
-        to_consume = auto_eat(remain,consum_list,lambda x: -1*x.hung_value)
+   
         print("player hunger: {}".format(self.player.hunger))
         print("player encbrn: {}".format(self.player.encumbrance))
+        consum_list = self.player.inventory.copy()
+        
+        remain = int(self.player.encumbrance/2)
+        if self.player.encumbrance > ENCUMBERED_VAL:
+            remain = self.player.encumbrance
+        print("target remain ",remain)
+        # lambda is currently mapping the amount of hunger an item restores
+        to_consume = auto_eat(remain,consum_list,lambda x: -1*x.hung_value)
 
         hung = 0
         enc = 0
         if to_consume:
-            print(to_consume)
+            self.can_auto = False
             for i in to_consume:
                 i.consume_item(self.player)
                 hung -= i.hung_value
@@ -535,6 +534,9 @@ class GUI():
         if self.sel_item: return True
         else: return False
     
+    def can_click_auto(self):
+        if self.can_auto: return True
+        else: return False
     
     def on_click(self,e):
         """
@@ -610,16 +612,26 @@ class GUI():
         pygame.time.delay(DELAY)
         
     def update_timer(self):
-        self.timer +=1 #increments every 6 seconds as per pygame clock in main
+        #increments every 6 seconds as per pygame clock in main
+        self.timer +=1
+        self.auto_timer += 1
 
     def update(self):
         """
         Update the drawing of everything display related.
         """
         self.screen.blit(self.background,(self.bgx,self.bgy))
+        is_fire = False
         for spr in setup.items:
             if spr.name == "Fire":
                 animation.handleAnimation(spr,0)
+                is_fire = True
+
+    
+        # prevent player from constantly clicking auto
+        if self.auto_timer > 4:
+            self.can_auto = True
+            self.auto_timer = 0
         for spr in setup.npcs:
             animation.handleAnimation(spr,spr.dir)
         setup.items.draw(self.screen)

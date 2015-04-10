@@ -52,27 +52,30 @@ while player.alive:
             if keys[pygame.K_RETURN]:
                 gui.search_pressed()
             elif keys[pygame.K_RSHIFT]:
-                gui.auto_pressed()
+                if gui.can_click_auto():
+                    gui.auto_pressed()
             elif keys[pygame.K_ESCAPE]:
                 pygame.display.quit()
                 sys.exit()
-            # Keys used to adjust stats during demo
-            if keys[pygame.K_f]:
+            
+            # Hotkeys used to adjust stats during demo
+            if keys[pygame.K_f]:    #spawn flint
                 flint.Flint().pick_up(player)
-            elif keys[pygame.K_r]:
+            elif keys[pygame.K_r]:  #spawn firewood
                 firewood.Firewood().pick_up(player)
-            elif keys[pygame.K_v]:
+            elif keys[pygame.K_v]:  #spawn berry
                 setup.demo_inv(1)
-            elif keys[pygame.K_b]:
+            elif keys[pygame.K_b]:  #spawn jerky
                 setup.demo_inv(2)
-            elif keys[pygame.K_n]:
+            elif keys[pygame.K_n]:  #spawn can
                 setup.demo_inv(3)
-            elif keys[pygame.K_m]:
+            elif keys[pygame.K_m]:  #spawn set of 3
                 setup.demo_inv(4)
-            elif keys[pygame.K_SLASH]:
+            elif keys[pygame.K_SLASH]: #reset stats
                 player.health = 100
                 player.hunger = 0
                 player.stamina = 100
+                gui.can_auto = True
                 while not player.inventory == []:
                     for i in player.inventory:
                         i.discard(player)
