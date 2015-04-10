@@ -8,7 +8,7 @@ To play the game, in the main directory with main.py, run the game with the comm
 
 Controls:
 >   * WASD    - Movement
->   * Cursor is used to interact with the gui. Hotkeys are available as follows:
+>   * Cursor is used to interact with the interface. Hotkeys are available as follows:
 >   - SPACE   - Hold to sprint
 >   - ESC     - Quit game
 >   - ENTER   - Search the area around you
