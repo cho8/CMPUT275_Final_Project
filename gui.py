@@ -42,8 +42,7 @@ BUTTON_DISABLED_COLOUR = (64, 64, 64)
 RED_BAR = (255,0,0)
 GREEN_BAR = (0,255,0)
 
-DROP_RATE = 0.30
-STAMINA_LOSS = 10
+DROP_RATE = 0.75
 
 
 # A container class which stores button information.
@@ -197,7 +196,12 @@ class GUI():
         #buttons
         for button in self.buttons:
             self.draw_gui_button(button)
-
+    
+        #Player has stamina?
+        if not self.has_stamina:
+            self.draw_message_rect(RED_BAR,"Not enough stamina.")
+    
+    
         
     def draw_inventory_list(self, inventory):
         """
@@ -276,19 +280,8 @@ class GUI():
             pygame.draw.rect(self.screen, SEL_COLOUR, self.sel_item.list_rect,1)
 
         #draw message dialogue for the last item picked up
-        if self.last_item and self.timer < 1:
+        if self.last_item:
             self.draw_message_rect(SEL_COLOUR, self.last_item.name, itmfound = True)
-
-        #Draw message dialogue box
-        elif self.has_stamina == False and self.timer < 1:
-            self.draw_message_rect(RED_BAR,"Not enough stamina.")
-        else:
-            self.last_item = None
-            self.timer = 0
-            self.has_stamina = True
-
-
-            
 
 
     def draw_hover_rect(self, item):
@@ -317,7 +310,7 @@ class GUI():
         drawText(self.screen, item_desc, FONT_COLOUR, text_rect, SMALL_FONT)
     
     def draw_message_rect(self, txtcolour, msg, itmfound = False):
-
+        if (self.timer <1): #6 second interval
             msg_rect = pygame.Rect(self.gui_rect.x - HOVER_WIDTH, self.screen_rect.h-HOVER_HEIGHT, HOVER_WIDTH, HOVER_HEIGHT/2)
             msg_out_rect = msg_rect.copy()
             msg_out_rect.w -= 1
@@ -334,6 +327,11 @@ class GUI():
                 drawText(self.screen, "Found item:", FONT_COLOUR, text_rect, SMALL_FONT)
                 text_rect.y += PAD + FONT_SIZE
             drawText(self.screen, msg, txtcolour, text_rect, SMALL_FONT)
+    
+        else:
+            self.last_item = None
+            self.timer = 0
+            self.has_stamina = True if self.has_stamina == False else False
     
     def draw_gui_button(self, button):
         """
@@ -439,15 +437,15 @@ class GUI():
 
         elif in_grass:
             #reduce stamina
-            if self.player.stamina < STAMINA_LOSS:
+            if self.player.stamina < 20:
                 print("no stamina")
                 self.has_stamina = False
                 return
             else:
-                self.player.stamina -= STAMINA_LOSS
+                self.player.stamina -= 20
             i_rand = random.randint(1,20)
             rand_p = random.random()
-            if rand_p > (1-DROP_RATE):
+            if rand_p > DROP_RATE:
                 eligible_item = setup.generateItem(i_rand)
                 if eligible_item:
                     eligible_item.pick_up(self.player)
@@ -455,22 +453,20 @@ class GUI():
         #Check if a log is in front
         elif self.search_log_possible(self.player.player, self.player.get_dir()):
             #reduce stamina
-            if self.player.stamina < STAMINA_LOSS:
-                print("no stamina")
+            if self.player.stamina < 20:
                 self.has_stamina = False
                 return
             else:
-                self.player.stamina -= STAMINA_LOSS
+                self.player.stamina -= 20
             rand_p = random.random()
             if rand_p > DROP_RATE:
                 eligible_item = firewood.Firewood()
                 eligible_item.pick_up(self.player)
                 eligible_item.set_inventory()
-
+        
         if eligible_item: #is found
             self.last_item = eligible_item
             self.timer = 0
-
 
 
     def search_log_possible(self, player, dir):
@@ -495,22 +491,23 @@ class GUI():
         Optimally consumes the items that restores the most hunger
         and relieves the most inventory space
         """
+        inv_remain = self.player.encumbrance
+        print("player hunger: {}".format(self.player.hunger))
         consum_list = []
         for i in self.player.inventory:
             if i.type == "Consumable":
                 consum_list.append(i)
         print(consum_list)
-        to_consume = auto_eat(self.player.hunger,consum_list,lambda x: -1*x.hung_value)
-        print(to_consume)
-        print("player hunger: {}".format(self.player.hunger))
+        to_consume = auto_eat(self.player,consum_list,lambda x: -1*x.hung_value)
         hung = 0
         enc = 0
         if to_consume:
+            print(to_consume)
             for i in to_consume:
                 i.consume_item(self.player)
                 hung -= i.hung_value
                 enc += i.size
-        print("Hung restored: {} Current hunger: {} Enc recovered: {}".format(hung, self.player.hunger, enc))
+        print("Hung restored: {} player hunger: {} encb: {}".format(hung, self.player.hunger, enc))
     
     
     def item_selected(self):
@@ -519,6 +516,7 @@ class GUI():
         """
         if self.sel_item: return True
         else: return False
+    
     
     def on_click(self,e):
         """
@@ -595,11 +593,6 @@ class GUI():
         
     def update_timer(self):
         self.timer +=1 #increments every 6 seconds as per pygame clock in main
-        for i in self.items:
-            if i.name == "Fire":
-                i.timer +=1
-                if i.timer > 5:
-                    self.items.remove(i)
 
     def update(self):
         """
@@ -618,8 +611,8 @@ class GUI():
         self.player.draw(self.screen)
         self.buildings.draw(self.screen)
         setup.longgrass.draw(self.screen)
-        setup.logs.draw(self.screen)
         setup.trees.draw(self.screen)
+
 
         self.draw_gui()
         pygame.display.flip()
