@@ -43,12 +43,10 @@ RED_BAR = (255,0,0)
 GREEN_BAR = (0,255,0)
 
 DROP_RATE = 0.75
-=======
 DROP_RATE = 0.30
 STAMINA_LOSS = 10
 ENCUMBERED_VAL = 70
 HUNGER_VAL = 70
->>>>>>> Stashed changes
 
 
 # A container class which stores button information.
